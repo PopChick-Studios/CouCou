@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[ExecuteInEditMode]
+//[ExecuteInEditMode]
 public class LightingManager : MonoBehaviour
 {
     // References
@@ -11,6 +11,7 @@ public class LightingManager : MonoBehaviour
     // Variables
     [SerializeField, Range(0, 24)] private float TimeOfDay;
     [SerializeField] private float LengthOfDay;
+    [SerializeField] private float LengthOfNight;
 
     private void Update()
     {

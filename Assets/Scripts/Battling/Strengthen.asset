@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 555418aa1484a2e4584a746c0aa44b78, type: 3}
+  m_Name: Strengthen
+  m_EditorClassIdentifier: 
+  abilityName: Strengthen
+  description: Increases your resistance by 10%
+  resistanceMultiplier: 1.1
+  selfMindset: 0
+  selfDetermination: 0
+  enemyDetermination: 0
+  abilityColor: {r: 0.9339623, g: 0.9108602, b: 0.73571557, a: 1}
