@@ -2,16 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-//[ExecuteInEditMode]
+[ExecuteInEditMode]
 public class LightingManager : MonoBehaviour
 {
     // References
-    [SerializeField] private Light DirectionalLight;
+    [SerializeField] private Light directionalLight;
     [SerializeField] private LightingPreset Preset;
     // Variables
-    [SerializeField, Range(0, 24)] private float TimeOfDay;
+    [SerializeField, Range(0, 24)] private float TimeOfDay = 6;
     [SerializeField] private float LengthOfDay;
-    [SerializeField] private float LengthOfNight;
 
     private void Update()
     {
@@ -38,33 +37,33 @@ public class LightingManager : MonoBehaviour
         RenderSettings.ambientLight = Preset.AmbientColour.Evaluate(TimePercent);
         RenderSettings.fogColor = Preset.FogColour.Evaluate(TimePercent);
 
-        if (DirectionalLight != null)
+        if (directionalLight != null)
         {
-            DirectionalLight.color = Preset.DirectionalColour.Evaluate(TimePercent);
+            directionalLight.color = Preset.DirectionalColour.Evaluate(TimePercent);
 
-            DirectionalLight.transform.localRotation = Quaternion.Euler(new Vector3((TimePercent * 360f) - 90f, 170f, 0));
+            directionalLight.transform.localRotation = Quaternion.Euler(new Vector3((TimePercent * 360f) - 90f, 170f, 0));
         }
     }
 
     private void OnValidate()
     {
-        if(DirectionalLight != null)
+        if(directionalLight != null)
         {
             return;
         }
 
         if (RenderSettings.sun != null)
         {
-            DirectionalLight = RenderSettings.sun;
+            directionalLight = RenderSettings.sun;
         }
         else
         {
-            Light[] lights = GameObject.FindObjectsOfType<Light>();
+            Light[] lights = FindObjectsOfType<Light>();
             foreach (Light light in lights)
             {
                 if(light.type == LightType.Directional)
                 {
-                    DirectionalLight = light;
+                    directionalLight = light;
                     return;
                 }
             }

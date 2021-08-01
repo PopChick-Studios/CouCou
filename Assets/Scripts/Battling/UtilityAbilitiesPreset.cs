@@ -10,8 +10,10 @@ public class UtilityAbilitiesPreset : ScriptableObject
     public string description;
 
     public float resistanceMultiplier = 1;
+
     public float selfMindset;
     public bool enemyMindset;
+
     public float selfDetermination;
     public float enemyDetermination;
 
