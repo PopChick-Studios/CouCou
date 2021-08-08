@@ -1,70 +1,76 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Users;
 
 public class CameraFollow : MonoBehaviour
 {
-    private InputManager inputManager;
+    private GameManager gameManager;
 
     public float CameraMoveSpeed = 120f;
     public GameObject CameraFollowObject;
-    public float clampAngle = 80f;
+    public float upperClampAngle;
+    public float lowerClampAngle;
     public float inputSensitivity = 150.0f;
-
-    // Mouse position
-    private float finalInputX;
-    private float finalInputZ;
-    public float mouseSensitivity = 3f;
 
     private float rotY = 0.0f;
     private float rotX = 0.0f;
+    
+    // Inputs
+    PlayerInputActions playerInputActions;
+    public Vector2 inputRotationMouse;
+    public Vector2 inputRotationJoystick;
+
+    private void Awake()
+    {
+        playerInputActions = new PlayerInputActions();
+
+        playerInputActions.Wandering.CameraMouse.performed += x => inputRotationMouse = x.ReadValue<Vector2>();
+        playerInputActions.Wandering.CameraMouse.canceled += x => inputRotationMouse = Vector2.zero;
+        playerInputActions.Wandering.CameraJoystick.performed += x => inputRotationJoystick = x.ReadValue<Vector2>();
+        playerInputActions.Wandering.CameraJoystick.canceled += x => inputRotationJoystick = Vector2.zero;
+    }
 
     // Start is called before the first frame update
     void Start()
     {
-        inputManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<InputManager>();
+        gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
 
         Vector3 rot = transform.localRotation.eulerAngles;
         rotY = rot.y;
         rotX = rot.x;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        // Set up the rotation of the joysticks
-        float inputX = Input.GetAxis("RightStickHorizontal");
-        float inputZ = Input.GetAxis("RightStickVertical");
-
-        // Get the input from the mouse
-        float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity;
-        float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity;
-
-        // Get the input manager and the input that is being used
-        InputManager.eInputState inputState = inputManager.GetInputState();
-        if (inputState == InputManager.eInputState.Controller)
+        if (gameManager.State == GameManager.GameState.Wandering)
         {
-            mouseX = 0;
-            mouseY = 0;
+            Vector2 rotation = (inputRotationMouse * 0.1f) + inputRotationJoystick;
+
+            if((Mathf.Abs(inputRotationJoystick.y) < 0.3 && inputRotationJoystick.magnitude != 0) || (Mathf.Abs(inputRotationMouse.y) < 1.4 && inputRotationMouse.magnitude != 0))
+            {
+                rotation.y = 0;
+            }
+
+            // Rotate according to the input and the sensitivity
+            rotY += rotation.x * inputSensitivity * Time.deltaTime;
+            rotX += rotation.y * inputSensitivity * Time.deltaTime;
+
+            // Clamps the angle so it can't go above or below certain angles
+            rotX = Mathf.Clamp(rotX, lowerClampAngle, upperClampAngle);
+
+            transform.rotation = Quaternion.Euler(rotX, rotY, 0.0f);
         }
-
-        // Combine the mouse and joystick input together
-        finalInputX = inputX + mouseX;
-        finalInputZ = inputZ + mouseY;
-
-        // Rotate according to the final input and the sensitivity
-        rotY += finalInputX * inputSensitivity * Time.deltaTime;
-        rotX += finalInputZ * inputSensitivity * Time.deltaTime;
-
-        // Clamps the angle so it can't go above or below certain angles
-        rotX = Mathf.Clamp(rotX, -clampAngle, clampAngle);
-
-        transform.rotation = Quaternion.Euler(rotX, rotY, 0.0f);
     }
 
     void LateUpdate()
     {
-        CameraUpdater();
+        if (gameManager.State == GameManager.GameState.Wandering)
+        {
+            CameraUpdater();
+        }
     }
 
     void CameraUpdater()
@@ -76,4 +82,18 @@ public class CameraFollow : MonoBehaviour
         float step = CameraMoveSpeed * Time.deltaTime;
         transform.position = Vector3.MoveTowards(transform.position, target.position, step);
     }
+
+    #region - Enable/Disable -
+
+    private void OnEnable()
+    {
+        playerInputActions.Enable();
+    }
+
+    private void OnDisable()
+    {
+        playerInputActions.Disable();
+    }
+
+    #endregion
 }

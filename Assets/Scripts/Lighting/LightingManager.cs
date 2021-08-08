@@ -32,6 +32,11 @@ public class LightingManager : MonoBehaviour
         }
     }
 
+    public void Daytime()
+    {
+        TimeOfDay = 6;
+    }
+
     private void UpdateLighting(float TimePercent)
     {
         RenderSettings.ambientLight = Preset.AmbientColour.Evaluate(TimePercent);
