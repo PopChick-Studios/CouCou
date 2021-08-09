@@ -7,8 +7,10 @@ using UnityEngine.UI;
 public class PlayerInteraction : MonoBehaviour
 {
     private GameManager gameManager;
+    private InteractableUI interactableUI;
 
-    public bool canInteract;
+    // Animator
+    // [SerializeField] private Animator animator;
 
     // Inputs
     PlayerInputActions playerInputActions;
@@ -16,6 +18,7 @@ public class PlayerInteraction : MonoBehaviour
     private void Awake()
     {
         gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
+        interactableUI = GameObject.FindGameObjectWithTag("Player").GetComponent<InteractableUI>();
 
         playerInputActions = new PlayerInputActions();
 
@@ -24,9 +27,9 @@ public class PlayerInteraction : MonoBehaviour
 
     private void Interact()
     {
-        if (canInteract)
+        if (interactableUI.canInteract)
         {
-            // Start interaction animation here
+            // animator.SetBool("interactPickUp", true);
             gameManager.SetState(GameManager.GameState.Interacting);
         }
     }
