@@ -9,10 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a9622388dde4ca34fb3f6354904c4e83, type: 3}
-  m_Name: DoublePunch
+  m_Script: {fileID: 11500000, guid: 450707579a6c53846ad870858ca6bdfd, type: 3}
+  m_Name: NPC Preset
   m_EditorClassIdentifier: 
-  abilityName: Double Punch
-  description: Punches the enemy twice, each doing 50% damage
-  damageMultiplier: 1
-  abilityColor: {r: 0.9339623, g: 0.9108602, b: 0.73571557, a: 1}
+  nameOfCharacter: 
+  coucou1: 
+  coucou2: 
+  coucou3: 
+  coucou4: 
+  coucou5: 

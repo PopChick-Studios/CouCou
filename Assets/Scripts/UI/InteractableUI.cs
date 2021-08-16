@@ -5,6 +5,12 @@ using UnityEngine.UI;
 
 public class InteractableUI : MonoBehaviour
 {
+    private DisplayManager displayManager;
+
+    [Header("Interaction Type")]
+    public DisplayManager.InteractionTypes interactionType;
+
+    [Header("Arrow")]
     [SerializeField] private Sprite arrowSprite;
     [SerializeField] private Sprite arrowGlowSprite;
 
@@ -23,6 +29,8 @@ public class InteractableUI : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        displayManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<DisplayManager>();
+
         arrowPlaceholder.sprite = arrowSprite;
         arrowPlaceholder.rectTransform.position = new Vector3(originTransform.position.x, originTransform.position.y + 2.5f, originTransform.position.z);
         arrowPlaceholder.gameObject.SetActive(false);
@@ -37,9 +45,11 @@ public class InteractableUI : MonoBehaviour
             arrowPlaceholder.rectTransform.position = new Vector3(originTransform.position.x, originTransform.position.y + 1.5f + y, originTransform.position.z);
             arrowPlaceholder.rectTransform.transform.LookAt(cameraTransform);
 
-            if (Mathf.Abs(player.transform.position.magnitude - gameObject.transform.position.magnitude) < 3)
+            // Check the distance from the player
+            if (Mathf.Abs(player.transform.position.magnitude - gameObject.transform.position.magnitude) < 2)
             {
                 arrowPlaceholder.sprite = arrowGlowSprite;
+                canInteract = true;
             }
             else if (!canInteract)
             {
@@ -53,8 +63,6 @@ public class InteractableUI : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         player = other.gameObject;
-
-        Debug.Log(other.transform.position.magnitude - gameObject.transform.position.magnitude);
 
         if (other.CompareTag("Player"))
         {
@@ -72,8 +80,14 @@ public class InteractableUI : MonoBehaviour
             arrowPlaceholder.gameObject.SetActive(false);
             isInRange = false;
             arrowPlaceholder.rectTransform.position = new Vector3(originTransform.position.x, originTransform.position.y + 2.5f, originTransform.position.z);
+            canInteract = false;
         }
     }
 
     #endregion
+
+    private void OnDisable()
+    {
+        canInteract = false;
+    }
 }

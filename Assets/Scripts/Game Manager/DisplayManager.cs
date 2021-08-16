@@ -1,5 +1,5 @@
 using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -9,7 +9,6 @@ using UnityEngine.InputSystem.Users;
 public class DisplayManager : MonoBehaviour
 {
     [SerializeField] private GameObject HUD;
-    [SerializeField] private GameObject Battle;
     [SerializeField] private GameObject Interaction;
     [SerializeField] private GameObject Satchel;
     [SerializeField] private GameObject Pause;
@@ -36,17 +35,11 @@ public class DisplayManager : MonoBehaviour
         playerInputActions.Wandering.Pause.performed += x => PauseMenu();
     }
 
-    private void Update()
-    {
-        
-    }
-
     public void PauseMenu()
     {
         Time.timeScale = 0;
 
         HUD.SetActive(false);
-        Battle.SetActive(false);
         Interaction.SetActive(false);
         Satchel.SetActive(false);
         Pause.SetActive(true);
@@ -59,7 +52,6 @@ public class DisplayManager : MonoBehaviour
         Time.timeScale = 1;
 
         HUD.SetActive(true);
-        Battle.SetActive(false);
         Interaction.SetActive(false);
         Satchel.SetActive(false);
         Pause.SetActive(false);
@@ -76,10 +68,11 @@ public class DisplayManager : MonoBehaviour
     public void OnInteraction(InteractionTypes type)
     {
         HUD.SetActive(false);
-        Battle.SetActive(false);
         Interaction.SetActive(true);
         Satchel.SetActive(false);
         Pause.SetActive(false);
+
+        Cursor.lockState = CursorLockMode.None;
 
         switch (type)
         {
@@ -105,7 +98,6 @@ public class DisplayManager : MonoBehaviour
                 Interaction.SetActive(false);
                 break;
         }
-
     }
 
     #region - Enable/Disable -

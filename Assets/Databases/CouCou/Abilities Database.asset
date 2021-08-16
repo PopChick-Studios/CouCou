@@ -1,0 +1,225 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2078a6f0e5b7d8f44bfe729e6d25f185, type: 3}
+  m_Name: Abilities Database
+  m_EditorClassIdentifier: 
+  attackAbilities:
+  - abilityName: Scratch
+    uniqueIdentifier: 0
+    description: Scratches the enemy, damaging them for 90% damage
+    coucouElement: 0
+    damageMultiplier: 0.9
+    abilityColor: {r: 0.97647065, g: 1, b: 0.5529412, a: 1}
+  - abilityName: Double Punch
+    uniqueIdentifier: 1
+    description: Punches the enemy twice, each doing 50% damage
+    coucouElement: 0
+    damageMultiplier: 1
+    abilityColor: {r: 0.97647065, g: 1, b: 0.5529412, a: 1}
+  - abilityName: Heavy Kick
+    uniqueIdentifier: 2
+    description: Kicks the enemy hard, dealing 110% damage
+    coucouElement: 0
+    damageMultiplier: 1.1
+    abilityColor: {r: 0.97647065, g: 1, b: 0.5529412, a: 1}
+  - abilityName: Fireball
+    uniqueIdentifier: 3
+    description: Shoot a fireball at the enemy, dealing 100% damage
+    coucouElement: 1
+    damageMultiplier: 1
+    abilityColor: {r: 0.9490197, g: 0.5294118, b: 0.5372549, a: 1}
+  - abilityName: Flame Breath
+    uniqueIdentifier: 4
+    description: Breathes fire on the enemy, dealing 105% damage
+    coucouElement: 1
+    damageMultiplier: 1
+    abilityColor: {r: 0.9490197, g: 0.5294118, b: 0.5372549, a: 1}
+  - abilityName: Solar Flare
+    uniqueIdentifier: 5
+    description: Radiates heat from the Sun towards the enemy, dealing 107% damage
+    coucouElement: 1
+    damageMultiplier: 1.07
+    abilityColor: {r: 0.9490197, g: 0.5294118, b: 0.5372549, a: 1}
+  - abilityName: Infernal Blaze
+    uniqueIdentifier: 6
+    description: Creates an inferno and covers the enemy in it, dealing 110% damage
+    coucouElement: 1
+    damageMultiplier: 1.1
+    abilityColor: {r: 0.9490197, g: 0.5294118, b: 0.5372549, a: 1}
+  - abilityName: Jet Stream
+    uniqueIdentifier: 7
+    description: Shoots a stream of water at the enemy, dealing 100% damage
+    coucouElement: 3
+    damageMultiplier: 1
+    abilityColor: {r: 0.7568628, g: 0.9921569, b: 1, a: 1}
+  - abilityName: Frozen Punch
+    uniqueIdentifier: 8
+    description: Punches the enemy with a frozen fist, dealing 105% damage
+    coucouElement: 3
+    damageMultiplier: 1.05
+    abilityColor: {r: 0.7568628, g: 0.9921569, b: 1, a: 1}
+  - abilityName: Vapour Gun
+    uniqueIdentifier: 9
+    description: Shoots rounds of vapour particles at the enemy, dealing 107% damage
+    coucouElement: 3
+    damageMultiplier: 1.07
+    abilityColor: {r: 0.7568628, g: 0.9921569, b: 1, a: 1}
+  - abilityName: Furious Flood
+    uniqueIdentifier: 10
+    description: Creates a flood to wash out the enemy, dealing 110% damage
+    coucouElement: 3
+    damageMultiplier: 1.1
+    abilityColor: {r: 0.7568628, g: 0.9921569, b: 1, a: 1}
+  - abilityName: Galeforce
+    uniqueIdentifier: 11
+    description: Fires a strong wind at the enemy, dealing 100% damage
+    coucouElement: 2
+    damageMultiplier: 1.07
+    abilityColor: {r: 0.8588236, g: 1, b: 0.69411767, a: 1}
+  - abilityName: Vine Bash
+    uniqueIdentifier: 12
+    description: Lashes the enemy with vines, dealing 105% damage
+    coucouElement: 2
+    damageMultiplier: 1.05
+    abilityColor: {r: 0.8588236, g: 1, b: 0.69411767, a: 1}
+  - abilityName: Explosive Blossom
+    uniqueIdentifier: 13
+    description: Plants and explodes a blossom on top of the enemy, dealing 107%
+      damage
+    coucouElement: 2
+    damageMultiplier: 1.07
+    abilityColor: {r: 0.8588236, g: 1, b: 0.69411767, a: 1}
+  - abilityName: Toxic Miasma
+    uniqueIdentifier: 14
+    description: Infects the air with a toxic smell, dealing 110% damage
+    coucouElement: 2
+    damageMultiplier: 1.1
+    abilityColor: {r: 0.8588236, g: 1, b: 0.69411767, a: 1}
+  - abilityName: Dark Claws
+    uniqueIdentifier: 15
+    description: Slashes the enemy with claws, dealing 100% damage
+    coucouElement: 5
+    damageMultiplier: 1
+    abilityColor: {r: 0.85098046, g: 0.81568635, b: 1, a: 1}
+  - abilityName: Shadow Whip
+    uniqueIdentifier: 16
+    description: Whips the enemy from the shadows, dealing 105% damage
+    coucouElement: 5
+    damageMultiplier: 1.05
+    abilityColor: {r: 0.85098046, g: 0.81568635, b: 1, a: 1}
+  - abilityName: Gloomy Grasp
+    uniqueIdentifier: 17
+    description: Grasps the enemy with dark magic, dealing 107% damage
+    coucouElement: 5
+    damageMultiplier: 1.07
+    abilityColor: {r: 0.85098046, g: 0.81568635, b: 1, a: 1}
+  - abilityName: Occult Force
+    uniqueIdentifier: 18
+    description: Lunges at the enemy and punches them with occult power, dealing
+      110% damage
+    coucouElement: 5
+    damageMultiplier: 1.1
+    abilityColor: {r: 0.85098046, g: 0.81568635, b: 1, a: 1}
+  - abilityName: Lunar Attack
+    uniqueIdentifier: 19
+    description: Channels power from the Moon and shoots it at the enemy, dealing
+      100% damage
+    coucouElement: 4
+    damageMultiplier: 1
+    abilityColor: {r: 1, g: 1, b: 1, a: 1}
+  - abilityName: Star Strike
+    uniqueIdentifier: 20
+    description: Strikes the enemy with a star, dealing 105% damage
+    coucouElement: 4
+    damageMultiplier: 1.05
+    abilityColor: {r: 1, g: 1, b: 1, a: 1}
+  - abilityName: Arclight Beam
+    uniqueIdentifier: 21
+    description: Shoots a beam of pure light at the enemy, dealing 107% damage
+    coucouElement: 4
+    damageMultiplier: 1.07
+    abilityColor: {r: 1, g: 1, b: 1, a: 1}
+  - abilityName: Lightning Blow
+    uniqueIdentifier: 22
+    description: Strikes the enemy from above with lightning, dealing 110% damage
+    coucouElement: 4
+    damageMultiplier: 1.1
+    abilityColor: {r: 1, g: 1, b: 1, a: 1}
+  utilityAbilities:
+  - abilityName: Strengthen
+    uniqueIdentifier: 100
+    description: Increases your resistance by 10%
+    coucouElement: 0
+    resistanceMultiplier: 1.1
+    selfMindset: 0
+    enemyMindset: 0
+    selfDetermination: 0
+    enemyDetermination: 0
+    abilityColor: {r: 0.97647065, g: 1, b: 0.5529412, a: 1}
+    canStun: 0
+  - abilityName: Meditate
+    uniqueIdentifier: 101
+    description: Clear your mind of distactions and increase your Mindset by 5
+    coucouElement: 0
+    resistanceMultiplier: 1
+    selfMindset: 5
+    enemyMindset: 0
+    selfDetermination: 0
+    enemyDetermination: 0
+    abilityColor: {r: 0.97647065, g: 1, b: 0.5529412, a: 1}
+    canStun: 0
+  - abilityName: Spook
+    uniqueIdentifier: 102
+    description: Fears the enemy, decreasing their Mindset and having a change
+    coucouElement: 6
+    resistanceMultiplier: 1
+    selfMindset: 0
+    enemyMindset: 1
+    selfDetermination: 0
+    enemyDetermination: 0
+    abilityColor: {r: 0.9725491, g: 0.79215693, b: 0.9490197, a: 1}
+    canStun: 0
+  - abilityName: Taunt
+    uniqueIdentifier: 103
+    description: Taunts the enemy, increasing your Mindset by 5, but increasing their
+      Determination by 10
+    coucouElement: 6
+    resistanceMultiplier: 1
+    selfMindset: 5
+    enemyMindset: 0
+    selfDetermination: 0
+    enemyDetermination: 10
+    abilityColor: {r: 0.9725491, g: 0.79215693, b: 0.9490197, a: 1}
+    canStun: 0
+  - abilityName: Charm
+    uniqueIdentifier: 104
+    description: Charms the enemy, decreasing their Mindset exponentially and Determination
+      by 10
+    coucouElement: 6
+    resistanceMultiplier: 1
+    selfMindset: 0
+    enemyMindset: 1
+    selfDetermination: 0
+    enemyDetermination: -10
+    abilityColor: {r: 0.9725491, g: 0.79215693, b: 0.9490197, a: 1}
+    canStun: 0
+  - abilityName: Shock
+    uniqueIdentifier: 105
+    description: If hits successfully, Shock will stun the enemy for 1 turn
+    coucouElement: 6
+    resistanceMultiplier: 1
+    selfMindset: 0
+    enemyMindset: 1
+    selfDetermination: 0
+    enemyDetermination: 0
+    abilityColor: {r: 0.9725491, g: 0.79215693, b: 0.9490197, a: 1}
+    canStun: 1

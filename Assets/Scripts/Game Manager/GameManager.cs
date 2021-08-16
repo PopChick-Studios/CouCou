@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour
     {
         TitleScreen,
         Wandering,
+        Paused,
         Interacting,
         Dialogue,
         Battling
@@ -43,6 +44,10 @@ public class GameManager : MonoBehaviour
             
             case GameState.Wandering:
 
+                break;
+
+            case GameState.Paused:
+                
                 break;
 
             case GameState.Interacting:
