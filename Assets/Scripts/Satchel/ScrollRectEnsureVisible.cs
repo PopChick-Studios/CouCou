@@ -1,3 +1,10 @@
+/***************************************************************************************************
+ * 
+ * This script is thanks to jschieck on the Unity Forums :)
+ * https://forum.unity.com/threads/scrollrect-scroll-to-a-gameobject-position.473214/#post-3088504 
+ * 
+ **************************************************************************************************/
+
 using UnityEngine;
 using UnityEngine.UI;
 
