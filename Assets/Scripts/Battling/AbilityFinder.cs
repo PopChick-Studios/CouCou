@@ -6,17 +6,14 @@ public class AbilityFinder : MonoBehaviour
 {
     public AbilitiesDatabase abilitiesDatabase;
 
-    private List<AbilitiesDatabase.AttackAbilityData> attackAbilityData;
-    private List<AbilitiesDatabase.UtilityAbilityData> utilityAbilityData;
+    public List<AbilitiesDatabase.AttackAbilityData> attackAbilityData;
+    public List<AbilitiesDatabase.UtilityAbilityData> utilityAbilityData;
 
     private void Awake()
     {
         attackAbilityData = new List<AbilitiesDatabase.AttackAbilityData>();
         utilityAbilityData = new List<AbilitiesDatabase.UtilityAbilityData>();
-    }
 
-    void Start()
-    {
         foreach (AbilitiesDatabase.AttackAbilityData a in abilitiesDatabase.attackAbilities)
         {
             attackAbilityData.Add(a);
@@ -42,7 +39,7 @@ public class AbilityFinder : MonoBehaviour
 
     public AbilitiesDatabase.UtilityAbilityData FindUtilityAbility(int abilityUID)
     {
-        for (int i = 0; i < attackAbilityData.Count - 1; i++)
+        for (int i = 0; i < utilityAbilityData.Count - 1; i++)
         {
             if (abilityUID == utilityAbilityData[i].uniqueIdentifier)
             {

@@ -8,11 +8,14 @@ public class BattleManager : MonoBehaviour
 {
     private AbilityDisplay abilityDisplay;
     private AbilityFinder abilityFinder;
+    private EnemyManager enemyManager;
 
     public InventoryList inventory;
     public CouCouDatabase coucouDatabase;
     public AbilitiesDatabase abilitiesDatabase;
     public ItemsDatabase itemsDatabase;
+
+    public GameObject menu;
 
     // CHANGE THESE !!! ONLY FOR DEBUGGING
     [Space]
@@ -42,6 +45,7 @@ public class BattleManager : MonoBehaviour
 
     private void Awake()
     {
+        enemyManager = GetComponent<EnemyManager>();
         abilityFinder = GetComponent<AbilityFinder>();
         abilityDisplay = GameObject.FindGameObjectWithTag("BattlingUI").GetComponent<AbilityDisplay>();
 
@@ -52,6 +56,8 @@ public class BattleManager : MonoBehaviour
         coucouVariantList = new List<CouCouDatabase.CouCouVariant>();
 
         ItemsDatabaseList = new List<ItemsDatabase>();
+
+        StartTurn();
     }
 
     private void Start()
@@ -213,7 +219,9 @@ public class BattleManager : MonoBehaviour
         {
             if (name == c.coucouName)
             {
+                activeCouCou.lineupOrder = c.lineupOrder;
                 activeCouCou = c;
+                activeCouCou.lineupOrder = 0;
             }
         }
     }
@@ -240,5 +248,16 @@ public class BattleManager : MonoBehaviour
             //EnemyManager.TakeDamage(activeCouCou.currentAttack * button.attackAbility.damageMultiplier);
         }
 
+    }
+
+    public void StartTurn()
+    {
+        menu.SetActive(true);
+    }
+
+    public void FinishedTurn()
+    {
+        
+        menu.SetActive(false);
     }
 }

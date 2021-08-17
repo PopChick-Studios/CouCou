@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 702f33a5e8631ca4996ad7764405fcba, type: 3}
+  m_Name: EnemyInventory
+  m_EditorClassIdentifier: 
+  couCouInventory:
+  - coucouName: Brawlster
+    coucouLevel: 20
+    coucouVariant: 6
+    element: 3
+    isCurrentlyActive: 1
+    onParty: 1
+    lineupOrder: 0
+    maxHealth: 0
+    currentAttack: 0
+    currentResistance: 0
+    currentHealth: 0
+    currentMindset: 0
+    currentDetermination: 0
+    ability1: 3
+    ability2: 12
+    ability3: 13
+    ability4: 102
+  itemInventory: []

@@ -1521,6 +1521,7 @@ GameObject:
   - component: {fileID: 368891498}
   - component: {fileID: 368891497}
   - component: {fileID: 368891499}
+  - component: {fileID: 368891500}
   m_Layer: 0
   m_Name: --Game Management--
   m_TagString: GameManager
@@ -1544,6 +1545,7 @@ MonoBehaviour:
   coucouDatabase: {fileID: 11400000, guid: b43204cd7c6f9b54984e64e16d68ca8a, type: 2}
   abilitiesDatabase: {fileID: 11400000, guid: 12472bc86e678384fa756e5fedb1272a, type: 2}
   itemsDatabase: {fileID: 11400000, guid: c6789e2ec6b1e7d4da21add6fed77929, type: 2}
+  menu: {fileID: 789084512}
   activeCouCou:
     coucouName: 
     coucouLevel: 0
@@ -1603,6 +1605,48 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   abilitiesDatabase: {fileID: 11400000, guid: 12472bc86e678384fa756e5fedb1272a, type: 2}
+  attackAbilityData: []
+  utilityAbilityData: []
+--- !u!114 &368891500
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 368891496}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02d26c50b01227c45a7395c0d92bb854, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemyInventory: {fileID: 11400000, guid: e4a668288a3079545aa3cb899de54343, type: 2}
+  enemyActiveCouCou:
+    coucouName: 
+    coucouLevel: 0
+    coucouVariant: 0
+    element: 0
+    isCurrentlyActive: 0
+    onParty: 0
+    lineupOrder: -1
+    maxHealth: 0
+    currentAttack: 0
+    currentResistance: 0
+    currentHealth: 0
+    currentMindset: 0
+    currentDetermination: 0
+    ability1: 0
+    ability2: 0
+    ability3: 0
+    ability4: 0
+  enemyCouCouParty: []
+  attackAbilities: []
+  utilityAbilities: []
+  cumulativeProbability: []
+  abilityProbability: []
+  abilityAdvantage: 
+  wild: 0
+  turn: 0
+  previousAbilityIndex: 0
 --- !u!114 &456843822 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 801370859691452377, guid: 8ae8a30ce2b2472479104084a2134009, type: 3}
@@ -4234,7 +4278,7 @@ MonoBehaviour:
   directionalLight: {fileID: 1562173530}
   Preset: {fileID: 11400000, guid: 93966cc27bf964a489783c1458661b8c, type: 2}
   TimeOfDay: 10
-  LengthOfDay: 20
+  LengthOfDay: 100
 --- !u!4 &1412138416
 Transform:
   m_ObjectHideFlags: 0
