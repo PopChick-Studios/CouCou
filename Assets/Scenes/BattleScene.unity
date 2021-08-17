@@ -507,24 +507,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   coucouDatabase: {fileID: 11400000, guid: b43204cd7c6f9b54984e64e16d68ca8a, type: 2}
+  scrollRect: {fileID: 630600196}
+  blurCamera: {fileID: 1939129689}
+  satchel: {fileID: 1080016852}
   inventoryList: {fileID: 11400000, guid: 44ee79a05ad81ff4d8652799fc7d7f56, type: 2}
   satchelSlotPrefab: {fileID: 5484765283773508640, guid: 7758af0b9678d914191742511a4de32a, type: 3}
-  currentFocusedItem: 0
-  currentFocusedCouCou: 0
-  usingMouse: 0
-  itemsSection: {fileID: 1384431086}
-  coucouSection: {fileID: 2033081568}
+  itemsSection: {fileID: 1384431088}
+  coucouSection: {fileID: 2033081570}
   selectedSection: 0
-  defaultButtonColour: {r: 0.77254903, g: 0.61960787, b: 0.41960785, a: 1}
-  headerSelection: 1
-  possibleSubmitFocus: 0
-  submitFocusedPrevious: 0
-  selectedObject: 0
   descriptionName: {fileID: 641706349}
   descriptionText: {fileID: 725775945}
   itemSprite: {fileID: 688467116}
-  submitButton: {fileID: 1947962533}
-  defaultColour: {r: 0.90588236, g: 0.85490197, b: 0.7921569, a: 1}
+  submitButton: {fileID: 1947962532}
   itemSlotList: []
   coucouSlotList: []
 --- !u!1 &93542247
@@ -634,8 +628,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1080016855}
-        m_TargetAssemblyTypeName: SatchelOpenClose, Assembly-CSharp
+      - m_Target: {fileID: 79374293}
+        m_TargetAssemblyTypeName: SatchelManager, Assembly-CSharp
         m_MethodName: OnItemSection
         m_Mode: 1
         m_Arguments:
@@ -3377,7 +3371,7 @@ MonoBehaviour:
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
-        m_CallState: 0
+        m_CallState: 2
 --- !u!114 &1075211642
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3426,7 +3420,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1080016853}
   - component: {fileID: 1080016854}
-  - component: {fileID: 1080016855}
   m_Layer: 5
   m_Name: Satchel
   m_TagString: Satchel
@@ -3464,19 +3457,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1080016852}
   m_CullTransparentMesh: 1
---- !u!114 &1080016855
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1080016852}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 99d74bff07098cb4d9901509ea1de0cd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  blurCamera: {fileID: 1939129689}
 --- !u!1 &1127239069
 GameObject:
   m_ObjectHideFlags: 0
@@ -4166,7 +4146,7 @@ GameObject:
   - component: {fileID: 1384431087}
   - component: {fileID: 1384431090}
   - component: {fileID: 1384431089}
-  - component: {fileID: 1384431091}
+  - component: {fileID: 1384431088}
   m_Layer: 5
   m_Name: ItemsSection
   m_TagString: Untagged
@@ -4194,6 +4174,62 @@ RectTransform:
   m_AnchoredPosition: {x: -525, y: 0}
   m_SizeDelta: {x: 450, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1384431088
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1384431086}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 4
+    m_WrapAround: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 2033081570}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9254902, g: 0.9254902, b: 0.9254902, a: 1}
+    m_PressedColor: {r: 0.81960785, g: 0.81960785, b: 0.81960785, a: 1}
+    m_SelectedColor: {r: 0.9254902, g: 0.9254902, b: 0.9254902, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 1384431089}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 79374293}
+        m_TargetAssemblyTypeName: SatchelManager, Assembly-CSharp
+        m_MethodName: OnItemSection
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1384431089
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4232,20 +4268,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1384431086}
   m_CullTransparentMesh: 1
---- !u!114 &1384431091
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1384431086}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ad66cede52d7405499b86fe165e964d8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  itemButton: {fileID: 1384431086}
-  coucouButton: {fileID: 2033081568}
 --- !u!1 &1412138414
 GameObject:
   m_ObjectHideFlags: 0
@@ -4556,8 +4578,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1080016855}
-        m_TargetAssemblyTypeName: SatchelOpenClose, Assembly-CSharp
+      - m_Target: {fileID: 79374293}
+        m_TargetAssemblyTypeName: SatchelManager, Assembly-CSharp
         m_MethodName: OnCouCouSection
         m_Mode: 1
         m_Arguments:
@@ -4784,11 +4806,11 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1074471355}
         m_TargetAssemblyTypeName: BattlingUI, Assembly-CSharp
-        m_MethodName: LastButtonPressed
-        m_Mode: 2
+        m_MethodName: OnFight
+        m_Mode: 1
         m_Arguments:
-          m_ObjectArgument: {fileID: 1593002705}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -4796,11 +4818,11 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 1074471355}
         m_TargetAssemblyTypeName: BattlingUI, Assembly-CSharp
-        m_MethodName: OnFight
-        m_Mode: 1
+        m_MethodName: LastButtonPressed
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 1593002705}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -5409,9 +5431,41 @@ MonoBehaviour:
   m_GameObject: {fileID: 1947962530}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8dafd0c7d113ec740964180642abb686, type: 3}
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 4
+    m_WrapAround: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9254902, g: 0.9254902, b: 0.9254902, a: 1}
+    m_PressedColor: {r: 0.81960785, g: 0.81960785, b: 0.81960785, a: 1}
+    m_SelectedColor: {r: 0.9254902, g: 0.9254902, b: 0.9254902, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 1947962533}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &1947962533
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5509,7 +5563,7 @@ GameObject:
   - component: {fileID: 2033081569}
   - component: {fileID: 2033081572}
   - component: {fileID: 2033081571}
-  - component: {fileID: 2033081573}
+  - component: {fileID: 2033081570}
   m_Layer: 5
   m_Name: CouCouSection
   m_TagString: Untagged
@@ -5537,6 +5591,62 @@ RectTransform:
   m_AnchoredPosition: {x: -150, y: 0}
   m_SizeDelta: {x: 300, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &2033081570
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2033081568}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 4
+    m_WrapAround: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 1384431088}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9254902, g: 0.9254902, b: 0.9254902, a: 1}
+    m_PressedColor: {r: 0.81960785, g: 0.81960785, b: 0.81960785, a: 1}
+    m_SelectedColor: {r: 0.9254902, g: 0.9254902, b: 0.9254902, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 2033081571}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 79374293}
+        m_TargetAssemblyTypeName: SatchelManager, Assembly-CSharp
+        m_MethodName: OnCouCouSection
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &2033081571
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5575,20 +5685,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2033081568}
   m_CullTransparentMesh: 1
---- !u!114 &2033081573
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2033081568}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ad66cede52d7405499b86fe165e964d8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  itemButton: {fileID: 1384431086}
-  coucouButton: {fileID: 2033081568}
 --- !u!1 &2133393277
 GameObject:
   m_ObjectHideFlags: 0

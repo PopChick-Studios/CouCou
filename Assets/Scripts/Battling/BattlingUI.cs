@@ -5,7 +5,6 @@ using UnityEngine.EventSystems;
 
 public class BattlingUI : MonoBehaviour
 {
-    private SatchelOpenClose satchelOpenClose;
     private AbilityDisplay abilityDisplay;
 
     public GameObject fightButtons;
@@ -16,15 +15,9 @@ public class BattlingUI : MonoBehaviour
     public GameObject abilitiesFirstButton;
     private GameObject lastButtonPressed;
 
-    private PlayerInputActions playerInputActions;
-
     private void Awake()
     {
-        playerInputActions = new PlayerInputActions();
-        playerInputActions.UI.Cancel.performed += x => BackToMenu();
-
         abilityDisplay = GetComponent<AbilityDisplay>();
-        satchelOpenClose = GameObject.FindGameObjectWithTag("Satchel").GetComponent<SatchelOpenClose>();
         
         fightButtons.SetActive(false);
         menuButtons.SetActive(true);
@@ -87,21 +80,8 @@ public class BattlingUI : MonoBehaviour
 
     public void OnSatchel()
     {
-        EventSystem.current.SetSelectedGameObject(null);
-
         fightButtons.SetActive(false);
         menuButtons.SetActive(false);
         healthBars.SetActive(false);
-        satchelOpenClose.gameObject.SetActive(true);
-    }
-
-    private void OnEnable()
-    {
-        playerInputActions.Enable();
-    }
-
-    private void OnDisable()
-    {
-        playerInputActions.Disable();
     }
 }
