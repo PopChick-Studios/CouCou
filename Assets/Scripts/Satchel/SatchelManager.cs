@@ -11,6 +11,7 @@ public class SatchelManager : MonoBehaviour
 {
     private BattleManager battleManager;
     private ScrollRectEnsureVisible scrollRectEnsureVisible;
+    public ScrollRect scrollRect;
 
     public enum SelectedObject
     {
@@ -526,7 +527,8 @@ public class SatchelManager : MonoBehaviour
         currentFocusedCouCou = 0;
         satchelOpenClose.OnItemSection();
         ChangeFocusedItem(currentFocusedItem, -1);
-        gameObject.GetComponentInParent<ScrollRect>().enabled = false;
+        scrollRect.normalizedPosition = new Vector2(0, 1);
+        scrollRect.enabled = false;
 
         submitButton.GetComponentInChildren<TextMeshProUGUI>().text = "Use Item";
     }
