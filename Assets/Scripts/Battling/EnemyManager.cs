@@ -3,18 +3,29 @@ using System.Threading.Tasks;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
 public class EnemyManager : MonoBehaviour
 {
     private AbilityFinder abilityFinder;
     private BattleManager battleManager;
+    private BattleSystem battleSystem;
 
+    public CouCouDatabase coucouDatabase;
     public InventoryList enemyInventory;
     public InventoryList.CouCouInventory enemyActiveCouCou = null;
     public List<InventoryList.CouCouInventory> enemyCouCouParty;
 
+    public List<CouCouDatabase.CouCouVariant> coucouVariantList;
     public List<AbilitiesDatabase.AttackAbilityData> attackAbilities;
     public List<AbilitiesDatabase.UtilityAbilityData> utilityAbilities;
+
+    public GameObject enemyHealthBar;
+    public TextMeshProUGUI enemyNameText;
+    public TextMeshProUGUI enemyLevelText;
+    public TextMeshProUGUI enemyHealthText;
+    public Image enemyElementSprite;
 
     public float[] cumulativeProbability;
     public float[] abilityProbability;
@@ -31,13 +42,19 @@ public class EnemyManager : MonoBehaviour
         utilityAbilities = new List<AbilitiesDatabase.UtilityAbilityData>();
         cumulativeProbability = new float[4];
         abilityProbability = new float[4];
+        coucouVariantList = new List<CouCouDatabase.CouCouVariant>();
 
+        battleSystem = gameObject.GetComponent<BattleSystem>();
         abilityFinder = gameObject.GetComponent<AbilityFinder>();
         battleManager = gameObject.GetComponent<BattleManager>();
     }
 
     void Start()
     {
+        foreach (CouCouDatabase.CouCouVariant c in coucouDatabase.coucouVariant)
+        {
+            coucouVariantList.Add(c);
+        }
         foreach (InventoryList.CouCouInventory c in enemyInventory.couCouInventory)
         {
             if (c.onParty)
@@ -72,8 +89,50 @@ public class EnemyManager : MonoBehaviour
         InitializeEnemyCouCou();
     }
 
+    public void InitializeHealthBarEnemy()
+    {
+        enemyNameText.text = enemyActiveCouCou.coucouName;
+        enemyHealthBar.GetComponent<Image>().fillAmount = enemyActiveCouCou.currentHealth / enemyActiveCouCou.maxHealth;
+        enemyHealthText.text = enemyActiveCouCou.currentHealth + "/" + enemyActiveCouCou.maxHealth;
+        enemyLevelText.text = enemyActiveCouCou.coucouLevel.ToString();
+        enemyElementSprite = null; // Fix this when sprites are made
+    }
+
     public void InitializeEnemyCouCou()
     {
+        int level;
+        int bonusStatsPer5;
+        int bonusStatsPer1;
+
+        for (int i = 0; i < enemyCouCouParty.Count; i++)
+        {
+            for (int a = 1; a < coucouVariantList.Count; a++)
+            {
+
+                // Be sure too add variant to the inventory when catching CouCou
+
+                if (enemyCouCouParty[i].coucouVariant == coucouVariantList[a].variant)
+                {
+                    level = enemyCouCouParty[i].coucouLevel;
+                    bonusStatsPer5 = Mathf.FloorToInt(level / 5);
+                    bonusStatsPer1 = level - bonusStatsPer5 - 1;
+
+                    enemyCouCouParty[i].maxHealth = coucouVariantList[a].hp + (coucouVariantList[a].bonusHP * bonusStatsPer1) + (coucouVariantList[a].bonusHPPer5 * bonusStatsPer5);
+                    enemyCouCouParty[i].currentAttack = coucouVariantList[a].attack + (coucouVariantList[a].bonusAttack * bonusStatsPer1) + (coucouVariantList[a].bonusAttackPer5 * bonusStatsPer5);
+                    enemyCouCouParty[i].currentResistance = coucouVariantList[a].resistance + (coucouVariantList[a].bonusResistance * bonusStatsPer1) + (coucouVariantList[a].bonusResistancePer5 * bonusStatsPer5);
+                    enemyCouCouParty[i].currentMindset = 10;
+                    enemyCouCouParty[i].currentDetermination = 50;
+
+                    // *********** REMOVE THIS ONCE YOU MADE THE CURRENT HEALTH SCRIPT *********** //
+                    enemyCouCouParty[i].currentHealth = enemyCouCouParty[i].maxHealth;
+                }
+            }
+        }
+
+        InitializeHealthBarEnemy();
+
+        battleSystem.enemy = enemyActiveCouCou;
+
         int abilityUID = -1;
         for (int i = 0; i < 4; i++)
         {
@@ -139,15 +198,15 @@ public class EnemyManager : MonoBehaviour
         if (attackAbilities[previousAbilityIndex] != null)
         {
             // Attack display
+            StartCoroutine(battleSystem.EnemyTurn(enemyActiveCouCou.currentAttack * attackAbilities[previousAbilityIndex].damageMultiplier, attackAbilities[previousAbilityIndex].abilityName));
             Debug.Log(enemyActiveCouCou.coucouName + " used " + attackAbilities[previousAbilityIndex].abilityName);
 
         }
         else
         {
+            StartCoroutine(battleSystem.EnemyTurn(0, utilityAbilities[previousAbilityIndex].abilityName));
             Debug.Log(enemyActiveCouCou.coucouName + " used " + utilityAbilities[previousAbilityIndex].abilityName);
         }
-
-        FinishedTurn();
     }
 
     public int PerformEnemyAbility(float[] probability)
@@ -198,10 +257,5 @@ public class EnemyManager : MonoBehaviour
         {
 
         }
-    }
-
-    public void FinishedTurn()
-    {
-        battleManager.StartTurn();
     }
 }

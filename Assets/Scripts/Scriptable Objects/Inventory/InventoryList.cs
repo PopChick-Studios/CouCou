@@ -25,6 +25,7 @@ public class InventoryList : ScriptableObject
         public int currentHealth;
         public int currentMindset;
         public int currentDetermination;
+        public bool isStunned = false;
 
         [Header("Abilities")]
         public int ability1;

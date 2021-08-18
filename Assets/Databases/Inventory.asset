@@ -17,15 +17,16 @@ MonoBehaviour:
     coucouLevel: 34
     coucouVariant: 5
     element: 1
-    isCurrentlyActive: 0
+    isCurrentlyActive: 1
     onParty: 1
-    lineupOrder: 3
+    lineupOrder: 1
     maxHealth: 540
     currentAttack: 385
     currentResistance: 2.86
     currentHealth: 540
     currentMindset: 10
     currentDetermination: 50
+    isStunned: 0
     ability1: 0
     ability2: 0
     ability3: 0
@@ -43,380 +44,25 @@ MonoBehaviour:
     currentHealth: 612
     currentMindset: 10
     currentDetermination: 50
+    isStunned: 0
     ability1: 0
     ability2: 0
     ability3: 0
     ability4: 0
-  - coucouName: Moinyaa
-    coucouLevel: 24
-    coucouVariant: 2
-    element: 3
-    isCurrentlyActive: 1
-    onParty: 1
-    lineupOrder: 1
-    maxHealth: 514
-    currentAttack: 425
-    currentResistance: 3.46
-    currentHealth: 514
-    currentMindset: 10
-    currentDetermination: 50
-    ability1: 1
-    ability2: 2
-    ability3: 3
-    ability4: 4
-  - coucouName: Moinyaa
-    coucouLevel: 23
-    coucouVariant: 2
-    element: 3
-    isCurrentlyActive: 1
-    onParty: 1
-    lineupOrder: 1
-    maxHealth: 514
-    currentAttack: 425
-    currentResistance: 3.46
-    currentHealth: 514
-    currentMindset: 10
-    currentDetermination: 50
-    ability1: 1
-    ability2: 2
-    ability3: 3
-    ability4: 4
-  - coucouName: Moinyaa
-    coucouLevel: 22
-    coucouVariant: 2
-    element: 3
-    isCurrentlyActive: 1
-    onParty: 1
-    lineupOrder: 1
-    maxHealth: 514
-    currentAttack: 425
-    currentResistance: 3.46
-    currentHealth: 514
-    currentMindset: 10
-    currentDetermination: 50
-    ability1: 1
-    ability2: 2
-    ability3: 3
-    ability4: 4
-  - coucouName: Moinyaa
-    coucouLevel: 21
-    coucouVariant: 2
-    element: 3
-    isCurrentlyActive: 1
-    onParty: 1
-    lineupOrder: 1
-    maxHealth: 514
-    currentAttack: 425
-    currentResistance: 3.46
-    currentHealth: 514
-    currentMindset: 10
-    currentDetermination: 50
-    ability1: 1
-    ability2: 2
-    ability3: 3
-    ability4: 4
-  - coucouName: Moinyaa
-    coucouLevel: 20
-    coucouVariant: 2
-    element: 3
-    isCurrentlyActive: 1
-    onParty: 1
-    lineupOrder: 1
-    maxHealth: 514
-    currentAttack: 425
-    currentResistance: 3.46
-    currentHealth: 514
-    currentMindset: 10
-    currentDetermination: 50
-    ability1: 1
-    ability2: 2
-    ability3: 3
-    ability4: 4
-  - coucouName: Moinyaa
-    coucouLevel: 19
-    coucouVariant: 2
-    element: 3
-    isCurrentlyActive: 1
-    onParty: 1
-    lineupOrder: 1
-    maxHealth: 514
-    currentAttack: 425
-    currentResistance: 3.46
-    currentHealth: 514
-    currentMindset: 10
-    currentDetermination: 50
-    ability1: 1
-    ability2: 2
-    ability3: 3
-    ability4: 4
-  - coucouName: Moinyaa
-    coucouLevel: 18
-    coucouVariant: 2
-    element: 3
-    isCurrentlyActive: 1
-    onParty: 1
-    lineupOrder: 1
-    maxHealth: 514
-    currentAttack: 425
-    currentResistance: 3.46
-    currentHealth: 514
-    currentMindset: 10
-    currentDetermination: 50
-    ability1: 1
-    ability2: 2
-    ability3: 3
-    ability4: 4
-  - coucouName: Moinyaa
-    coucouLevel: 17
-    coucouVariant: 2
-    element: 3
-    isCurrentlyActive: 1
-    onParty: 1
-    lineupOrder: 1
-    maxHealth: 514
-    currentAttack: 425
-    currentResistance: 3.46
-    currentHealth: 514
-    currentMindset: 10
-    currentDetermination: 50
-    ability1: 1
-    ability2: 2
-    ability3: 3
-    ability4: 4
-  - coucouName: Moinyaa
-    coucouLevel: 16
-    coucouVariant: 2
-    element: 3
-    isCurrentlyActive: 1
-    onParty: 1
-    lineupOrder: 1
-    maxHealth: 514
-    currentAttack: 425
-    currentResistance: 3.46
-    currentHealth: 514
-    currentMindset: 10
-    currentDetermination: 50
-    ability1: 1
-    ability2: 2
-    ability3: 3
-    ability4: 4
-  - coucouName: Moinyaa
-    coucouLevel: 15
-    coucouVariant: 2
-    element: 3
-    isCurrentlyActive: 1
-    onParty: 1
-    lineupOrder: 1
-    maxHealth: 514
-    currentAttack: 425
-    currentResistance: 3.46
-    currentHealth: 514
-    currentMindset: 10
-    currentDetermination: 50
-    ability1: 1
-    ability2: 2
-    ability3: 3
-    ability4: 4
-  - coucouName: Moinyaa
-    coucouLevel: 14
-    coucouVariant: 2
-    element: 3
-    isCurrentlyActive: 1
-    onParty: 1
-    lineupOrder: 1
-    maxHealth: 514
-    currentAttack: 425
-    currentResistance: 3.46
-    currentHealth: 514
-    currentMindset: 10
-    currentDetermination: 50
-    ability1: 1
-    ability2: 2
-    ability3: 3
-    ability4: 4
-  - coucouName: Moinyaa
-    coucouLevel: 13
-    coucouVariant: 2
-    element: 3
-    isCurrentlyActive: 1
-    onParty: 1
-    lineupOrder: 1
-    maxHealth: 514
-    currentAttack: 425
-    currentResistance: 3.46
-    currentHealth: 514
-    currentMindset: 10
-    currentDetermination: 50
-    ability1: 1
-    ability2: 2
-    ability3: 3
-    ability4: 4
-  - coucouName: Moinyaa
-    coucouLevel: 12
-    coucouVariant: 2
-    element: 3
-    isCurrentlyActive: 1
-    onParty: 1
-    lineupOrder: 1
-    maxHealth: 514
-    currentAttack: 425
-    currentResistance: 3.46
-    currentHealth: 514
-    currentMindset: 10
-    currentDetermination: 50
-    ability1: 1
-    ability2: 2
-    ability3: 3
-    ability4: 4
-  - coucouName: Moinyaa
-    coucouLevel: 11
-    coucouVariant: 2
-    element: 3
-    isCurrentlyActive: 1
-    onParty: 1
-    lineupOrder: 1
-    maxHealth: 514
-    currentAttack: 425
-    currentResistance: 3.46
-    currentHealth: 514
-    currentMindset: 10
-    currentDetermination: 50
-    ability1: 1
-    ability2: 2
-    ability3: 3
-    ability4: 4
-  - coucouName: Moinyaa
-    coucouLevel: 10
-    coucouVariant: 2
-    element: 3
-    isCurrentlyActive: 1
-    onParty: 1
-    lineupOrder: 1
-    maxHealth: 514
-    currentAttack: 425
-    currentResistance: 3.46
-    currentHealth: 514
-    currentMindset: 10
-    currentDetermination: 50
-    ability1: 1
-    ability2: 2
-    ability3: 3
-    ability4: 4
-  - coucouName: Moinyaa
-    coucouLevel: 9
-    coucouVariant: 2
-    element: 3
-    isCurrentlyActive: 1
-    onParty: 1
-    lineupOrder: 1
-    maxHealth: 514
-    currentAttack: 425
-    currentResistance: 3.46
-    currentHealth: 514
-    currentMindset: 10
-    currentDetermination: 50
-    ability1: 1
-    ability2: 2
-    ability3: 3
-    ability4: 4
-  - coucouName: Moinyaa
-    coucouLevel: 8
-    coucouVariant: 2
-    element: 3
-    isCurrentlyActive: 1
-    onParty: 1
-    lineupOrder: 1
-    maxHealth: 514
-    currentAttack: 425
-    currentResistance: 3.46
-    currentHealth: 514
-    currentMindset: 10
-    currentDetermination: 50
-    ability1: 1
-    ability2: 2
-    ability3: 3
-    ability4: 4
-  - coucouName: Moinyaa
-    coucouLevel: 7
-    coucouVariant: 2
-    element: 3
-    isCurrentlyActive: 1
-    onParty: 1
-    lineupOrder: 1
-    maxHealth: 514
-    currentAttack: 425
-    currentResistance: 3.46
-    currentHealth: 514
-    currentMindset: 10
-    currentDetermination: 50
-    ability1: 1
-    ability2: 2
-    ability3: 3
-    ability4: 4
-  - coucouName: Moinyaa
-    coucouLevel: 6
-    coucouVariant: 2
-    element: 3
-    isCurrentlyActive: 1
-    onParty: 1
-    lineupOrder: 1
-    maxHealth: 514
-    currentAttack: 425
-    currentResistance: 3.46
-    currentHealth: 514
-    currentMindset: 10
-    currentDetermination: 50
-    ability1: 1
-    ability2: 2
-    ability3: 3
-    ability4: 4
-  - coucouName: Moinyaa
-    coucouLevel: 5
-    coucouVariant: 2
-    element: 3
-    isCurrentlyActive: 1
-    onParty: 1
-    lineupOrder: 1
-    maxHealth: 514
-    currentAttack: 425
-    currentResistance: 3.46
-    currentHealth: 514
-    currentMindset: 10
-    currentDetermination: 50
-    ability1: 1
-    ability2: 2
-    ability3: 3
-    ability4: 4
-  - coucouName: Moinyaa
-    coucouLevel: 4
-    coucouVariant: 2
-    element: 3
-    isCurrentlyActive: 1
-    onParty: 1
-    lineupOrder: 1
-    maxHealth: 514
-    currentAttack: 425
-    currentResistance: 3.46
-    currentHealth: 514
-    currentMindset: 10
-    currentDetermination: 50
-    ability1: 1
-    ability2: 2
-    ability3: 3
-    ability4: 4
   - coucouName: Moinyaa
     coucouLevel: 3
     coucouVariant: 2
     element: 3
     isCurrentlyActive: 1
     onParty: 1
-    lineupOrder: 1
-    maxHealth: 514
-    currentAttack: 425
-    currentResistance: 3.46
-    currentHealth: 514
+    lineupOrder: 3
+    maxHealth: 80
+    currentAttack: 40
+    currentResistance: 1.22
+    currentHealth: 0
     currentMindset: 10
     currentDetermination: 50
+    isStunned: 0
     ability1: 1
     ability2: 2
     ability3: 3
@@ -425,15 +71,16 @@ MonoBehaviour:
     coucouLevel: 2
     coucouVariant: 2
     element: 3
-    isCurrentlyActive: 1
+    isCurrentlyActive: 0
     onParty: 1
-    lineupOrder: 1
-    maxHealth: 514
-    currentAttack: 425
-    currentResistance: 3.46
-    currentHealth: 514
+    lineupOrder: 4
+    maxHealth: 70
+    currentAttack: 30
+    currentResistance: 1.16
+    currentHealth: 70
     currentMindset: 10
     currentDetermination: 50
+    isStunned: 0
     ability1: 1
     ability2: 2
     ability3: 3
@@ -442,15 +89,16 @@ MonoBehaviour:
     coucouLevel: 1
     coucouVariant: 2
     element: 3
-    isCurrentlyActive: 1
+    isCurrentlyActive: 0
     onParty: 1
-    lineupOrder: 1
-    maxHealth: 514
-    currentAttack: 425
-    currentResistance: 3.46
-    currentHealth: 514
+    lineupOrder: 5
+    maxHealth: 60
+    currentAttack: 20
+    currentResistance: 1.1
+    currentHealth: 60
     currentMindset: 10
     currentDetermination: 50
+    isStunned: 0
     ability1: 1
     ability2: 2
     ability3: 3

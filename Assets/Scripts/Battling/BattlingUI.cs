@@ -8,19 +8,24 @@ public class BattlingUI : MonoBehaviour
     private AbilityDisplay abilityDisplay;
 
     public GameObject fightButtons;
-    public GameObject menuButtons;
+    public GameObject menu;
     public GameObject healthBars;
+    public GameObject dialogueBox;
 
     public GameObject menuFirstButton;
     public GameObject abilitiesFirstButton;
     private GameObject lastButtonPressed;
 
+    private PlayerInputActions playerInputActions;
+
     private void Awake()
     {
         abilityDisplay = GetComponent<AbilityDisplay>();
-        
+        playerInputActions = new PlayerInputActions();
+        playerInputActions.UI.Cancel.performed += x => BackToMenu();
+
         fightButtons.SetActive(false);
-        menuButtons.SetActive(true);
+        menu.SetActive(true);
 
         lastButtonPressed = menuFirstButton;
     }
@@ -46,7 +51,7 @@ public class BattlingUI : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(null);
 
         fightButtons.SetActive(true);
-        menuButtons.SetActive(false);
+        menu.SetActive(false);
 
         EventSystem.current.SetSelectedGameObject(abilitiesFirstButton);
     }
@@ -57,8 +62,9 @@ public class BattlingUI : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(null);
 
         fightButtons.SetActive(false);
-        menuButtons.SetActive(true);
+        menu.SetActive(true);
         healthBars.SetActive(true);
+        dialogueBox.SetActive(true);
 
         EventSystem.current.SetSelectedGameObject(lastButtonPressed);
     }
@@ -69,19 +75,29 @@ public class BattlingUI : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(menuFirstButton);
 
-        menuButtons.SetActive(true);
+        menu.SetActive(true);
     }
 
     public void OnFinishTurn()
     {
         fightButtons.SetActive(false);
-        menuButtons.SetActive(false);
+        menu.SetActive(false);
     }
 
     public void OnSatchel()
     {
+        dialogueBox.SetActive(false);
         fightButtons.SetActive(false);
-        menuButtons.SetActive(false);
+        menu.SetActive(false);
         healthBars.SetActive(false);
+    }
+
+    private void OnEnable()
+    {
+        playerInputActions.Enable();
+    }
+    private void OnDisable()
+    {
+        playerInputActions.Disable();
     }
 }

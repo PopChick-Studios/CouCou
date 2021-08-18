@@ -9,6 +9,7 @@ public class BattleManager : MonoBehaviour
     private AbilityDisplay abilityDisplay;
     private AbilityFinder abilityFinder;
     private EnemyManager enemyManager;
+    private BattleSystem battleSystem;
 
     public InventoryList inventory;
     public CouCouDatabase coucouDatabase;
@@ -37,14 +38,10 @@ public class BattleManager : MonoBehaviour
     public TextMeshProUGUI allyLevelText;
     public TextMeshProUGUI allyHealthText;
     public Image allyElementSprite;
-    public GameObject enemyHealthBar;
-    public TextMeshProUGUI enemyNameText;
-    public TextMeshProUGUI enemyLevelText;
-    public TextMeshProUGUI enemyHealthText;
-    public Image enemyElementSprite;
 
     private void Awake()
     {
+        battleSystem = gameObject.GetComponent<BattleSystem>();
         enemyManager = GetComponent<EnemyManager>();
         abilityFinder = GetComponent<AbilityFinder>();
         abilityDisplay = GameObject.FindGameObjectWithTag("BattlingUI").GetComponent<AbilityDisplay>();
@@ -56,8 +53,6 @@ public class BattleManager : MonoBehaviour
         coucouVariantList = new List<CouCouDatabase.CouCouVariant>();
 
         ItemsDatabaseList = new List<ItemsDatabase>();
-
-        StartTurn();
     }
 
     private void Start()
@@ -94,6 +89,11 @@ public class BattleManager : MonoBehaviour
             coucouParty[0].isCurrentlyActive = true;
             inventory.couCouInventory[0].isCurrentlyActive = true;
             activeCouCou = coucouParty[0];
+        }
+
+        if (coucouParty.Count > 5)
+        {
+            coucouParty.RemoveRange(5, coucouParty.Count - 5);
         }
 
         foreach (CouCouDatabase.CouCouData c in coucouDatabase.coucouData)
@@ -134,13 +134,12 @@ public class BattleManager : MonoBehaviour
                 }
             }
         }
-
-        UpdateHealthBarAlly();
-
-        UpdateAbilities();
+        battleSystem.player = activeCouCou;
+        InitializeHealthBarAlly();
+        InitializeAbilities();
     }
 
-    public void UpdateHealthBarAlly()
+    public void InitializeHealthBarAlly()
     {
         allyNameText.text = activeCouCou.coucouName;
         allyHealthBar.GetComponent<Image>().fillAmount = activeCouCou.currentHealth / activeCouCou.maxHealth;
@@ -149,7 +148,7 @@ public class BattleManager : MonoBehaviour
         allyElementSprite = null; // Fix this when sprites are made
     }
 
-    public void UpdateAbilities()
+    public void InitializeAbilities()
     {
         abilityDisplay.DisplayAbilities(activeCouCou.ability1, activeCouCou.ability2, activeCouCou.ability3, activeCouCou.ability4);
     }
@@ -226,38 +225,5 @@ public class BattleManager : MonoBehaviour
         }
     }
 
-    public void UseAbility(AbilityUID button)
-    {
-        int abilityUID = button.abilityUID;
-        bool isUtility = button.isUtility;
 
-        if (isUtility)
-        {
-            if (button.utilityAbility.enemyMindset)
-            {
-                psychicAbilitiesUsed++;
-                // Decrease enemy mindset
-            }
-            if (button.utilityAbility.canStun)
-            {
-                //DO ONCE YOU'VE ADDED ENEMY COUCOU
-            }
-        }
-        else
-        {
-            //EnemyManager.TakeDamage(activeCouCou.currentAttack * button.attackAbility.damageMultiplier);
-        }
-
-    }
-
-    public void StartTurn()
-    {
-        menu.SetActive(true);
-    }
-
-    public void FinishedTurn()
-    {
-        
-        menu.SetActive(false);
-    }
 }

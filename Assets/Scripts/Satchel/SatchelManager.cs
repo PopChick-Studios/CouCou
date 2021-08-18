@@ -8,6 +8,7 @@ using TMPro;
 
 public class SatchelManager : MonoBehaviour
 {
+    private BattleManager battleManager;
     private BattlingUI battlingUI;
     private ScrollRectEnsureVisible scrollRectEnsureVisible;
     
@@ -48,6 +49,7 @@ public class SatchelManager : MonoBehaviour
 
         scrollRectEnsureVisible = gameObject.GetComponentInParent<ScrollRectEnsureVisible>();
 
+        battleManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<BattleManager>();
         inputSystemUIInputModule = GameObject.Find("EventSystem").GetComponent<InputSystemUIInputModule>();
         battlingUI = GameObject.FindGameObjectWithTag("BattlingUI").GetComponent<BattlingUI>();
 
@@ -230,6 +232,18 @@ public class SatchelManager : MonoBehaviour
             }
 
             yield return new WaitForSeconds(inputSystemUIInputModule.moveRepeatRate);
+        }
+    }
+
+    public void OnSubmitPressed()
+    {
+        if (selectedSection == 1)
+        {
+            battleManager.UseItem(descriptionName.text);
+        }
+        else if (selectedSection == 2)
+        {
+            battleManager.ChangeCouCou(descriptionName.text);
         }
     }
 
