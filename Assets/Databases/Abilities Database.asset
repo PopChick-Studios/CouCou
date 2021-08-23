@@ -168,10 +168,10 @@ MonoBehaviour:
     canStun: 0
   - abilityName: Meditate
     uniqueIdentifier: 101
-    description: Clear your mind of distactions and increase your Mindset by 5
+    description: Clear your mind of distactions and increase your Mindset by 15
     coucouElement: 0
     resistanceMultiplier: 1
-    selfMindset: 5
+    selfMindset: 15
     enemyMindset: 0
     selfDetermination: 0
     enemyDetermination: 0
@@ -190,11 +190,11 @@ MonoBehaviour:
     canStun: 0
   - abilityName: Taunt
     uniqueIdentifier: 103
-    description: Taunts the enemy, increasing your Mindset by 5, but increasing their
-      Determination by 10
+    description: Taunts the enemy, increasing your Mindset by 30, but increasing
+      their Determination by 10
     coucouElement: 6
     resistanceMultiplier: 1
-    selfMindset: 5
+    selfMindset: 30
     enemyMindset: 0
     selfDetermination: 0
     enemyDetermination: 10

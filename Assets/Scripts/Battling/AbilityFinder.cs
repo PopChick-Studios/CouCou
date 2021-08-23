@@ -26,7 +26,7 @@ public class AbilityFinder : MonoBehaviour
 
     public AbilitiesDatabase.AttackAbilityData FindAttackAbility(int abilityUID)
     {
-        for (int i = 0; i < attackAbilityData.Count - 1; i++)
+        for (int i = 0; i < attackAbilityData.Count; i++)
         {
             if (abilityUID == attackAbilityData[i].uniqueIdentifier)
             {
@@ -39,7 +39,7 @@ public class AbilityFinder : MonoBehaviour
 
     public AbilitiesDatabase.UtilityAbilityData FindUtilityAbility(int abilityUID)
     {
-        for (int i = 0; i < utilityAbilityData.Count - 1; i++)
+        for (int i = 0; i < utilityAbilityData.Count; i++)
         {
             if (abilityUID == utilityAbilityData[i].uniqueIdentifier)
             {

@@ -232,6 +232,14 @@
                     "interactions": ""
                 },
                 {
+                    "name": "NavigateSections",
+                    "type": "Button",
+                    "id": "10c7ab77-88a5-4e02-bc7e-adac7298f5cf",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
                     "name": "Submit",
                     "type": "Button",
                     "id": "fc6be2a2-5036-4f68-a396-8cfac8ab02cc",
@@ -300,14 +308,6 @@
                     "type": "PassThrough",
                     "id": "f8582e69-a4cf-4e14-be73-3bef24f063c2",
                     "expectedControlType": "Quaternion",
-                    "processors": "",
-                    "interactions": ""
-                },
-                {
-                    "name": "NavigateSections",
-                    "type": "Button",
-                    "id": "10c7ab77-88a5-4e02-bc7e-adac7298f5cf",
-                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
                 }

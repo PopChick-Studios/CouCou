@@ -10,6 +10,7 @@ public class InventoryList : ScriptableObject
     {
         public string coucouName;
         public int coucouLevel;
+        public float coucouEXP;
         public int coucouVariant;
         public CouCouDatabase.Element element;
 
@@ -26,6 +27,7 @@ public class InventoryList : ScriptableObject
         public int currentMindset;
         public int currentDetermination;
         public bool isStunned = false;
+        public bool hasCollapsed = false;
 
         [Header("Abilities")]
         public int ability1;
@@ -41,7 +43,6 @@ public class InventoryList : ScriptableObject
     {
         public string itemName;
         public int itemAmount;
-        public string itemDescription;
 
         public ItemsDatabase.ItemAttribute itemAttribute;
         public CouCouDatabase.Element element;
@@ -49,6 +50,7 @@ public class InventoryList : ScriptableObject
     }
 
     // Save these lists for save function
+    public string inventoryOwner;
     public List<CouCouInventory> couCouInventory = new List<CouCouInventory>();
     public List<ItemInventory> itemInventory = new List<ItemInventory>();
 }

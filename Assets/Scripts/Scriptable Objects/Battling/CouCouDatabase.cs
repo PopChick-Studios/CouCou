@@ -54,6 +54,10 @@ public class CouCouDatabase : ScriptableObject
         public int hp;
         public int bonusHP;
         public int bonusHPPer5;
+
+        [Header("Mindset and Determination")]
+        public int determination;
+        public int mindset;
     }
 
     public List<CouCouData> coucouData = new List<CouCouData>();

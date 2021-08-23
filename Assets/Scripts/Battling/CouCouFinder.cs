@@ -26,7 +26,7 @@ public class CouCouFinder : MonoBehaviour
 
     public CouCouDatabase.CouCouData FindCouCou(string name)
     {
-        for (int i = 0; i < coucouList.Count - 1; i++)
+        for (int i = 0; i < coucouList.Count; i++)
         {
             if (name == coucouList[i].coucouName)
             {

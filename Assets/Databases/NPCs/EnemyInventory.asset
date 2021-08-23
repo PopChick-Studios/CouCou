@@ -13,21 +13,22 @@ MonoBehaviour:
   m_Name: EnemyInventory
   m_EditorClassIdentifier: 
   couCouInventory:
-  - coucouName: Brawlster
-    coucouLevel: 20
-    coucouVariant: 6
-    element: 3
+  - coucouName: Foxtning
+    coucouLevel: 37
+    coucouVariant: 2
+    element: 4
     isCurrentlyActive: 1
     onParty: 1
     lineupOrder: 0
-    maxHealth: 0
-    currentAttack: 0
-    currentResistance: 0
-    currentHealth: 0
-    currentMindset: 0
-    currentDetermination: 0
-    ability1: 3
-    ability2: 12
-    ability3: 13
-    ability4: 102
+    maxHealth: 504
+    currentAttack: 415
+    currentResistance: 6.8
+    currentHealth: 106
+    currentMindset: 10
+    currentDetermination: 50
+    isStunned: 0
+    ability1: 0
+    ability2: 3
+    ability3: 20
+    ability4: 22
   itemInventory: []

@@ -10,27 +10,29 @@ public class BattleManager : MonoBehaviour
     private AbilityFinder abilityFinder;
     private EnemyManager enemyManager;
     private BattleSystem battleSystem;
+    private BattlingUI battlingUI;
+    private InventoryManager inventoryManager;
 
     public InventoryList inventory;
     public CouCouDatabase coucouDatabase;
     public AbilitiesDatabase abilitiesDatabase;
     public ItemsDatabase itemsDatabase;
 
-    public GameObject menu;
-
-    // CHANGE THESE !!! ONLY FOR DEBUGGING
     [Space]
     public InventoryList.CouCouInventory activeCouCou;
     public List<InventoryList.CouCouInventory> coucouParty;
 
     private AbilitiesDatabase.AttackAbilityData attackAbility;
     private AbilitiesDatabase.UtilityAbilityData utilityAbility;
-    private int psychicAbilitiesUsed = 0;
 
     public List<CouCouDatabase.CouCouData> coucouDataList;
     public List<CouCouDatabase.CouCouVariant> coucouVariantList;
 
     public List<ItemsDatabase> ItemsDatabaseList;
+
+    [Header("Dialogue")]
+    public GameObject dialogueBox;
+    public TextMeshProUGUI dialogueText;
 
     [Header("Health Bars")]
     public GameObject allyHealthBar;
@@ -39,11 +41,19 @@ public class BattleManager : MonoBehaviour
     public TextMeshProUGUI allyHealthText;
     public Image allyElementSprite;
 
+    public bool finishedIncrement;
+    public bool incorrectItemUse = false;
+
+    public float attackDiminishingReturns = 1;
+    public float resistanceDiminishingReturns = 1;
+
     private void Awake()
     {
-        battleSystem = gameObject.GetComponent<BattleSystem>();
+        inventoryManager = GetComponent<InventoryManager>();
+        battleSystem = GetComponent<BattleSystem>();
         enemyManager = GetComponent<EnemyManager>();
         abilityFinder = GetComponent<AbilityFinder>();
+        battlingUI = GameObject.FindGameObjectWithTag("BattlingUI").GetComponent<BattlingUI>();
         abilityDisplay = GameObject.FindGameObjectWithTag("BattlingUI").GetComponent<AbilityDisplay>();
 
         activeCouCou = new InventoryList.CouCouInventory();
@@ -84,7 +94,7 @@ public class BattleManager : MonoBehaviour
         }
 
         // If they haven't set up an active CouCou, default to the first on the list
-        if (activeCouCou == null)
+        if (activeCouCou.coucouLevel == 0)
         {
             coucouParty[0].isCurrentlyActive = true;
             inventory.couCouInventory[0].isCurrentlyActive = true;
@@ -126,8 +136,8 @@ public class BattleManager : MonoBehaviour
                     coucouParty[i].maxHealth = coucouVariantList[a].hp + (coucouVariantList[a].bonusHP * bonusStatsPer1) + (coucouVariantList[a].bonusHPPer5 * bonusStatsPer5);
                     coucouParty[i].currentAttack = coucouVariantList[a].attack + (coucouVariantList[a].bonusAttack * bonusStatsPer1) + (coucouVariantList[a].bonusAttackPer5 * bonusStatsPer5);
                     coucouParty[i].currentResistance = coucouVariantList[a].resistance + (coucouVariantList[a].bonusResistance * bonusStatsPer1) + (coucouVariantList[a].bonusResistancePer5 * bonusStatsPer5);
-                    coucouParty[i].currentMindset = 10;
-                    coucouParty[i].currentDetermination = 50;
+                    coucouParty[i].currentMindset = coucouVariantList[a].mindset;
+                    coucouParty[i].currentDetermination = coucouVariantList[a].determination;
 
                     // *********** REMOVE THIS ONCE YOU MADE THE CURRENT HEALTH SCRIPT *********** //
                     coucouParty[i].currentHealth = coucouParty[i].maxHealth;
@@ -150,69 +160,94 @@ public class BattleManager : MonoBehaviour
 
     public void InitializeAbilities()
     {
-        abilityDisplay.DisplayAbilities(activeCouCou.ability1, activeCouCou.ability2, activeCouCou.ability3, activeCouCou.ability4);
+        StartCoroutine(abilityDisplay.DisplayAbilities(activeCouCou.ability1, activeCouCou.ability2, activeCouCou.ability3, activeCouCou.ability4));
     }
 
-    public void UseItem(string name)
+    public IEnumerator UseItem(string name)
     {
-
         Debug.Log("Item used");
 
         foreach (InventoryList.ItemInventory i in inventory.itemInventory)
         {
+            if (i.itemAmount <= 0)
+            {
+                //inventory.itemInventory.Remove(i);
+            }
+
             if (name == i.itemName)
             {
+                yield return new WaitForSeconds(1f);
+
                 switch (i.itemAttribute)
                 {
                     case ItemsDatabase.ItemAttribute.Health:
-
-                        activeCouCou.currentHealth = Mathf.Min(activeCouCou.maxHealth, Mathf.CeilToInt(activeCouCou.currentHealth * 1.3f));
-
+                        StartCoroutine(IncrementallyIncreaseHP((int)(activeCouCou.currentHealth + activeCouCou.maxHealth * 0.3f)));
+                        yield return new WaitUntil(() => finishedIncrement);
+                        finishedIncrement = false;
+                        dialogueText.text = activeCouCou.coucouName+ " gained " + (int)Mathf.Min(activeCouCou.maxHealth - activeCouCou.currentHealth, activeCouCou.currentHealth + activeCouCou.maxHealth * 0.3f) + " health";
                         break;
 
                     case ItemsDatabase.ItemAttribute.Resistance:
-
-                        activeCouCou.currentResistance = Mathf.CeilToInt(activeCouCou.currentResistance * 1.15f);
-
+                        float resistance = activeCouCou.currentResistance * 1.15f * resistanceDiminishingReturns;
+                        dialogueText.text = activeCouCou.coucouName + " gained " + (int)resistance + " resistance";
+                        activeCouCou.currentResistance = (int)resistance;
+                        resistanceDiminishingReturns *= 0.87f;
                         break;
 
                     case ItemsDatabase.ItemAttribute.Attack:
-
-                        activeCouCou.currentAttack = Mathf.CeilToInt(activeCouCou.currentAttack * 1.15f);
-
+                        float attack = activeCouCou.currentAttack * 1.15f * attackDiminishingReturns;
+                        dialogueText.text = activeCouCou.coucouName + " gained " + (int)attack + " attack";
+                        activeCouCou.currentAttack = (int)attack;
+                        attackDiminishingReturns *= 0.87f;
                         break;
 
                     case ItemsDatabase.ItemAttribute.ElementalMindset:
-
                         if (activeCouCou.element != i.element)
                         {
-
-                            // Dialogue "I can't use this on your CouCou"
-
-                            break;
+                            dialogueBox.SetActive(true);
+                            dialogueText.text = "This berry can't be used with " + activeCouCou.coucouName;
+                            yield return new WaitForSeconds(2f);
+                            dialogueBox.SetActive(false);
+                            incorrectItemUse = true;
+                           break;
                         }
-
+                        dialogueText.text = "The berry gave " + activeCouCou.coucouName + " " + Mathf.Min(30 - activeCouCou.currentMindset, activeCouCou.currentMindset + 5) +  " more Mindset";
                         activeCouCou.currentMindset += 5;
 
                         break;
 
                     default:
 
-                        // Dialogue "I can't use that right now"
-
+                        dialogueBox.SetActive(true);
+                        dialogueText.text = "This item can't be used right now...";
+                        yield return new WaitForSeconds(2f);
+                        dialogueBox.SetActive(false);
+                        incorrectItemUse = true;
                         break;
                 }
             }
         }
+
+        if (incorrectItemUse)
+        {
+            battlingUI.OnNewRound();
+            yield break;
+        }
+
+        inventoryManager.UsedItem(name);
+
+        yield return new WaitForSeconds(2f);
+
+        battleSystem.EnemyTurn();
     }
 
-    public void ChangeCouCou(string name)
+    public IEnumerator ChangeCouCou(string name)
     {
-
-        Debug.Log("CouCou Changed");
+        dialogueText.text = "You recall " + activeCouCou.coucouName + " for " + name;
 
         // Recall Animation
-        // Dialogue "Come back " + coucouname / "Have a rest ..." / "You've done a good job ..."
+
+        yield return new WaitForSeconds(2f);
 
         foreach (InventoryList.CouCouInventory c in coucouParty)
         {
@@ -221,9 +256,63 @@ public class BattleManager : MonoBehaviour
                 activeCouCou.lineupOrder = c.lineupOrder;
                 activeCouCou = c;
                 activeCouCou.lineupOrder = 0;
+                battleSystem.player = activeCouCou;
+                InitializeHealthBarAlly();
+                InitializeAbilities();
             }
+        }
+        enemyManager.InitializeElementalAdvantage();
+        yield return new WaitForSeconds(2f);
+        bool surpirseSuccess = enemyManager.SurpriseAttack();
+        if (!surpirseSuccess)
+        {
+            StartCoroutine(battleSystem.PlayerTurn());
         }
     }
 
+    public IEnumerator IncrementallyIncreaseHP(int desiredHP)
+    {
+        float increase = activeCouCou.currentHealth;
 
+        while (increase != desiredHP && activeCouCou.currentHealth < activeCouCou.maxHealth)
+        {
+            increase = Mathf.MoveTowards(increase, desiredHP, Time.deltaTime * 500f);
+            allyHealthBar.GetComponent<Image>().fillAmount = increase / activeCouCou.maxHealth;
+            allyHealthText.text = (int)increase + "/" + activeCouCou.maxHealth;
+            activeCouCou.currentHealth = (int)increase;
+            yield return new WaitForSeconds(0.02f);
+        }
+        finishedIncrement = true;
+        if (activeCouCou.currentHealth >= activeCouCou.maxHealth)
+        {
+            activeCouCou.currentHealth = activeCouCou.maxHealth;
+        }
+        yield break;
+    }
+
+    public bool SurpriseAttack()
+    {
+        float chance = 3f * activeCouCou.currentDetermination / 5f;
+        float rnd = Random.Range(1, 101);
+
+        if (chance < 0)
+        {
+            chance = 0;
+        }
+        else if (chance > 60)
+        {
+            chance = 60;
+        }
+
+        if (rnd <= chance)
+        {
+            StartCoroutine(battleSystem.PlayerTurn());
+            battleSystem.state = BattleState.PLAYERTURN;
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
 }
