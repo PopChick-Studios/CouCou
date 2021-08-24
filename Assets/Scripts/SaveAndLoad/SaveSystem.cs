@@ -7,7 +7,7 @@ public static class SaveSystem
     public static void SaveInventory(InventoryList inventory)
     {
         BinaryFormatter formatter = new BinaryFormatter();
-        string path = Application.persistentDataPath + "/inventory.data";
+        string path = Application.persistentDataPath + "/" + inventory.name + ".save";
         FileStream stream = new FileStream(path, FileMode.Create);
 
         InventoryData data = new InventoryData(inventory);
@@ -16,9 +16,9 @@ public static class SaveSystem
         stream.Close();
     }
 
-    public static InventoryData LoadInventory()
+    public static InventoryData LoadInventory(InventoryList inventory)
     {
-        string path = Application.persistentDataPath + "/inventory.data";
+        string path = Application.persistentDataPath + "/" + inventory.name + ".save";
         if (File.Exists(path))
         {
             BinaryFormatter formatter = new BinaryFormatter();

@@ -19,7 +19,7 @@ MonoBehaviour:
     coucouEXP: 0
     coucouVariant: 5
     element: 1
-    isCurrentlyActive: 0
+    isCurrentlyActive: 1
     onParty: 1
     lineupOrder: 0
     maxHealth: 654
@@ -59,7 +59,7 @@ MonoBehaviour:
     coucouEXP: 0
     coucouVariant: 2
     element: 3
-    isCurrentlyActive: 1
+    isCurrentlyActive: 0
     onParty: 1
     lineupOrder: 0
     maxHealth: 416
@@ -79,7 +79,7 @@ MonoBehaviour:
     coucouEXP: 0
     coucouVariant: 2
     element: 3
-    isCurrentlyActive: 1
+    isCurrentlyActive: 0
     onParty: 1
     lineupOrder: 1
     maxHealth: 404
@@ -95,17 +95,17 @@ MonoBehaviour:
     ability3: 3
     ability4: 4
   - coucouName: Moinyaa
-    coucouLevel: 22
+    coucouLevel: 50
     coucouEXP: 0
     coucouVariant: 2
     element: 3
     isCurrentlyActive: 1
     onParty: 1
-    lineupOrder: 1
-    maxHealth: 392
-    currentAttack: 250
-    currentResistance: 2.69
-    currentHealth: 392
+    lineupOrder: 0
+    maxHealth: 848
+    currentAttack: 560
+    currentResistance: 4.83
+    currentHealth: 848
     currentMindset: 15
     currentDetermination: 50
     isStunned: 0
@@ -534,28 +534,48 @@ MonoBehaviour:
     ability2: 2
     ability3: 3
     ability4: 4
+  - coucouName: Flamem
+    coucouLevel: 28
+    coucouEXP: 0
+    coucouVariant: 2
+    element: 4
+    isCurrentlyActive: 1
+    onParty: 1
+    lineupOrder: 0
+    maxHealth: 484
+    currentAttack: 315
+    currentResistance: 3.14
+    currentHealth: 484
+    currentMindset: 15
+    currentDetermination: 50
+    isStunned: 0
+    hasCollapsed: 0
+    ability1: 0
+    ability2: 3
+    ability3: 20
+    ability4: 22
   itemInventory:
+  - itemName: CouCou Capsule
+    itemAmount: 4
+    itemAttribute: 5
+    element: 0
   - itemName: Ripe Berry
     itemAmount: 50
     itemAttribute: 0
-    element: 0
-  - itemName: Bulwark Berry
-    itemAmount: 25
-    itemAttribute: 2
-    element: 0
-  - itemName: CouCou Capsule
-    itemAmount: 5
-    itemAttribute: 5
     element: 0
   - itemName: Strong Berry
     itemAmount: 10
     itemAttribute: 1
     element: 0
-  - itemName: Mystic Berry
-    itemAmount: 10
-    itemAttribute: 4
-    element: 6
+  - itemName: Bulwark Berry
+    itemAmount: 25
+    itemAttribute: 2
+    element: 0
   - itemName: Burnt Berry
     itemAmount: 10
     itemAttribute: 3
     element: 1
+  - itemName: Mystic Berry
+    itemAmount: 10
+    itemAttribute: 4
+    element: 6

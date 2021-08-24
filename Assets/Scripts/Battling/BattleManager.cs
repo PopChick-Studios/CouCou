@@ -12,6 +12,7 @@ public class BattleManager : MonoBehaviour
     private BattleSystem battleSystem;
     private BattlingUI battlingUI;
     private InventoryManager inventoryManager;
+    private Catching catching;
 
     public InventoryList inventory;
     public CouCouDatabase coucouDatabase;
@@ -49,6 +50,7 @@ public class BattleManager : MonoBehaviour
 
     private void Awake()
     {
+        catching = GetComponent<Catching>();
         inventoryManager = GetComponent<InventoryManager>();
         battleSystem = GetComponent<BattleSystem>();
         enemyManager = GetComponent<EnemyManager>();
@@ -165,26 +167,34 @@ public class BattleManager : MonoBehaviour
 
     public IEnumerator UseItem(string name)
     {
-        Debug.Log("Item used");
+        bool usedCapsule = false;
 
         foreach (InventoryList.ItemInventory i in inventory.itemInventory)
         {
-            if (i.itemAmount <= 0)
-            {
-                //inventory.itemInventory.Remove(i);
-            }
-
             if (name == i.itemName)
             {
                 yield return new WaitForSeconds(1f);
 
                 switch (i.itemAttribute)
                 {
+                    case ItemsDatabase.ItemAttribute.Capsule:
+                        if (enemyManager.wild)
+                        {
+                            dialogueText.text = inventory.inventoryOwner + " throws out a " + i.itemName;
+                            usedCapsule = true;
+                        }
+                        else
+                        {
+                            dialogueText.text = "This item can't be used right now";
+                            incorrectItemUse = true;
+                        }                        
+                        break;
+
                     case ItemsDatabase.ItemAttribute.Health:
                         StartCoroutine(IncrementallyIncreaseHP((int)(activeCouCou.currentHealth + activeCouCou.maxHealth * 0.3f)));
                         yield return new WaitUntil(() => finishedIncrement);
                         finishedIncrement = false;
-                        dialogueText.text = activeCouCou.coucouName+ " gained " + (int)Mathf.Min(activeCouCou.maxHealth - activeCouCou.currentHealth, activeCouCou.currentHealth + activeCouCou.maxHealth * 0.3f) + " health";
+                        dialogueText.text = activeCouCou.coucouName + " gained " + (int)Mathf.Min(activeCouCou.maxHealth - activeCouCou.currentHealth, activeCouCou.currentHealth + activeCouCou.maxHealth * 0.3f) + " health";
                         break;
 
                     case ItemsDatabase.ItemAttribute.Resistance:
@@ -217,9 +227,8 @@ public class BattleManager : MonoBehaviour
                         break;
 
                     default:
-
                         dialogueBox.SetActive(true);
-                        dialogueText.text = "This item can't be used right now...";
+                        dialogueText.text = "This item can't be used right now";
                         yield return new WaitForSeconds(2f);
                         dialogueBox.SetActive(false);
                         incorrectItemUse = true;
@@ -236,9 +245,15 @@ public class BattleManager : MonoBehaviour
 
         inventoryManager.UsedItem(name);
 
-        yield return new WaitForSeconds(2f);
-
-        battleSystem.EnemyTurn();
+        if (!usedCapsule)
+        {
+            yield return new WaitForSeconds(2f);
+            battleSystem.EnemyTurn();
+        }
+        else
+        {
+            StartCoroutine(catching.CatchCouCou());
+        }
     }
 
     public IEnumerator ChangeCouCou(string name)

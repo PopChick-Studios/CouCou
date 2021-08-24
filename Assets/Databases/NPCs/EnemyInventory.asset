@@ -12,21 +12,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 702f33a5e8631ca4996ad7764405fcba, type: 3}
   m_Name: EnemyInventory
   m_EditorClassIdentifier: 
+  inventoryOwner: 
   couCouInventory:
   - coucouName: Foxtning
     coucouLevel: 37
+    coucouEXP: 0
     coucouVariant: 2
     element: 4
-    isCurrentlyActive: 1
+    isCurrentlyActive: 0
     onParty: 1
-    lineupOrder: 0
-    maxHealth: 504
+    lineupOrder: 1
+    maxHealth: 632
     currentAttack: 415
-    currentResistance: 6.8
-    currentHealth: 106
-    currentMindset: 10
+    currentResistance: 3.83
+    currentHealth: 632
+    currentMindset: 15
     currentDetermination: 50
     isStunned: 0
+    hasCollapsed: 0
     ability1: 0
     ability2: 3
     ability3: 20

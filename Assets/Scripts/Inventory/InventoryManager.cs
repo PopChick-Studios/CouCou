@@ -7,7 +7,8 @@ public class InventoryManager : MonoBehaviour
 {
     private ItemFinder itemFinder;
 
-    public InventoryList inventory;
+    public InventoryList playerInventory;
+    public InventoryList enemyInventory;
     public ItemsDatabase itemDatabase;
     public List<ItemsDatabase.ItemData> itemsDatabaseList;
 
@@ -16,7 +17,8 @@ public class InventoryManager : MonoBehaviour
         itemFinder = GameObject.FindGameObjectWithTag("GameManager").GetComponent<ItemFinder>();
 
         itemsDatabaseList = new List<ItemsDatabase.ItemData>();
-        LoadInventory();
+        LoadInventory(playerInventory);
+        LoadInventory(enemyInventory);
     }
 
     private void Start()
@@ -26,12 +28,12 @@ public class InventoryManager : MonoBehaviour
 
     public void SortItemInventory()
     {
-        inventory.itemInventory = inventory.itemInventory.OrderBy(e => itemFinder.FindItem(e.itemName).positionIndex).ToList();
+        playerInventory.itemInventory = playerInventory.itemInventory.OrderBy(e => itemFinder.FindItem(e.itemName).positionIndex).ToList();
     }
 
-    public void LoadInventory()
+    public void LoadInventory(InventoryList inventory)
     {
-        InventoryData data = SaveSystem.LoadInventory();
+        InventoryData data = SaveSystem.LoadInventory(inventory);
 
         if(data == null)
         {
@@ -51,13 +53,14 @@ public class InventoryManager : MonoBehaviour
 
     public void SaveInventory()
     {
-        SaveSystem.SaveInventory(inventory);
+        SaveSystem.SaveInventory(playerInventory);
+        SaveSystem.SaveInventory(enemyInventory);
     }
 
     public void FoundItem(string name)
     {
         InventoryList.ItemInventory item = null;
-        foreach (InventoryList.ItemInventory i in inventory.itemInventory.ToList())
+        foreach (InventoryList.ItemInventory i in playerInventory.itemInventory.ToList())
         {
             if (name == i.itemName)
             {
@@ -81,7 +84,7 @@ public class InventoryManager : MonoBehaviour
                         element = i.element, 
                         itemAttribute = i.itemAttribute
                     };
-                    inventory.itemInventory.Add(item);
+                    playerInventory.itemInventory.Add(item);
                     break;
                 }
             }
@@ -90,16 +93,22 @@ public class InventoryManager : MonoBehaviour
 
     public void UsedItem(string name)
     {
-        foreach (InventoryList.ItemInventory i in inventory.itemInventory.ToList())
+        foreach (InventoryList.ItemInventory i in playerInventory.itemInventory.ToList())
         {
             if (name == i.itemName)
             {
                 i.itemAmount--;
                 if (i.itemAmount <= 0)
                 {
-                    inventory.itemInventory.Remove(i);
+                    playerInventory.itemInventory.Remove(i);
                 }
             }
         }
+    }
+
+    public void AddCouCou(InventoryList.CouCouInventory coucou)
+    {
+        coucou.currentHealth = coucou.maxHealth;
+        playerInventory.couCouInventory.Add(coucou);
     }
 }

@@ -87,7 +87,7 @@ public class EnemyManager : MonoBehaviour
         }
 
         // If they haven't set up an active CouCou, default to the first on the list
-        if (enemyActiveCouCou == null)
+        if (enemyActiveCouCou.maxHealth == 0)
         {
             enemyCouCouParty[0].isCurrentlyActive = true;
             enemyInventory.couCouInventory[0].isCurrentlyActive = true;
@@ -428,7 +428,6 @@ public class EnemyManager : MonoBehaviour
                 break;
             }
         }
-        Debug.Log("Yeepers i'm here");
         if (enemyActiveCouCou.hasCollapsed)
         {
             StartCoroutine(battleSystem.EndBattle());
@@ -436,15 +435,12 @@ public class EnemyManager : MonoBehaviour
         else
         {
             bool surpriseSuccess = battleManager.SurpriseAttack();
-            Debug.Log(surpriseSuccess);
             if (surpriseSuccess)
             {
-                Debug.Log("We want");
                 StartCoroutine(battleSystem.PlayerTurn());
             }
             else
             {
-                Debug.Log("Nice");
                 battleSystem.EnemyTurn();
             }
         }

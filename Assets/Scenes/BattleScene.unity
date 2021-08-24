@@ -2188,6 +2188,7 @@ GameObject:
   - component: {fileID: 368891499}
   - component: {fileID: 368891504}
   - component: {fileID: 368891503}
+  - component: {fileID: 368891505}
   m_Layer: 0
   m_Name: --Game Management--
   m_TagString: GameManager
@@ -2325,6 +2326,7 @@ MonoBehaviour:
   abilityProbability: []
   abilityAdvantage: 
   amountOfAdvantage: 0
+  initializeFinished: 0
   wild: 0
   enemyPsychicAbilitiesUsed: 0
   turn: 0
@@ -2420,7 +2422,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55e862b5e577d1b428a1a207e0df3421, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inventory: {fileID: 11400000, guid: 44ee79a05ad81ff4d8652799fc7d7f56, type: 2}
+  playerInventory: {fileID: 11400000, guid: 44ee79a05ad81ff4d8652799fc7d7f56, type: 2}
+  enemyInventory: {fileID: 11400000, guid: e4a668288a3079545aa3cb899de54343, type: 2}
   itemDatabase: {fileID: 11400000, guid: c6789e2ec6b1e7d4da21add6fed77929, type: 2}
   itemsDatabaseList: []
 --- !u!114 &368891504
@@ -2437,6 +2440,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemDatabase: {fileID: 11400000, guid: c6789e2ec6b1e7d4da21add6fed77929, type: 2}
   itemDataList: []
+--- !u!114 &368891505
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 368891496}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 539c1cb99b59e0b4c86f297ba5a0cfd1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemyInventory: {fileID: 11400000, guid: e4a668288a3079545aa3cb899de54343, type: 2}
+  dialogueText: {fileID: 1372405038}
+  catchSuccessful: 0
 --- !u!114 &456843822 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 801370859691452377, guid: 8ae8a30ce2b2472479104084a2134009, type: 3}

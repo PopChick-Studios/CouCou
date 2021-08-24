@@ -28,11 +28,13 @@ public class BattleSystem : MonoBehaviour
     private BattleManager battleManager;
     private EnemyManager enemyManager;
     private BattlingUI battlingUI;
+    private Catching catching;
 
     public BattleState state;
 
     private void Awake()
     {
+        catching = gameObject.GetComponent<Catching>();
         battleManager = gameObject.GetComponent<BattleManager>();
         enemyManager = gameObject.GetComponent<EnemyManager>();
         battlingUI = GameObject.FindGameObjectWithTag("BattlingUI").GetComponent<BattlingUI>();
@@ -268,7 +270,10 @@ public class BattleSystem : MonoBehaviour
     {
         if (state == BattleState.WON)
         {
-            dialogueText.text = enemy.coucouName + " has collapsed.";
+            if (!catching.catchSuccessful)
+            {
+                dialogueText.text = enemy.coucouName + " has collapsed.";
+            }
 
             yield return new WaitForSeconds(3f);
 
