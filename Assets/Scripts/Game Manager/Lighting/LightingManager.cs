@@ -34,7 +34,7 @@ public class LightingManager : MonoBehaviour
 
     public void Daytime()
     {
-        TimeOfDay = 6;
+        TimeOfDay = 11;
     }
 
     private void UpdateLighting(float TimePercent)

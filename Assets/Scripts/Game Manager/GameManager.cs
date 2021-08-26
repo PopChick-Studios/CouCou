@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,6 +7,9 @@ public class GameManager : MonoBehaviour
 {
     // References to other scripts
     private DisplayManager displayManager;
+    private IncreaseCouCouHealth increaseCouCouHealth;
+
+    public InventoryList playerInventory;
 
     // Create the states of the game
     public enum GameState
@@ -17,7 +21,7 @@ public class GameManager : MonoBehaviour
         Dialogue,
         Battling
     }
-    private GameState gameState;
+    [SerializeField] private GameState gameState;
     public GameState State { get { return gameState; } }
 
     public void SetState(GameState state)
@@ -28,8 +32,7 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        gameState = GameState.Wandering;
-
+        increaseCouCouHealth = gameObject.GetComponent<IncreaseCouCouHealth>();
         displayManager = gameObject.GetComponent<DisplayManager>();
     }
 
@@ -43,7 +46,7 @@ public class GameManager : MonoBehaviour
                 break;
             
             case GameState.Wandering:
-
+                
                 break;
 
             case GameState.Paused:

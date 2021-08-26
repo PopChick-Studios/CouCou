@@ -39,7 +39,7 @@ public class PlayerInteraction : MonoBehaviour
             {
                 displayManager.OnInteraction(interactableUI.interactionType);
                 // animator.SetBool("interactPickUp", true);
-                gameManager.SetState(GameManager.GameState.Interacting);
+                gameManager.SetState(GameManager.GameState.Battling);
 
                 // Pause the game
                 Time.timeScale = 0;

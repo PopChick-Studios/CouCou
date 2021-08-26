@@ -31,6 +31,36 @@ public class InventoryManager : MonoBehaviour
         playerInventory.itemInventory = playerInventory.itemInventory.OrderBy(e => itemFinder.FindItem(e.itemName).positionIndex).ToList();
     }
 
+    public void SortCouCouInventory()
+    {
+        for (int i = 0; i < playerInventory.couCouInventory.Count; i++)
+        {
+            if (playerInventory.couCouInventory[i].hasCollapsed)
+            {
+                playerInventory.couCouInventory[i].lineupOrder = 100 + i;
+                playerInventory.couCouInventory[i].onParty = false;
+                playerInventory.couCouInventory[i].isCurrentlyActive = false;
+            }
+        }
+
+        playerInventory.couCouInventory = playerInventory.couCouInventory.OrderBy(e => e.lineupOrder).ToList();
+
+        for (int i = 0; i < playerInventory.couCouInventory.Count; i++)
+        {
+            playerInventory.couCouInventory[i].lineupOrder = i + 1;
+        }
+    }
+
+    public void MoveCouCou(InventoryList.CouCouInventory coucou, int position)
+    {
+        playerInventory.couCouInventory.Remove(coucou);
+        playerInventory.couCouInventory.Insert(position, coucou);
+        for (int i = 0; i < playerInventory.couCouInventory.Count; i++)
+        {
+            playerInventory.couCouInventory[i].lineupOrder = i;
+        }
+    }
+
     public void LoadInventory(InventoryList inventory)
     {
         InventoryData data = SaveSystem.LoadInventory(inventory);
@@ -109,6 +139,7 @@ public class InventoryManager : MonoBehaviour
     public void AddCouCou(InventoryList.CouCouInventory coucou)
     {
         coucou.currentHealth = coucou.maxHealth;
+        coucou.lineupOrder = playerInventory.couCouInventory.Count;
         playerInventory.couCouInventory.Add(coucou);
     }
 }

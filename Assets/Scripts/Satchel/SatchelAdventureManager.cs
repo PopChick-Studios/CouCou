@@ -1,19 +1,16 @@
 using System.Collections.Generic;
+using System.Collections;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using TMPro;
 
-public class SatchelManager : MonoBehaviour
+public class SatchelAdventureManager : MonoBehaviour
 {
-    private BattleManager battleManager;
-    private BattlingUI battlingUI;
     private ScrollRectEnsureVisible scrollRectEnsureVisible;
     private CouCouFinder coucouFinder;
     private ItemFinder itemFinder;
-    private BattleSystem battleSystem;
-    private EnemyManager enemyManager;
     private InventoryManager inventoryManager;
 
     public CouCouDatabase coucouDatabase;
@@ -25,13 +22,15 @@ public class SatchelManager : MonoBehaviour
     public Camera blurCamera;
     public GameObject satchel;
     public GameObject dialogueBox;
-    public GameObject prompt;
-    public GameObject promptText;
+    //public GameObject prompt;
+    //public GameObject promptText;
     public GameObject dialogueText;
-    public GameObject acceptButton;
+    public GameObject changeCouCouOrder;
+    public GameObject inputCouCouChange;
+    private int inputNumber;
 
     public InventoryList inventoryList;
-    public SatchelSlotController satchelSlotPrefab;
+    public SatchelSlotControllerAdventure satchelSlotPrefab;
 
     private PlayerInputActions playerInputActions;
 
@@ -50,7 +49,6 @@ public class SatchelManager : MonoBehaviour
     public TextMeshProUGUI descriptionText;
     public Image itemSprite;
     public Button submitButton;
-    public Button giveBerryButton;
 
     [Header("Stats")]
     public GameObject statDisplay;
@@ -60,28 +58,24 @@ public class SatchelManager : MonoBehaviour
     public TextMeshProUGUI determinationText;
     public TextMeshProUGUI mindsetText;
 
-    public List<SatchelSlotController> itemSlotList;
-    public List<SatchelSlotController> coucouSlotList;
+    public List<SatchelSlotControllerAdventure> itemSlotList;
+    public List<SatchelSlotControllerAdventure> coucouSlotList;
 
     private void Awake()
     {
         coucouDataList = new List<CouCouDatabase.CouCouData>();
 
-        scrollRectEnsureVisible = satchelList.GetComponentInParent<ScrollRectEnsureVisible>();
-
         inventoryManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<InventoryManager>();
-        enemyManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<EnemyManager>();
-        battleSystem = GameObject.FindGameObjectWithTag("GameManager").GetComponent<BattleSystem>();
+        scrollRectEnsureVisible = satchelList.GetComponentInParent<ScrollRectEnsureVisible>();
         coucouFinder = GameObject.FindGameObjectWithTag("GameManager").GetComponent<CouCouFinder>();
         itemFinder = GameObject.FindGameObjectWithTag("GameManager").GetComponent<ItemFinder>();
-        battleManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<BattleManager>();
-        battlingUI = GameObject.FindGameObjectWithTag("BattlingUI").GetComponent<BattlingUI>();
 
         playerInputActions = new PlayerInputActions();
         playerInputActions.UI.Cancel.started += x => GoBack();
         playerInputActions.UI.NavigateSections.performed += x => NavigateSections(x.ReadValue<float>());
-
+        changeCouCouOrder.SetActive(false);
         satchel.SetActive(false);
+        
     }
 
     private void Start()
@@ -98,13 +92,13 @@ public class SatchelManager : MonoBehaviour
 
         for (int i = 0; i < inventoryList.itemInventory.Count; i++)
         {
-            SatchelSlotController newSatchelSlot = Instantiate(satchelSlotPrefab, satchelList.transform);
+            SatchelSlotControllerAdventure newSatchelSlot = Instantiate(satchelSlotPrefab, satchelList.transform);
             ItemsDatabase.ItemData item = itemFinder.FindItem(inventoryList.itemInventory[i].itemName);
             newSatchelSlot.itemNameText.text = item.itemName;
             newSatchelSlot.itemAmountText.text = inventoryList.itemInventory[i].itemAmount.ToString();
             newSatchelSlot.itemDescription = item.itemDescription;
             newSatchelSlot.uniqueIdentifier = i;
-            newSatchelSlot.GetComponent<Button>().onClick.AddListener(delegate { GoToSubmit(newSatchelSlot.GetComponent<Button>()); });
+            //newSatchelSlot.GetComponent<Button>().onClick.AddListener(delegate { GoToSubmit(newSatchelSlot.GetComponent<Button>()); });
             itemSlotList.Insert(Mathf.Min(item.positionIndex, itemSlotList.Count), newSatchelSlot);
         }
         
@@ -131,14 +125,6 @@ public class SatchelManager : MonoBehaviour
         {
             itemSlotList[0].GetComponent<Button>().Select();
             descriptionName.text = itemSlotList[0].itemNameText.text;
-            if (inventoryList.itemInventory[itemSlotList[0].uniqueIdentifier].itemAttribute == ItemsDatabase.ItemAttribute.ElementalMindset && enemyManager.wild)
-            {
-                giveBerryButton.gameObject.SetActive(true);
-            }
-            else
-            {
-                giveBerryButton.gameObject.SetActive(false);
-            }
         }
         else
         {
@@ -152,34 +138,25 @@ public class SatchelManager : MonoBehaviour
         statDisplay.SetActive(true);
 
         inventoryManager.SortCouCouInventory();
-        int onPartyCount = 0;
+
         for (int i = 0; i < inventoryList.couCouInventory.Count; i++)
         {
-            if (inventoryList.couCouInventory[i].onParty)
+            SatchelSlotControllerAdventure newSatchelSlot = Instantiate(satchelSlotPrefab, satchelList.transform);
+            CouCouDatabase.CouCouData newCouCou = coucouFinder.FindCouCou(inventoryList.couCouInventory[i].coucouName);
+            newSatchelSlot.itemNameText.text = inventoryList.couCouInventory[i].coucouName;
+            newSatchelSlot.itemAmountText.text = "Lv: " + inventoryList.couCouInventory[i].coucouLevel.ToString();
+            newSatchelSlot.uniqueIdentifier = i;
+            if (inventoryList.couCouInventory[i].hasCollapsed)
             {
-                onPartyCount++;
-                SatchelSlotController newSatchelSlot = Instantiate(satchelSlotPrefab, satchelList.transform);
-                CouCouDatabase.CouCouData coucou = coucouFinder.FindCouCou(inventoryList.couCouInventory[i].coucouName);
-                newSatchelSlot.itemNameText.text = inventoryList.couCouInventory[i].coucouName;
-                newSatchelSlot.itemAmountText.text = "Lv: " + inventoryList.couCouInventory[i].coucouLevel.ToString();
-                newSatchelSlot.uniqueIdentifier = i;
-                if (inventoryList.couCouInventory[i].hasCollapsed)
-                {
-                    newSatchelSlot.coucouOrder.text = "Collapsed";
-                    newSatchelSlot.coucouOrder.color = Color.gray;
-                }
-                else
-                {
-                    newSatchelSlot.coucouOrder.text = "Position " + onPartyCount;
-                }
-                newSatchelSlot.itemDescription = coucou.coucouDescription;
-                newSatchelSlot.GetComponent<Button>().onClick.AddListener(delegate { GoToSubmit(newSatchelSlot.GetComponent<Button>()); });
-                coucouSlotList.Add(newSatchelSlot);
+                newSatchelSlot.coucouOrder.text = "Collapsed";
+                newSatchelSlot.coucouOrder.color = Color.gray;
             }
-            if (onPartyCount >= 5)
+            else
             {
-                break;
+                newSatchelSlot.coucouOrder.text = "Position " + inventoryList.couCouInventory[i].lineupOrder;
             }
+            newSatchelSlot.itemDescription = newCouCou.coucouDescription;
+            coucouSlotList.Add(newSatchelSlot);
         }
 
         for (int i = 0; i < coucouSlotList.Count; i++)
@@ -243,7 +220,7 @@ public class SatchelManager : MonoBehaviour
             Destroy(child.gameObject);
         }
     }
-
+    /*
     public void GoToSubmit(Button button)
     {
         inPrompt = false;
@@ -254,13 +231,13 @@ public class SatchelManager : MonoBehaviour
         buttonClicked = button;
         submitButton.Select();
     }
-
+    */
     public void GoBack()
     {
         if (inPrompt)
         {
             submitButton.Select();
-            OnSubmitCancelled();
+            //OnSubmitCancelled();
         }
         else if (inSubmit)
         {
@@ -271,10 +248,9 @@ public class SatchelManager : MonoBehaviour
         else
         {
             OnCloseSatchel();
-            battlingUI.BackToMenuFromSatchel();
         }
     }
-
+    
     public void OnCloseSatchel()
     {
         selectedSection = 0;
@@ -283,38 +259,66 @@ public class SatchelManager : MonoBehaviour
         ClearItems();
         ClearCouCou();
         satchel.SetActive(false);
-        battlingUI.BackToMenu();
     }
 
     public void UpdateDescription()
     {
+        SatchelSlotControllerAdventure satchelSlot = currentSelectedButton.GetComponent<SatchelSlotControllerAdventure>();
         if (selectedSection == 1)
         {
-            descriptionName.text = currentSelectedButton.GetComponent<SatchelSlotController>().itemNameText.text;
-            descriptionText.text = currentSelectedButton.GetComponent<SatchelSlotController>().itemDescription;
-
-            if (inventoryList.itemInventory[currentSelectedButton.GetComponent<SatchelSlotController>().uniqueIdentifier].itemAttribute == ItemsDatabase.ItemAttribute.ElementalMindset && enemyManager.wild)
-            {
-                giveBerryButton.gameObject.SetActive(true);
-            }
-            else
-            {
-                giveBerryButton.gameObject.SetActive(false);
-            }
+            descriptionName.text = satchelSlot.itemNameText.text;
+            descriptionText.text = satchelSlot.itemDescription;
         }
         else if (selectedSection == 2)
         {
-            descriptionName.text = currentSelectedButton.GetComponent<SatchelSlotController>().itemNameText.text;
-            descriptionText.text = currentSelectedButton.GetComponent<SatchelSlotController>().itemDescription;
-            healthPointsText.text = "HP: " + inventoryList.couCouInventory[currentSelectedButton.GetComponent<SatchelSlotController>().uniqueIdentifier].currentHealth + "/" + inventoryList.couCouInventory[currentSelectedButton.GetComponent<SatchelSlotController>().uniqueIdentifier].maxHealth;
-            attackText.text = "Atk: " + inventoryList.couCouInventory[currentSelectedButton.GetComponent<SatchelSlotController>().uniqueIdentifier].currentAttack;
-            resistanceText.text = "Res: " + inventoryList.couCouInventory[currentSelectedButton.GetComponent<SatchelSlotController>().uniqueIdentifier].currentResistance;
-            determinationText.text = "Det: " + inventoryList.couCouInventory[currentSelectedButton.GetComponent<SatchelSlotController>().uniqueIdentifier].currentDetermination;
-            mindsetText.text = "Mind: " + inventoryList.couCouInventory[currentSelectedButton.GetComponent<SatchelSlotController>().uniqueIdentifier].currentMindset;
+            descriptionName.text = satchelSlot.itemNameText.text;
+            descriptionText.text = satchelSlot.itemDescription;
+            healthPointsText.text = "HP: " + inventoryList.couCouInventory[satchelSlot.uniqueIdentifier].currentHealth + "/" + inventoryList.couCouInventory[satchelSlot.uniqueIdentifier].maxHealth;
+            attackText.text = "Atk: " + inventoryList.couCouInventory[satchelSlot.uniqueIdentifier].currentAttack;
+            resistanceText.text = "Res: " + inventoryList.couCouInventory[satchelSlot.uniqueIdentifier].currentResistance;
+            determinationText.text = "Det: " + inventoryList.couCouInventory[satchelSlot.uniqueIdentifier].currentDetermination;
+            mindsetText.text = "Mind: " + inventoryList.couCouInventory[satchelSlot.uniqueIdentifier].currentMindset;
             scrollRectEnsureVisible.CenterOnItem(currentSelectedButton.GetComponent<RectTransform>());
         }
     }
 
+    public void OnSubmitPressed()
+    {
+        if (selectedSection == 1)
+        {
+            
+        }
+        else if (selectedSection == 2)
+        {
+            changeCouCouOrder.SetActive(true);
+        }
+    }
+
+    public void OnCouCouOrderChange()
+    {
+        if (inputCouCouChange.GetComponent<TMP_InputField>().text == "" || inputCouCouChange.GetComponent<TMP_InputField>().text == null)
+        {
+            changeCouCouOrder.SetActive(false);
+            return;
+        }
+        inputNumber = int.Parse(inputCouCouChange.GetComponent<TMP_InputField>().text);
+        inputCouCouChange.GetComponent<TMP_InputField>().text = "";
+        for (int i = 0; i < inventoryList.couCouInventory.Count; i++)
+        {
+            if (descriptionName.text == inventoryList.couCouInventory[i].coucouName)
+            {
+                inventoryManager.MoveCouCou(inventoryList.couCouInventory[i], inputNumber - 1);
+                break;
+            }
+        }
+
+        ClearCouCou();
+        DisplayCouCou();
+        scrollRect.normalizedPosition = new Vector2(0, 1);
+        changeCouCouOrder.SetActive(false);
+    }
+
+    /*
     public void OnSubmitPressed()
     {
         inPrompt = true;
@@ -336,6 +340,7 @@ public class SatchelManager : MonoBehaviour
         acceptButton.GetComponent<Button>().Select();
     }
 
+    
     public void OnSubmitAccepted()
     {
         inPrompt = false;
@@ -357,7 +362,6 @@ public class SatchelManager : MonoBehaviour
             dialogueText.GetComponent<TextMeshProUGUI>().text = "You use " + descriptionName.text;
             StartCoroutine(enemyManager.GiveBerry(itemFinder.FindItem(descriptionName.text).element));
         }
-        battlingUI.OnFinishTurn();
         selectedSection = 0;
     }
 
@@ -375,12 +379,12 @@ public class SatchelManager : MonoBehaviour
         selectedSection = 3;
         OnSubmitPressed();
     }
+    */
 
     #region - Section Changes -
 
     public void NavigateSections(float direction)
     {
-        Debug.Log(direction);
         if (direction > 0 && selectedSection == 1 && !inSubmit)
         {
             OnCouCouSection();
@@ -393,6 +397,10 @@ public class SatchelManager : MonoBehaviour
 
     public void OnItemSection()
     {
+        if (selectedSection == 1)
+        {
+            return;
+        }
         blurCamera.gameObject.SetActive(true);
         satchel.SetActive(true);
         submitButton.interactable = true;
@@ -407,6 +415,10 @@ public class SatchelManager : MonoBehaviour
 
     public void OnCouCouSection()
     {
+        if (selectedSection == 2)
+        {
+            return;
+        }
         blurCamera.gameObject.SetActive(true);
         satchel.SetActive(true);
         submitButton.interactable = true;
@@ -416,7 +428,7 @@ public class SatchelManager : MonoBehaviour
         scrollRect.enabled = true;
         scrollRect.normalizedPosition = new Vector2(0, 1);
 
-        submitButton.GetComponentInChildren<TextMeshProUGUI>().text = "Change CouCou";
+        submitButton.GetComponentInChildren<TextMeshProUGUI>().text = "Change CouCou Position";
     }
 
     #endregion

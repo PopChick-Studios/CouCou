@@ -12,6 +12,7 @@ TagManager:
   - Save
   - Satchel
   - BattlingUI
+  - AdventureUI
   layers:
   - Default
   - TransparentFX

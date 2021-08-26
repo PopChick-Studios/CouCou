@@ -9,6 +9,7 @@ public class SatchelSlotController : MonoBehaviour, ISelectHandler, IPointerClic
 
     public TextMeshProUGUI itemNameText;
     public TextMeshProUGUI itemAmountText;
+    public TextMeshProUGUI coucouOrder;
     public string itemDescription;
     public int uniqueIdentifier;
 

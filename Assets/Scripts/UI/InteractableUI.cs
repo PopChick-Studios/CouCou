@@ -12,7 +12,6 @@ public class InteractableUI : MonoBehaviour
 
     [Header("Arrow")]
     [SerializeField] private Sprite arrowSprite;
-    [SerializeField] private Sprite arrowGlowSprite;
 
     [SerializeField] private Image arrowPlaceholder;
 
@@ -46,14 +45,15 @@ public class InteractableUI : MonoBehaviour
             arrowPlaceholder.rectTransform.transform.LookAt(cameraTransform);
 
             // Check the distance from the player
-            if (Mathf.Abs(player.transform.position.magnitude - gameObject.transform.position.magnitude) < 2)
+            if (Vector3.Distance(player.transform.position, gameObject.transform.position) < 2.5)
             {
-                arrowPlaceholder.sprite = arrowGlowSprite;
+                arrowPlaceholder.color = new Color32(255, 212, 73, 255);
                 canInteract = true;
             }
-            else if (!canInteract)
+            else
             {
-                arrowPlaceholder.sprite = arrowSprite;
+                arrowPlaceholder.color = Color.white;
+                canInteract = false;
             }
         }
     }
@@ -80,7 +80,6 @@ public class InteractableUI : MonoBehaviour
             arrowPlaceholder.gameObject.SetActive(false);
             isInRange = false;
             arrowPlaceholder.rectTransform.position = new Vector3(originTransform.position.x, originTransform.position.y + 2.5f, originTransform.position.z);
-            canInteract = false;
         }
     }
 
