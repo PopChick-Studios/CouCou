@@ -8,7 +8,7 @@ public class SceneLoader : MonoBehaviour
     private GameManager gameManager;
     private InventoryManager inventoryManager;
     private LightingManager lightingManager;
-    private GameManager.GameState previousState;
+    private GameManager.GameState previousState = GameManager.GameState.Wandering;
 
     public GameObject findWildCouCou;
     public Animator transition;
@@ -29,6 +29,10 @@ public class SceneLoader : MonoBehaviour
             {
                 LoadBattleScene();
             }
+            if (gameManager.State == GameManager.GameState.Wandering && SceneManager.GetActiveScene().name != "TestingScene")
+            {
+                LoadAdventureScene();
+            }
             previousState = gameManager.State;
         }
         
@@ -37,6 +41,11 @@ public class SceneLoader : MonoBehaviour
     public void LoadBattleScene()
     {
         StartCoroutine(LoadScene("BattleScene"));
+    }
+
+    public void LoadAdventureScene()
+    {
+        StartCoroutine(LoadScene("TestingScene"));
     }
 
     public IEnumerator LoadScene(string sceneName)

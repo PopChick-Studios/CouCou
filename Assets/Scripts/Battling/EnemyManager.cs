@@ -150,7 +150,7 @@ public class EnemyManager : MonoBehaviour
     public void InitializeHealthBarEnemy()
     {
         enemyNameText.text = enemyActiveCouCou.coucouName;
-        enemyHealthBar.GetComponent<Image>().fillAmount = enemyActiveCouCou.currentHealth / enemyActiveCouCou.maxHealth;
+        enemyHealthBar.GetComponent<Image>().fillAmount = enemyActiveCouCou.currentHealth / (float)enemyActiveCouCou.maxHealth;
         enemyHealthText.text = enemyActiveCouCou.currentHealth + "/" + enemyActiveCouCou.maxHealth;
         enemyLevelText.text = enemyActiveCouCou.coucouLevel.ToString();
         enemyElementSprite.sprite = coucouFinder.GetElementSprite(enemyActiveCouCou.element);
@@ -162,7 +162,7 @@ public class EnemyManager : MonoBehaviour
         {
             if (attackAbilities[i] != null)
             {
-                abilityAdvantage[i] = battleSystem.HasDisadvantage(attackAbilities[i].coucouElement, battleSystem.player.element);
+                abilityAdvantage[i] = battleSystem.HasAdvantage(attackAbilities[i].coucouElement, battleSystem.player.element);
                 if (abilityAdvantage[i])
                 {
                     amountOfAdvantage++;

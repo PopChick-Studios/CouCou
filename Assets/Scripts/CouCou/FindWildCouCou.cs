@@ -28,7 +28,7 @@ public class FindWildCouCou : MonoBehaviour
         inventoryManager.AddCouCou(coucouName, level);
 
         CouCouDatabase.CouCouData starterCouCou = coucouFinder.FindCouCou(coucouName);
-        List<CouCouDatabase.Element> elementList = coucouFinder.FindDisadvantages(starterCouCou.coucouElement);
+        List<CouCouDatabase.Element> elementList = coucouFinder.FindAdvantages(starterCouCou.coucouElement);
 
         int randomElement = Random.Range(0, elementList.Count);
         List<CouCouDatabase.CouCouData> possibleEnemies = coucouFinder.GetElementalCouCou(elementList[randomElement]);

@@ -81,7 +81,7 @@ public class BattleManager : MonoBehaviour
     public void InitializeHealthBarAlly()
     {
         allyNameText.text = activeCouCou.coucouName;
-        allyHealthBar.GetComponent<Image>().fillAmount = activeCouCou.currentHealth / activeCouCou.maxHealth;
+        allyHealthBar.GetComponent<Image>().fillAmount = activeCouCou.currentHealth / (float)activeCouCou.maxHealth;
         allyHealthText.text = activeCouCou.currentHealth + "/" + activeCouCou.maxHealth;
         allyLevelText.text = activeCouCou.coucouLevel.ToString();
         allyElementSprite.sprite = coucouFinder.GetElementSprite(activeCouCou.element); 
@@ -127,14 +127,14 @@ public class BattleManager : MonoBehaviour
 
                     case ItemsDatabase.ItemAttribute.Resistance:
                         float resistance = activeCouCou.currentResistance * 1.15f * resistanceDiminishingReturns;
-                        dialogueText.text = activeCouCou.coucouName + " gained " + (int)resistance + " resistance";
+                        dialogueText.text = activeCouCou.coucouName + " gained " + (Mathf.Round(resistance - activeCouCou.currentResistance * 100) / 100) + " resistance";
                         activeCouCou.currentResistance = (int)resistance;
                         resistanceDiminishingReturns *= 0.87f;
                         break;
 
                     case ItemsDatabase.ItemAttribute.Attack:
                         float attack = activeCouCou.currentAttack * 1.15f * attackDiminishingReturns;
-                        dialogueText.text = activeCouCou.coucouName + " gained " + (int)attack + " attack";
+                        dialogueText.text = activeCouCou.coucouName + " gained " + (Mathf.Round(attack - activeCouCou.currentAttack * 100) / 100) + " attack";
                         activeCouCou.currentAttack = (int)attack;
                         attackDiminishingReturns *= 0.87f;
                         break;
@@ -149,8 +149,9 @@ public class BattleManager : MonoBehaviour
                             incorrectItemUse = true;
                            break;
                         }
-                        dialogueText.text = "The berry gave " + activeCouCou.coucouName + " " + Mathf.Min(100 - activeCouCou.currentMindset, activeCouCou.currentMindset + 5) +  " more Mindset";
-                        activeCouCou.currentMindset += 10;
+                        int mindset = 10;
+                        dialogueText.text = "The berry gave " + activeCouCou.coucouName + " " + Mathf.Min(100 - activeCouCou.currentMindset, mindset) + " more Mindset";
+                        activeCouCou.currentMindset += mindset;
 
                         break;
 

@@ -128,8 +128,17 @@ public class SatchelAdventureManager : MonoBehaviour
             itemSlotList[0].GetComponent<Button>().Select();
             descriptionName.text = itemSlotList[0].itemNameText.text;
             descriptionText.text = itemSlotList[0].itemDescription;
+            itemSprite.sprite = coucouFinder.GetElementSprite(inventoryList.itemInventory[itemSlotList[0].uniqueIdentifier].element);
             submitButton.enabled = false;
             submitButton.GetComponentInChildren<TextMeshProUGUI>().text = "";
+            if (itemSprite.sprite == null)
+            {
+                itemSprite.enabled = false;
+            }
+            else
+            {
+                itemSprite.enabled = true;
+            }
         }
         else
         {
@@ -197,6 +206,7 @@ public class SatchelAdventureManager : MonoBehaviour
             resistanceText.text = "Res: " + Mathf.Round(inventoryList.couCouInventory[coucouSlotList[0].uniqueIdentifier].currentResistance * 10000) / 10000;
             determinationText.text = "Det: " + inventoryList.couCouInventory[coucouSlotList[0].uniqueIdentifier].currentDetermination;
             mindsetText.text = "Mind: " + inventoryList.couCouInventory[coucouSlotList[0].uniqueIdentifier].currentMindset;
+            itemSprite.sprite = coucouFinder.GetElementSprite(inventoryList.couCouInventory[coucouSlotList[0].uniqueIdentifier].element);
         }
         else
         {
@@ -275,11 +285,19 @@ public class SatchelAdventureManager : MonoBehaviour
 
     public void UpdateDescription()
     {
+        submitButton.enabled = true;
+        itemSprite.enabled = true;
         SatchelSlotControllerAdventure satchelSlot = currentSelectedButton.GetComponent<SatchelSlotControllerAdventure>();
         if (selectedSection == 1)
         {
             descriptionName.text = satchelSlot.itemNameText.text;
             descriptionText.text = satchelSlot.itemDescription;
+            itemSprite.sprite = coucouFinder.GetElementSprite(inventoryList.itemInventory[satchelSlot.uniqueIdentifier].element);
+
+            if (itemSprite.sprite == null)
+            {
+                itemSprite.enabled = false;
+            }
         }
         else if (selectedSection == 2)
         {
@@ -291,6 +309,19 @@ public class SatchelAdventureManager : MonoBehaviour
             determinationText.text = "Det: " + inventoryList.couCouInventory[satchelSlot.uniqueIdentifier].currentDetermination;
             mindsetText.text = "Mind: " + inventoryList.couCouInventory[satchelSlot.uniqueIdentifier].currentMindset;
             scrollRectEnsureVisible.CenterOnItem(currentSelectedButton.GetComponent<RectTransform>());
+            itemSprite.sprite = coucouFinder.GetElementSprite(inventoryList.couCouInventory[satchelSlot.uniqueIdentifier].element);
+            Vector3 defaultPosition = new Vector3(1335, 140, 0);
+            if (inventoryList.couCouInventory[satchelSlot.uniqueIdentifier].hasCollapsed)
+            {
+                submitButton.GetComponentInChildren<TextMeshProUGUI>().text = "You can't change the position of a collasped CouCou";
+                submitButton.transform.position = new Vector2(defaultPosition.x, defaultPosition.y + 50);
+                submitButton.enabled = false;
+            }
+            else
+            {
+                submitButton.GetComponentInChildren<TextMeshProUGUI>().text = "Change CouCou Position";
+                submitButton.transform.position = defaultPosition;
+            }
         }
     }
 

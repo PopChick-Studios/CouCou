@@ -35,11 +35,13 @@ public class BattleSystem : MonoBehaviour
     private Catching catching;
     private CouCouFinder coucouFinder;
     private AbilityFinder abilityFinder;
+    private GameManager gameManager;
 
     public BattleState state;
 
     private void Awake()
     {
+        gameManager = gameObject.GetComponent<GameManager>();
         abilityFinder = gameObject.GetComponent<AbilityFinder>();
         coucouFinder = gameObject.GetComponent<CouCouFinder>();
         catching = gameObject.GetComponent<Catching>();
@@ -87,13 +89,20 @@ public class BattleSystem : MonoBehaviour
         }
     }
 
+    public void OnButtonCall(AbilityUID button)
+    {
+        dialogueText.text = player.coucouName + " used " + button.GetComponentInChildren<TextMeshProUGUI>().text;
+        battlingUI.OnFinishTurn();
+        StartCoroutine(UseAbility(button));
+    }
+
     public IEnumerator EnemyAbility(float damage, int abilityUID, bool surprise)
     {
         string ability = "";
         AbilitiesDatabase.AttackAbilityData attackAbility = null;
         AbilitiesDatabase.UtilityAbilityData utilityAbility = null;
         bool isUtility;
-        float waitAfterAbility = 3f;
+        float waitAfterAbility = 2f;
 
         Debug.Log(abilityUID);
 
@@ -188,6 +197,7 @@ public class BattleSystem : MonoBehaviour
         else
         {
             abilityDisadvantage = HasDisadvantage(attackAbility.coucouElement, player.element);
+            abilityAdvantage = HasAdvantage(attackAbility.coucouElement, player.element);
             crit = false;
             float damageModifier = 1;
             int rnd = Random.Range(1, 101);
@@ -196,7 +206,7 @@ public class BattleSystem : MonoBehaviour
             {
                 damageModifier = 0.9f;
             }
-            else
+            else if (abilityAdvantage)
             {
                 damageModifier = 1.12f;
             }
@@ -211,7 +221,7 @@ public class BattleSystem : MonoBehaviour
             yield return new WaitUntil(() => takeDamageFinished);
             takeDamageFinished = false;
         }
-        
+
         if (crit)
         {
             dialogueText.text = enemy.coucouName + " critically hit!";
@@ -220,13 +230,15 @@ public class BattleSystem : MonoBehaviour
         {
             dialogueText.text = "The attack wasn't very outstanding...";
         }
-        else if (!abilityDisadvantage)
+        else if (abilityAdvantage)
         {
             dialogueText.text = "The attack was glorious!";
         }
         yield return new WaitForSeconds(2f);
         if (isDead)
         {
+            dialogueText.text = player.coucouName + " has collapsed";
+            player.hasCollapsed = true;
             state = BattleState.LOST;
             StartCoroutine(EndBattle());
         }
@@ -245,18 +257,11 @@ public class BattleSystem : MonoBehaviour
         yield break;
     }
 
-    public void OnButtonCall(AbilityUID button)
-    {
-        dialogueText.text = player.coucouName + " used " + button.GetComponentInChildren<TextMeshProUGUI>().text;
-        battlingUI.OnFinishTurn();
-        StartCoroutine(UseAbility(button));
-    }
-
     public IEnumerator UseAbility(AbilityUID button)
     {
         yield return new WaitForSeconds(1f);
 
-        float waitAfterAbility = 3f;
+        float waitAfterAbility = 2f;
 
         int abilityUID = button.abilityUID;
         bool isUtility = button.isUtility;
@@ -279,7 +284,7 @@ public class BattleSystem : MonoBehaviour
             if (button.utilityAbility.resistanceMultiplier != 1)
             {
                 float resistance = player.currentResistance * button.utilityAbility.resistanceMultiplier * battleManager.resistanceDiminishingReturns;
-                dialogueText.text = player.coucouName + " gained " + ((Mathf.Round(resistance * 100f) / 100f) - player.currentResistance) + " resistance";
+                dialogueText.text = player.coucouName + " gained " + (Mathf.Round((resistance - player.currentResistance) * 100f) / 100f) + " resistance";
                 player.currentResistance = resistance;
                 battleManager.resistanceDiminishingReturns *= 0.91f;
                 yield return new WaitForSeconds(waitAfterAbility);
@@ -330,6 +335,7 @@ public class BattleSystem : MonoBehaviour
         else
         {
             bool abilityDisadvantage = HasDisadvantage(button.attackAbility.coucouElement, enemy.element);
+            bool abilityAdvantage = HasAdvantage(button.attackAbility.coucouElement, enemy.element);
             bool crit = false;
             float damageModifier = 1;
             int rnd = Random.Range(1, 101);
@@ -338,7 +344,7 @@ public class BattleSystem : MonoBehaviour
             {
                 damageModifier = 0.9f;
             }
-            else
+            else if (abilityAdvantage)
             {
                 damageModifier = 1.12f;
             }
@@ -359,7 +365,7 @@ public class BattleSystem : MonoBehaviour
             {
                 dialogueText.text = "The attack wasn't very outstanding...";
             }
-            else if (!abilityDisadvantage)
+            else if (abilityAdvantage)
             {
                 dialogueText.text = "The attack was glorious!";
             }
@@ -390,29 +396,6 @@ public class BattleSystem : MonoBehaviour
             EnemyTurn();
         }
         yield break;
-    }
-
-    public IEnumerator EndBattle()
-    {
-        if (state == BattleState.WON)
-        {
-            if (!catching.catchSuccessful)
-            {
-                dialogueText.text = enemy.coucouName + " has collapsed.";
-            }
-
-            yield return new WaitForSeconds(3f);
-
-            // Give EXP and move out of battle scene
-        }
-        else if (state == BattleState.LOST)
-        {
-            dialogueText.text = player.coucouName + " has collapsed.";
-
-            yield return new WaitForSeconds(3f);
-
-            // move out of battle scene
-        }
     }
 
     public bool TakeDamage(float damage)
@@ -559,6 +542,65 @@ public class BattleSystem : MonoBehaviour
         }
     }
 
+    public bool HasAdvantage(CouCouDatabase.Element attackingElement, CouCouDatabase.Element defendingElement)
+    {
+        switch (attackingElement)
+        {
+            case CouCouDatabase.Element.Flame:
+                if (defendingElement == CouCouDatabase.Element.Aqua || defendingElement == CouCouDatabase.Element.Lux)
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+
+            case CouCouDatabase.Element.Aqua:
+                if (defendingElement == CouCouDatabase.Element.Nature || defendingElement == CouCouDatabase.Element.Lux)
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+
+            case CouCouDatabase.Element.Nature:
+                if (defendingElement == CouCouDatabase.Element.Flame || defendingElement == CouCouDatabase.Element.Umbral)
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+
+            case CouCouDatabase.Element.Umbral:
+                if (defendingElement == CouCouDatabase.Element.Flame || defendingElement == CouCouDatabase.Element.Aqua)
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+
+            case CouCouDatabase.Element.Lux:
+                if (defendingElement == CouCouDatabase.Element.Umbral || defendingElement == CouCouDatabase.Element.Nature)
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+
+            default:
+                return false;
+        }
+    }
+
     public void ReduceMindset(int amountUsed)
     {
         float amountToBeReduced = Mathf.Pow(amountUsed, 2) - Mathf.Pow(amountUsed - 1, 2);
@@ -592,5 +634,30 @@ public class BattleSystem : MonoBehaviour
             coucou.currentHealth = coucou.maxHealth;
         }
         yield break;
+    }
+
+    public IEnumerator EndBattle()
+    {
+        if (state == BattleState.WON)
+        {
+            if (!catching.catchSuccessful)
+            {
+                dialogueText.text = enemy.coucouName + " has collapsed.";
+            }
+
+            yield return new WaitForSeconds(3f);
+
+            // Give EXP
+
+            gameManager.SetState(GameManager.GameState.Wandering);
+        }
+        else if (state == BattleState.LOST)
+        {
+            dialogueText.text = player.coucouName + " has collapsed.";
+
+            yield return new WaitForSeconds(3f);
+
+            gameManager.SetState(GameManager.GameState.Wandering);
+        }
     }
 }

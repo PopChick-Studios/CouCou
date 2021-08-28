@@ -132,6 +132,15 @@ public class SatchelManager : MonoBehaviour
             itemSlotList[0].GetComponent<Button>().Select();
             descriptionName.text = itemSlotList[0].itemNameText.text;
             descriptionText.text = itemSlotList[0].itemDescription;
+            itemSprite.sprite = coucouFinder.GetElementSprite(inventoryList.itemInventory[itemSlotList[0].uniqueIdentifier].element);
+            if (itemSprite.sprite == null)
+            {
+                itemSprite.enabled = false;
+            }
+            else
+            {
+                itemSprite.enabled = true;
+            }
             if (inventoryList.itemInventory[itemSlotList[0].uniqueIdentifier].itemAttribute == ItemsDatabase.ItemAttribute.ElementalMindset && enemyManager.wild)
             {
                 giveBerryButton.gameObject.SetActive(true);
@@ -214,6 +223,7 @@ public class SatchelManager : MonoBehaviour
             resistanceText.text = "Res: " + Mathf.Round(inventoryList.couCouInventory[coucouSlotList[0].uniqueIdentifier].currentResistance * 10000) / 10000;
             determinationText.text = "Det: " + inventoryList.couCouInventory[coucouSlotList[0].uniqueIdentifier].currentDetermination;
             mindsetText.text = "Mind: " + inventoryList.couCouInventory[coucouSlotList[0].uniqueIdentifier].currentMindset;
+            itemSprite.sprite = coucouFinder.GetElementSprite(inventoryList.couCouInventory[coucouSlotList[0].uniqueIdentifier].element);
 
             if (descriptionName.text == battleSystem.player.coucouName)
             {
@@ -283,17 +293,20 @@ public class SatchelManager : MonoBehaviour
             buttonClicked = null;
             inSubmit = false;
         }
-        else
+        else if (battleSystem.state != BattleState.PLAYERTURN)
+        {
+            return;
+        }
+        else if (battlingUI.inSatchel)
         {
             OnCloseSatchel();
-            battlingUI.BackToMenuFromSatchel();
+            battlingUI.BackToMenu();
         }
     }
 
     public void OnCloseSatchel()
     {
         selectedSection = 0;
-
         blurCamera.gameObject.SetActive(false);
         ClearItems();
         ClearCouCou();
@@ -303,12 +316,22 @@ public class SatchelManager : MonoBehaviour
 
     public void UpdateDescription()
     {
+        SatchelSlotController satchelSlot = currentSelectedButton.GetComponent<SatchelSlotController>();
         if (selectedSection == 1)
         {
-            descriptionName.text = currentSelectedButton.GetComponent<SatchelSlotController>().itemNameText.text;
-            descriptionText.text = currentSelectedButton.GetComponent<SatchelSlotController>().itemDescription;
+            descriptionName.text = satchelSlot.itemNameText.text;
+            descriptionText.text = satchelSlot.itemDescription;
+            itemSprite.sprite = coucouFinder.GetElementSprite(inventoryList.itemInventory[satchelSlot.uniqueIdentifier].element);
+            if (itemSprite.sprite == null)
+            {
+                itemSprite.enabled = false;
+            }
+            else
+            {
+                itemSprite.enabled = true;
+            }
 
-            if (inventoryList.itemInventory[currentSelectedButton.GetComponent<SatchelSlotController>().uniqueIdentifier].itemAttribute == ItemsDatabase.ItemAttribute.ElementalMindset && enemyManager.wild)
+            if (inventoryList.itemInventory[satchelSlot.uniqueIdentifier].itemAttribute == ItemsDatabase.ItemAttribute.ElementalMindset && enemyManager.wild)
             {
                 giveBerryButton.gameObject.SetActive(true);
             }
@@ -319,14 +342,15 @@ public class SatchelManager : MonoBehaviour
         }
         else if (selectedSection == 2)
         {
-            descriptionName.text = currentSelectedButton.GetComponent<SatchelSlotController>().itemNameText.text;
-            descriptionText.text = currentSelectedButton.GetComponent<SatchelSlotController>().itemDescription;
-            healthPointsText.text = "HP: " + inventoryList.couCouInventory[currentSelectedButton.GetComponent<SatchelSlotController>().uniqueIdentifier].currentHealth + "/" + inventoryList.couCouInventory[currentSelectedButton.GetComponent<SatchelSlotController>().uniqueIdentifier].maxHealth;
-            attackText.text = "Atk: " + inventoryList.couCouInventory[currentSelectedButton.GetComponent<SatchelSlotController>().uniqueIdentifier].currentAttack;
-            resistanceText.text = "Res: " + Mathf.Round(inventoryList.couCouInventory[currentSelectedButton.GetComponent<SatchelSlotController>().uniqueIdentifier].currentResistance * 10000) / 10000;
-            determinationText.text = "Det: " + inventoryList.couCouInventory[currentSelectedButton.GetComponent<SatchelSlotController>().uniqueIdentifier].currentDetermination;
-            mindsetText.text = "Mind: " + inventoryList.couCouInventory[currentSelectedButton.GetComponent<SatchelSlotController>().uniqueIdentifier].currentMindset;
+            descriptionName.text = satchelSlot.itemNameText.text;
+            descriptionText.text = satchelSlot.itemDescription;
+            healthPointsText.text = "HP: " + inventoryList.couCouInventory[satchelSlot.uniqueIdentifier].currentHealth + "/" + inventoryList.couCouInventory[satchelSlot.uniqueIdentifier].maxHealth;
+            attackText.text = "Atk: " + inventoryList.couCouInventory[satchelSlot.uniqueIdentifier].currentAttack;
+            resistanceText.text = "Res: " + Mathf.Round(inventoryList.couCouInventory[satchelSlot.uniqueIdentifier].currentResistance * 10000) / 10000;
+            determinationText.text = "Det: " + inventoryList.couCouInventory[satchelSlot.uniqueIdentifier].currentDetermination;
+            mindsetText.text = "Mind: " + inventoryList.couCouInventory[satchelSlot.uniqueIdentifier].currentMindset;
             scrollRectEnsureVisible.CenterOnItem(currentSelectedButton.GetComponent<RectTransform>());
+            itemSprite.sprite = coucouFinder.GetElementSprite(inventoryList.couCouInventory[satchelSlot.uniqueIdentifier].element);
 
             if (descriptionName.text == battleSystem.player.coucouName)
             {

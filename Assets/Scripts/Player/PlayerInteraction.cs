@@ -35,7 +35,7 @@ public class PlayerInteraction : MonoBehaviour
 
     private void Interact()
     {
-        if (interactableUI != null)
+        if (interactableUI != null && gameManager.State == GameManager.GameState.Wandering)
         {
             if (interactableUI.canInteract)
             {

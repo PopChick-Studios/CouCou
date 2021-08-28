@@ -11,10 +11,15 @@ public class DisplayManager : MonoBehaviour
     private GameManager gameManager;
     private FindWildCouCou findWildCouCou;
 
+    [Header("Blur Camera")]
+    public GameObject blurCamera;
+
+    [Header("UI Elements")]
     [SerializeField] private GameObject HUD;
     [SerializeField] private GameObject interaction;
     [SerializeField] private GameObject satchel;
     [SerializeField] private GameObject pause;
+    [SerializeField] private GameObject confirmation;
     [SerializeField] private GameObject options;
     [SerializeField] private GameObject crossfade;
     [SerializeField] private GameObject coucouCamera;
@@ -30,6 +35,7 @@ public class DisplayManager : MonoBehaviour
     [Header("Buttons")]
     [SerializeField] private Button coucouUIYes;
     [SerializeField] private Button continueButton;
+    public Button confirmationQuitButton;
 
     private string coucouInteractingName;
 
@@ -55,6 +61,8 @@ public class DisplayManager : MonoBehaviour
         playerInputActions.Wandering.Pause.performed += x => PauseMenu();
 
         HeadsUpDisplay();
+
+        confirmation.SetActive(false);
     }
 
     public void PauseMenu()
@@ -67,6 +75,8 @@ public class DisplayManager : MonoBehaviour
         satchel.SetActive(false);
         pause.SetActive(true);
         coucouCamera.SetActive(false);
+        confirmation.SetActive(false);
+        blurCamera.SetActive(true);
 
         Cursor.lockState = CursorLockMode.None;
 
@@ -75,11 +85,19 @@ public class DisplayManager : MonoBehaviour
         continueButton.Select();
     }
 
+    public void OnConfirmation()
+    {
+        pause.SetActive(false);
+        confirmation.SetActive(true);
+        confirmationQuitButton.Select();
+    }
+
     public void HeadsUpDisplay()
     {
         gameManager.SetState(GameManager.GameState.Wandering);
         Time.timeScale = 1;
 
+        blurCamera.SetActive(false);
         options.SetActive(false);
         HUD.SetActive(true);
         interaction.SetActive(false);
