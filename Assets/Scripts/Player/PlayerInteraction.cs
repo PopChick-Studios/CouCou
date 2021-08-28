@@ -9,6 +9,7 @@ public class PlayerInteraction : MonoBehaviour
     private GameManager gameManager;
     private InteractableUI interactableUI;
     private DisplayManager displayManager;
+    private InventoryManager inventoryManager;
 
     // Saving game
     public bool OnSaveButton;
@@ -22,6 +23,7 @@ public class PlayerInteraction : MonoBehaviour
 
     private void Awake()
     {
+        inventoryManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<InventoryManager>();
         gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
         displayManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<DisplayManager>();
 
@@ -37,9 +39,8 @@ public class PlayerInteraction : MonoBehaviour
         {
             if (interactableUI.canInteract)
             {
-                displayManager.OnInteraction(interactableUI.interactionType);
-                // animator.SetBool("interactPickUp", true);
-                gameManager.SetState(GameManager.GameState.Battling);
+                displayManager.OnInteraction(interactableUI.interactionType, interactableUI);
+                // animator.SetTrigger("interactPickUp");
 
                 // Pause the game
                 Time.timeScale = 0;
@@ -47,7 +48,10 @@ public class PlayerInteraction : MonoBehaviour
                 playerInputActions.UI.Enable();
                 playerInputActions.Wandering.Disable();
 
-                Debug.Log("Interacting - " + interactableUI.interactionType);
+                if (interactableUI.interactionType == DisplayManager.InteractionTypes.Collect)
+                {
+                    inventoryManager.FoundItem(interactableUI.itemName, interactableUI.itemAmount);
+                }
             }
         }
     }
@@ -101,16 +105,17 @@ public class PlayerInteraction : MonoBehaviour
         FinishInteraction(interactableUI.interactionType);
     }
 
+    public void OnCouCouCancelButton()
+    {
+        displayManager.HeadsUpDisplay();
+        playerInputActions.UI.Disable();
+        playerInputActions.Wandering.Enable();
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Interactable"))
             interactableUI = other.GetComponent<InteractableUI>();
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("Interactable"))
-            interactableUI = null;
     }
 
     #region - Enable/Disable -

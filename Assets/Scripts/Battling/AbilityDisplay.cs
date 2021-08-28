@@ -75,9 +75,6 @@ public class AbilityDisplay : MonoBehaviour
                     break;
             }
 
-            Debug.LogWarning("Check ability id = " + checkAbilityID);
-            Debug.LogWarning("Button = " + ability4.name);
-
             // Attack IDs are only up to 99
             if (checkAbilityID <= 99 && checkAbilityID != -1)
             {
@@ -85,7 +82,6 @@ public class AbilityDisplay : MonoBehaviour
                 {
                     if (checkAbilityID == attackAbilitiesList[i].uniqueIdentifier)
                     {
-                        Debug.Log("Attack Ability");
                         currentAbilites.Add(attackAbilitiesList[i].uniqueIdentifier);
                         updateButton.GetComponentInChildren<TextMeshProUGUI>().text = attackAbilitiesList[i].abilityName;
                         updateButton.GetComponent<Image>().color = attackAbilitiesList[i].abilityColor;
@@ -102,7 +98,6 @@ public class AbilityDisplay : MonoBehaviour
                 {
                     if (checkAbilityID == utilityAbilitiesList[i].uniqueIdentifier)
                     {
-                        Debug.Log("Utility Ability");
                         currentAbilites.Add(utilityAbilitiesList[i].uniqueIdentifier);
                         updateButton.GetComponentInChildren<TextMeshProUGUI>().text = utilityAbilitiesList[i].abilityName;
                         updateButton.GetComponent<Image>().color = utilityAbilitiesList[i].abilityColor;

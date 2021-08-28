@@ -66,4 +66,17 @@ public class GameManager : MonoBehaviour
                 break;
         }
     }
+
+    public void OnQuit()
+    {
+        Debug.Log("Application Quit");
+        // FOR TESTING ONLY
+        SaveSystem.DeleteAllSaveFiles();
+        Application.Quit();
+    }
+
+    public void OnApplicationQuit()
+    {
+        SaveSystem.DeleteAllSaveFiles();
+    }
 }

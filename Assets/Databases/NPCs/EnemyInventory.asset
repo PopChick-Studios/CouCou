@@ -14,24 +14,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inventoryOwner: 
   couCouInventory:
-  - coucouName: Foxtning
-    coucouLevel: 37
+  - coucouName: Hop-scorch
+    coucouLevel: 15
     coucouEXP: 0
-    coucouVariant: 2
-    element: 4
-    isCurrentlyActive: 0
-    onParty: 1
-    lineupOrder: 1
-    maxHealth: 632
-    currentAttack: 415
-    currentResistance: 3.83
-    currentHealth: 632
-    currentMindset: 15
+    coucouVariant: 1
+    element: 1
+    lineupOrder: 0
+    maxHealth: 272
+    currentAttack: 198
+    currentResistance: 1.93
+    currentHealth: 272
+    currentMindset: 30
     currentDetermination: 50
     isStunned: 0
     hasCollapsed: 0
-    ability1: 0
-    ability2: 3
-    ability3: 20
-    ability4: 22
   itemInventory: []

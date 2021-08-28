@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 public class SceneLoader : MonoBehaviour
 {
     private GameManager gameManager;
+    private InventoryManager inventoryManager;
     private LightingManager lightingManager;
     private GameManager.GameState previousState;
 
@@ -14,6 +15,7 @@ public class SceneLoader : MonoBehaviour
 
     private void Awake()
     {
+        inventoryManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<InventoryManager>();
         lightingManager = gameObject.GetComponent<LightingManager>();
         gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
     }
@@ -40,6 +42,7 @@ public class SceneLoader : MonoBehaviour
     public IEnumerator LoadScene(string sceneName)
     {
         transition.SetTrigger("Start");
+        inventoryManager.SaveInventory();
         yield return new WaitForSeconds(1f);
         DontDestroyOnLoad(findWildCouCou);
         SceneManager.LoadScene(sceneName);

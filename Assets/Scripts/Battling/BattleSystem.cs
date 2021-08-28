@@ -8,8 +8,10 @@ public enum BattleState { NOTBATTLING, START, PLAYERTURN, ENEMYTURN, WON, LOST }
 
 public class BattleSystem : MonoBehaviour
 {
-    //public GameObject playerPrefab;
-    //public GameObject enemyPrefab;
+    public GameObject playerModel;
+    public GameObject enemyModel;
+    private GameObject playerInScene;
+    private GameObject enemyInScene;
 
     public InventoryList.CouCouInventory player;
     public InventoryList.CouCouInventory enemy;
@@ -20,27 +22,33 @@ public class BattleSystem : MonoBehaviour
     public TextMeshProUGUI allyHealthText;
     public Image enemyHealthBar;
     public TextMeshProUGUI enemyHealthText;
-    public Transform playerPlatform;
-    public Transform enemyPlatform;
+    public Transform playerSpawner;
+    public Transform enemySpawner;
 
-    public int psychicAbilitiesUsed;
+    public int enemyPsychicAbilitiesUsed = 0;
+    public int playerPsychicAbilitiesUsed = 0;
+    public bool finishedHealthIncrement;
 
     private BattleManager battleManager;
     private EnemyManager enemyManager;
     private BattlingUI battlingUI;
     private Catching catching;
+    private CouCouFinder coucouFinder;
+    private AbilityFinder abilityFinder;
 
     public BattleState state;
 
     private void Awake()
     {
+        abilityFinder = gameObject.GetComponent<AbilityFinder>();
+        coucouFinder = gameObject.GetComponent<CouCouFinder>();
         catching = gameObject.GetComponent<Catching>();
         battleManager = gameObject.GetComponent<BattleManager>();
         enemyManager = gameObject.GetComponent<EnemyManager>();
         battlingUI = GameObject.FindGameObjectWithTag("BattlingUI").GetComponent<BattlingUI>();
 
-        //playerPrefab = coucouFinder.FindCouCou(battleManager.activeCouCou.coucouName).coucouModel;
-        //enemyPrefab = coucouFinder.FindCouCou(enemyManager.enemyActiveCouCou.coucouName).coucouModel;
+        //playerModel = coucouFinder.FindCouCou(battleManager.activeCouCou.coucouName).coucouModel;
+        //enemyModel = coucouFinder.FindCouCou(enemyManager.enemyActiveCouCou.coucouName).coucouModel;
     }
 
     void Start()
@@ -51,8 +59,8 @@ public class BattleSystem : MonoBehaviour
 
     public void SetupBattle()
     {
-        //GameObject playerGO = Instantiate(playerPrefab, playerPlatform);
-        //GameObject enemyGO = Instantiate(enemyPrefab, enemyPlatform);
+        //playerInScene = Instantiate(playerModel, playerSpawner);
+        //enemyInScene = Instantiate(enemyModel, enemySpawner);
 
         StartCoroutine(PlayerTurn());
     }
@@ -79,42 +87,142 @@ public class BattleSystem : MonoBehaviour
         }
     }
 
-    public IEnumerator EnemyAbility(float damage, string ability, bool surprise)
+    public IEnumerator EnemyAbility(float damage, int abilityUID, bool surprise)
     {
-        bool isDead;
-        bool crit = false;
+        string ability = "";
+        AbilitiesDatabase.AttackAbilityData attackAbility = null;
+        AbilitiesDatabase.UtilityAbilityData utilityAbility = null;
+        bool isUtility;
+        float waitAfterAbility = 3f;
+
+        Debug.Log(abilityUID);
+
+        if (abilityUID > 99)
+        {
+            utilityAbility = abilityFinder.FindUtilityAbility(abilityUID);
+            ability = utilityAbility.abilityName;
+            isUtility = true;
+        }
+        else
+        {
+            attackAbility = abilityFinder.FindAttackAbility(abilityUID);
+            ability = attackAbility.abilityName;
+            isUtility = false;
+        }
 
         if (!surprise)
         {
             dialogueText.text = enemy.coucouName + " used " + ability;
         }
-        
-        if (damage == 0)
+
+        bool isDead = false;
+        bool crit = false;
+        bool abilityDisadvantage = false;
+        bool abilityAdvantage = false;
+
+        if (isUtility)
         {
-            takeDamageFinished = false;
-            isDead = false;
+            if (utilityAbility.enemyMindset)
+            {
+                enemyPsychicAbilitiesUsed++;
+                ReduceMindset(enemyPsychicAbilitiesUsed);
+                yield return new WaitForSeconds(waitAfterAbility);
+            }
+            if (utilityAbility.canStun)
+            {
+                dialogueText.text = enemy.coucouName + " has stunned " + player.coucouName;
+                player.isStunned = true;
+                yield return new WaitForSeconds(waitAfterAbility);
+            }
+            if (utilityAbility.resistanceMultiplier != 1)
+            {
+                float resistance = enemy.currentResistance * utilityAbility.resistanceMultiplier * enemyManager.resistanceDiminishingReturns;
+                dialogueText.text = enemy.coucouName + " gained " + ((Mathf.Round(resistance * 100f) / 100f) - enemy.currentResistance) + " resistance";
+                enemy.currentResistance = resistance;
+                enemyManager.resistanceDiminishingReturns *= 0.91f;
+                yield return new WaitForSeconds(waitAfterAbility);
+            }
+            if (utilityAbility.selfMindset > 0)
+            {
+                dialogueText.text = enemy.coucouName + " gained " + (int)Mathf.Min(100 - enemy.currentMindset, utilityAbility.selfMindset) + " mindset";
+                enemy.currentMindset += (int)utilityAbility.selfMindset;
+                if (enemy.currentMindset > 100)
+                {
+                    enemy.currentMindset = 100;
+                }
+                yield return new WaitForSeconds(waitAfterAbility);
+            }
+            if (utilityAbility.selfDetermination > 0)
+            {
+                dialogueText.text = enemy.coucouName + " gained " + (int)Mathf.Min(100 - enemy.currentDetermination, utilityAbility.selfDetermination) + " determination";
+                enemy.currentDetermination += (int)utilityAbility.selfDetermination;
+                if (enemy.currentDetermination > 100)
+                {
+                    enemy.currentDetermination = 100;
+                }
+                yield return new WaitForSeconds(waitAfterAbility);
+            }
+            if (utilityAbility.enemyDetermination > 0)
+            {
+                int determinationAbsolute = (int)Mathf.Abs(utilityAbility.enemyDetermination);
+                dialogueText.text = player.coucouName + " lost " + Mathf.Min(Mathf.Max(100 - enemy.currentDetermination, 0), determinationAbsolute) + " determination";
+                enemy.currentDetermination -= (int)utilityAbility.enemyDetermination;
+                if (enemy.currentDetermination < 0)
+                {
+                    enemy.currentDetermination = 0;
+                }
+                yield return new WaitForSeconds(waitAfterAbility);
+            }
+            if (utilityAbility.enemyDetermination < 0)
+            {
+                int determinationAbsolute = (int)Mathf.Abs(utilityAbility.enemyDetermination);
+                dialogueText.text = player.coucouName + " gained " + Mathf.Min(100 - enemy.currentDetermination, determinationAbsolute) + " determination";
+                enemy.currentDetermination += determinationAbsolute;
+                if (enemy.currentDetermination > 100)
+                {
+                    enemy.currentDetermination = 100;
+                }
+                yield return new WaitForSeconds(waitAfterAbility);
+            }
         }
         else
         {
+            abilityDisadvantage = HasDisadvantage(attackAbility.coucouElement, player.element);
             crit = false;
             float damageModifier = 1;
             int rnd = Random.Range(1, 101);
             Debug.Log(rnd + " + " + enemy.currentMindset);
+            if (abilityDisadvantage)
+            {
+                damageModifier = 0.9f;
+            }
+            else
+            {
+                damageModifier = 1.12f;
+            }
             if (rnd <= enemy.currentMindset)
             {
                 damageModifier += enemy.currentDetermination / 100f;
                 crit = true;
             }
 
-            float damageAfterResistance = damage / enemy.currentResistance;
+            float damageAfterResistance = damage / player.currentResistance;
             isDead = TakeDamage(damageAfterResistance * damageModifier);
+            yield return new WaitUntil(() => takeDamageFinished);
+            takeDamageFinished = false;
         }
         
-        yield return new WaitUntil(() => takeDamageFinished);
-        takeDamageFinished = false;
         if (crit)
         {
             dialogueText.text = enemy.coucouName + " critically hit!";
+        }
+        else if (abilityDisadvantage)
+        {
+            dialogueText.text = "The attack wasn't very outstanding...";
+        }
+        else if (!abilityDisadvantage)
+        {
+            dialogueText.text = "The attack was glorious!";
         }
         yield return new WaitForSeconds(2f);
         if (isDead)
@@ -158,8 +266,8 @@ public class BattleSystem : MonoBehaviour
         {
             if (button.utilityAbility.enemyMindset)
             {
-                psychicAbilitiesUsed++;
-                ReduceMindset(psychicAbilitiesUsed);
+                playerPsychicAbilitiesUsed++;
+                ReduceMindset(playerPsychicAbilitiesUsed);
                 yield return new WaitForSeconds(waitAfterAbility);
             }
             if (button.utilityAbility.canStun)
@@ -171,14 +279,14 @@ public class BattleSystem : MonoBehaviour
             if (button.utilityAbility.resistanceMultiplier != 1)
             {
                 float resistance = player.currentResistance * button.utilityAbility.resistanceMultiplier * battleManager.resistanceDiminishingReturns;
-                dialogueText.text = player.coucouName + " gained " + (int)resistance + " resistance";
-                player.currentResistance = (int)resistance;
-                battleManager.resistanceDiminishingReturns *= 0.87f;
+                dialogueText.text = player.coucouName + " gained " + ((Mathf.Round(resistance * 100f) / 100f) - player.currentResistance) + " resistance";
+                player.currentResistance = resistance;
+                battleManager.resistanceDiminishingReturns *= 0.91f;
                 yield return new WaitForSeconds(waitAfterAbility);
             }
             if (button.utilityAbility.selfMindset > 0)
             {
-                dialogueText.text = player.coucouName + " gained " + (int)Mathf.Min(30 - player.currentMindset, button.utilityAbility.selfMindset) + " mindset";
+                dialogueText.text = player.coucouName + " gained " + (int)Mathf.Min(100 - player.currentMindset, button.utilityAbility.selfMindset) + " mindset";
                 player.currentMindset += (int)button.utilityAbility.selfMindset;
                 if (player.currentMindset > 100)
                 {
@@ -196,9 +304,10 @@ public class BattleSystem : MonoBehaviour
                 }
                 yield return new WaitForSeconds(waitAfterAbility);
             }
-            if (button.utilityAbility.enemyDetermination > 0)
+            if (button.utilityAbility.enemyDetermination < 0)
             {
-                dialogueText.text = enemy.coucouName + " lost " + (int)Mathf.Max(player.currentDetermination, button.utilityAbility.enemyDetermination) + " determination";
+                int determinationAbsolute = (int)Mathf.Abs(button.utilityAbility.enemyDetermination);
+                dialogueText.text = enemy.coucouName + " lost " + Mathf.Min(Mathf.Max(100 - enemy.currentDetermination, 0), determinationAbsolute) + " determination";
                 enemy.currentDetermination -= (int)button.utilityAbility.enemyDetermination;
                 if (enemy.currentDetermination < 0)
                 {
@@ -206,10 +315,10 @@ public class BattleSystem : MonoBehaviour
                 }
                 yield return new WaitForSeconds(waitAfterAbility);
             }
-            if (button.utilityAbility.enemyDetermination < 0)
+            if (button.utilityAbility.enemyDetermination > 0)
             {
                 int determinationAbsolute = (int)Mathf.Abs(button.utilityAbility.enemyDetermination);
-                dialogueText.text = enemy.coucouName + " gained " + Mathf.Max(player.currentDetermination, determinationAbsolute) + " determination";
+                dialogueText.text = enemy.coucouName + " gained " + Mathf.Min(100 - enemy.currentDetermination, determinationAbsolute) + " determination";
                 enemy.currentDetermination += determinationAbsolute;
                 if (enemy.currentDetermination > 100)
                 {
@@ -220,10 +329,19 @@ public class BattleSystem : MonoBehaviour
         }
         else
         {
+            bool abilityDisadvantage = HasDisadvantage(button.attackAbility.coucouElement, enemy.element);
             bool crit = false;
             float damageModifier = 1;
             int rnd = Random.Range(1, 101);
             Debug.Log(rnd + " + " + player.currentMindset);
+            if (abilityDisadvantage)
+            {
+                damageModifier = 0.9f;
+            }
+            else
+            {
+                damageModifier = 1.12f;
+            }
             if (rnd <= player.currentMindset)
             {
                 damageModifier += player.currentDetermination / 100f;
@@ -236,6 +354,14 @@ public class BattleSystem : MonoBehaviour
             if (crit)
             {
                 dialogueText.text = player.coucouName + " critically hit!";
+            }
+            else if (abilityDisadvantage)
+            {
+                dialogueText.text = "The attack wasn't very outstanding...";
+            }
+            else if (!abilityDisadvantage)
+            {
+                dialogueText.text = "The attack was glorious!";
             }
             else
             {
@@ -340,11 +466,11 @@ public class BattleSystem : MonoBehaviour
 
             while (increase != desiredHP && enemy.currentHealth > 0)
             {
-                increase = Mathf.MoveTowards(increase, desiredHP, Time.deltaTime * 500f);
+                increase = Mathf.MoveTowards(increase, desiredHP, Time.deltaTime * 250f);
                 enemyHealthBar.fillAmount = increase / enemy.maxHealth;
                 enemyHealthText.text = (int)Mathf.Max(increase, 0) + "/" + enemy.maxHealth;
                 enemy.currentHealth = (int)increase;
-                yield return new WaitForSeconds(0.02f);
+                yield return new WaitForSeconds(0.04f);
             }
             takeDamageFinished = true;
             if (enemy.currentHealth <= 0)
@@ -359,11 +485,11 @@ public class BattleSystem : MonoBehaviour
 
             while (increase != desiredHP && player.currentHealth > 0)
             {
-                increase = Mathf.MoveTowards(increase, desiredHP, Time.deltaTime * 500f);
+                increase = Mathf.MoveTowards(increase, desiredHP, Time.deltaTime * 250f);
                 allyHealthBar.fillAmount = increase / player.maxHealth;
                 allyHealthText.text = (int)Mathf.Max(increase, 0) + "/" + player.maxHealth;
                 player.currentHealth = (int)increase;
-                yield return new WaitForSeconds(0.02f);
+                yield return new WaitForSeconds(0.04f);
             }
             takeDamageFinished = true;
             if (player.currentHealth <= 0)
@@ -435,7 +561,7 @@ public class BattleSystem : MonoBehaviour
 
     public void ReduceMindset(int amountUsed)
     {
-        float amountToBeReduced = (Mathf.Pow(amountUsed, 2) / 4) - (Mathf.Pow(amountUsed - 1, 2) / 4);
+        float amountToBeReduced = Mathf.Pow(amountUsed, 2) - Mathf.Pow(amountUsed - 1, 2);
         if (state == BattleState.PLAYERTURN)
         {
             enemy.currentMindset -= (int)amountToBeReduced;
@@ -446,5 +572,25 @@ public class BattleSystem : MonoBehaviour
             player.currentMindset -= (int)amountToBeReduced;
             dialogueText.text = player.coucouName + " had its Mindset reduced by " + (int)amountToBeReduced;
         }
+    }
+
+    public IEnumerator IncrementallyIncreaseHP(int desiredHP, InventoryList.CouCouInventory coucou)
+    {
+        float increase = coucou.currentHealth;
+
+        while (increase != desiredHP && coucou.currentHealth < coucou.maxHealth)
+        {
+            increase = Mathf.MoveTowards(increase, desiredHP, Time.deltaTime * 500f);
+            allyHealthBar.GetComponent<Image>().fillAmount = increase / coucou.maxHealth;
+            allyHealthText.text = (int)increase + "/" + coucou.maxHealth;
+            coucou.currentHealth = (int)increase;
+            yield return new WaitForSeconds(0.02f);
+        }
+        finishedHealthIncrement = true;
+        if (coucou.currentHealth >= coucou.maxHealth)
+        {
+            coucou.currentHealth = coucou.maxHealth;
+        }
+        yield break;
     }
 }

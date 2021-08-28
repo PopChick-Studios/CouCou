@@ -157,9 +157,9 @@ MonoBehaviour:
   utilityAbilities:
   - abilityName: Strengthen
     uniqueIdentifier: 100
-    description: Increases your resistance by 10%
+    description: Increases your resistance by 15%
     coucouElement: 0
-    resistanceMultiplier: 1.1
+    resistanceMultiplier: 1.15
     selfMindset: 0
     enemyMindset: 0
     selfDetermination: 0
@@ -191,13 +191,13 @@ MonoBehaviour:
   - abilityName: Taunt
     uniqueIdentifier: 103
     description: Taunts the enemy, increasing your Mindset by 30, but increasing
-      their Determination by 10
+      their Determination by 15
     coucouElement: 6
     resistanceMultiplier: 1
     selfMindset: 30
     enemyMindset: 0
     selfDetermination: 0
-    enemyDetermination: 10
+    enemyDetermination: 15
     abilityColor: {r: 0.9725491, g: 0.79215693, b: 0.9490197, a: 1}
     canStun: 0
   - abilityName: Charm

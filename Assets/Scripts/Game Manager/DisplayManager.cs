@@ -9,24 +9,36 @@ using UnityEngine.InputSystem.Users;
 public class DisplayManager : MonoBehaviour
 {
     private GameManager gameManager;
+    private FindWildCouCou findWildCouCou;
 
     [SerializeField] private GameObject HUD;
     [SerializeField] private GameObject interaction;
     [SerializeField] private GameObject satchel;
     [SerializeField] private GameObject pause;
+    [SerializeField] private GameObject options;
     [SerializeField] private GameObject crossfade;
+    [SerializeField] private GameObject coucouCamera;
 
+    [Header("Interactables")]
     [SerializeField] private GameObject collectUI;
+    [SerializeField] private TextMeshProUGUI collectText;
     [SerializeField] private GameObject letterUI;
     [SerializeField] private GameObject saveUI;
+    [SerializeField] private GameObject coucouUI;
+    [SerializeField] private TextMeshProUGUI coucouUIText;
 
+    [Header("Buttons")]
+    [SerializeField] private Button coucouUIYes;
     [SerializeField] private Button continueButton;
+
+    private string coucouInteractingName;
 
     public enum InteractionTypes
     {
         Collect,
         Letter,
-        Save
+        Save,
+        CouCou
     }
 
     // Inputs
@@ -35,6 +47,7 @@ public class DisplayManager : MonoBehaviour
 
     private void Awake()
     {
+        findWildCouCou = GameObject.FindGameObjectWithTag("CannotDieOnLoad").GetComponent<FindWildCouCou>();
         gameManager = gameObject.GetComponent<GameManager>();
 
         playerInputActions = new PlayerInputActions();
@@ -48,10 +61,12 @@ public class DisplayManager : MonoBehaviour
     {
         Time.timeScale = 0;
 
+        options.SetActive(false);
         HUD.SetActive(false);
         interaction.SetActive(false);
         satchel.SetActive(false);
         pause.SetActive(true);
+        coucouCamera.SetActive(false);
 
         Cursor.lockState = CursorLockMode.None;
 
@@ -62,16 +77,17 @@ public class DisplayManager : MonoBehaviour
 
     public void HeadsUpDisplay()
     {
+        gameManager.SetState(GameManager.GameState.Wandering);
         Time.timeScale = 1;
 
+        options.SetActive(false);
         HUD.SetActive(true);
         interaction.SetActive(false);
         satchel.SetActive(false);
         pause.SetActive(false);
+        coucouCamera.SetActive(false);
 
         Cursor.lockState = CursorLockMode.Locked;
-
-        gameManager.SetState(GameManager.GameState.Wandering);
     }
 
     public void OpenSatchel()
@@ -79,6 +95,7 @@ public class DisplayManager : MonoBehaviour
         satchel.SetActive(true);
         interaction.SetActive(false);
         pause.SetActive(false);
+        coucouCamera.SetActive(true);
     }
 
     public void OnApplicationPause(bool pause)
@@ -90,8 +107,19 @@ public class DisplayManager : MonoBehaviour
         }
     }
 
-    public void OnInteraction(InteractionTypes type)
+    public void OpenOptions()
     {
+        options.SetActive(true);
+        pause.SetActive(false);
+    }
+
+    public void OnInteraction(InteractionTypes type, InteractableUI interactingWith)
+    {
+        if (interactingWith.itemName != "")
+        {
+            coucouInteractingName = interactingWith.itemName;
+        }
+
         HUD.SetActive(false);
         interaction.SetActive(true);
         satchel.SetActive(false);
@@ -105,24 +133,45 @@ public class DisplayManager : MonoBehaviour
                 collectUI.SetActive(true);
                 letterUI.SetActive(false);
                 saveUI.SetActive(false);
+                coucouUI.SetActive(false);
+
+                collectText.text = interactingWith.itemName + " x" + interactingWith.itemAmount;
                 break;
 
             case InteractionTypes.Letter:
                 letterUI.SetActive(true);
                 saveUI.SetActive(false);
                 collectUI.SetActive(false);
+                coucouUI.SetActive(false);
                 break;
 
             case InteractionTypes.Save:
                 saveUI.SetActive(true);
                 letterUI.SetActive(false);
                 collectUI.SetActive(false);
+                coucouUI.SetActive(false);
+                break;
+
+            case InteractionTypes.CouCou:
+                saveUI.SetActive(false);
+                letterUI.SetActive(false);
+                collectUI.SetActive(false);
+                coucouUI.SetActive(true);
+
+                coucouUIText.text = "Do you want to choose " + interactingWith.itemName + "?";
+                coucouUIYes.Select();
                 break;
 
             default:
                 interaction.SetActive(false);
                 break;
         }
+    }
+
+    public void OnChooseCouCou()
+    {
+        Time.timeScale = 1;
+        findWildCouCou.ChooseWildCouCouStarter(coucouInteractingName, 15);
     }
 
     #region - Enable/Disable -

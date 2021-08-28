@@ -9,6 +9,8 @@ public class EnemyManager : MonoBehaviour
     private AbilityFinder abilityFinder;
     private BattleManager battleManager;
     private BattleSystem battleSystem;
+    private CouCouFinder coucouFinder;
+    private InventoryManager inventoryManager;
 
     public TextMeshProUGUI dialogueText;
 
@@ -39,6 +41,9 @@ public class EnemyManager : MonoBehaviour
     public int turn;
     public int previousAbilityIndex;
 
+    public float resistanceDiminishingReturns = 1;
+    public float attackDiminishingReturns = 1;
+
     private void Awake()
     {
         // CHANGE THIS WHEN YOU CREATE THE INTO BATTLE SCRIPT
@@ -51,6 +56,8 @@ public class EnemyManager : MonoBehaviour
         abilityAdvantage = new bool[4];
         coucouVariantList = new List<CouCouDatabase.CouCouVariant>();
 
+        inventoryManager = GetComponent<InventoryManager>();
+        coucouFinder = gameObject.GetComponent<CouCouFinder>();
         battleSystem = gameObject.GetComponent<BattleSystem>();
         abilityFinder = gameObject.GetComponent<AbilityFinder>();
         battleManager = gameObject.GetComponent<BattleManager>();
@@ -64,45 +71,13 @@ public class EnemyManager : MonoBehaviour
         }
         foreach (InventoryList.CouCouInventory c in enemyInventory.couCouInventory)
         {
-            if (c.onParty)
+            if (c.lineupOrder < 6)
             {
-                enemyCouCouParty.Insert(Mathf.Min(enemyCouCouParty.Count, c.lineupOrder), c);
-            }
-            if (c.isCurrentlyActive)
-            {
-                enemyActiveCouCou = c;
-                if (c.onParty)
-                {
-                    enemyCouCouParty.Remove(c);
-                }
-                enemyCouCouParty.Insert(0, c);
+                enemyCouCouParty.Add(c);
             }
         }
 
-        for (int i = 0; enemyCouCouParty.Count < Mathf.Min(5, enemyInventory.couCouInventory.Count); i++)
-        {
-            enemyInventory.couCouInventory[enemyCouCouParty.Count].onParty = true;
-            enemyInventory.couCouInventory[enemyCouCouParty.Count].lineupOrder = enemyCouCouParty.Count;
-            enemyCouCouParty.Add(enemyInventory.couCouInventory[enemyCouCouParty.Count]);
-        }
-
-        // If they haven't set up an active CouCou, default to the first on the list
-        if (enemyActiveCouCou.maxHealth == 0)
-        {
-            enemyCouCouParty[0].isCurrentlyActive = true;
-            enemyInventory.couCouInventory[0].isCurrentlyActive = true;
-            enemyActiveCouCou = enemyCouCouParty[0];
-        }
         InitializeEnemyCouCou();
-    }
-
-    public void InitializeHealthBarEnemy()
-    {
-        enemyNameText.text = enemyActiveCouCou.coucouName;
-        enemyHealthBar.GetComponent<Image>().fillAmount = enemyActiveCouCou.currentHealth / enemyActiveCouCou.maxHealth;
-        enemyHealthText.text = enemyActiveCouCou.currentHealth + "/" + enemyActiveCouCou.maxHealth;
-        enemyLevelText.text = enemyActiveCouCou.coucouLevel.ToString();
-        enemyElementSprite = null; // Fix this when sprites are made
     }
 
     public void InitializeEnemyCouCou()
@@ -113,11 +88,8 @@ public class EnemyManager : MonoBehaviour
 
         for (int i = 0; i < enemyCouCouParty.Count; i++)
         {
-            for (int a = 1; a < coucouVariantList.Count; a++)
+            for (int a = 0; a < coucouVariantList.Count; a++)
             {
-
-                // Be sure too add variant to the inventory when catching CouCou
-
                 if (enemyCouCouParty[i].coucouVariant == coucouVariantList[a].variant)
                 {
                     level = enemyCouCouParty[i].coucouLevel;
@@ -130,15 +102,14 @@ public class EnemyManager : MonoBehaviour
                     enemyCouCouParty[i].currentMindset = coucouVariantList[a].mindset;
                     enemyCouCouParty[i].currentDetermination = coucouVariantList[a].determination;
 
-                    // *********** REMOVE THIS ONCE YOU MADE THE CURRENT HEALTH SCRIPT *********** //
                     enemyCouCouParty[i].currentHealth = enemyCouCouParty[i].maxHealth;
                 }
             }
         }
 
-        InitializeHealthBarEnemy();
-
+        enemyActiveCouCou = enemyCouCouParty[0];
         battleSystem.enemy = enemyActiveCouCou;
+        InitializeHealthBarEnemy();
 
         int abilityUID = -1;
         for (int i = 0; i < 4; i++)
@@ -146,19 +117,19 @@ public class EnemyManager : MonoBehaviour
             switch (i)
             {
                 case 0:
-                    abilityUID = enemyActiveCouCou.ability1;
+                    abilityUID = coucouFinder.FindCouCou(enemyActiveCouCou.coucouName).ability1;
                     break;
 
                 case 1:
-                    abilityUID = enemyActiveCouCou.ability2;
+                    abilityUID = coucouFinder.FindCouCou(enemyActiveCouCou.coucouName).ability2;
                     break;
 
                 case 2:
-                    abilityUID = enemyActiveCouCou.ability3;
+                    abilityUID = coucouFinder.FindCouCou(enemyActiveCouCou.coucouName).ability3;
                     break;
 
                 case 3:
-                    abilityUID = enemyActiveCouCou.ability4;
+                    abilityUID = coucouFinder.FindCouCou(enemyActiveCouCou.coucouName).ability4;
                     break;
             }
             if (abilityUID > 99)
@@ -174,6 +145,15 @@ public class EnemyManager : MonoBehaviour
         }
 
         InitializeElementalAdvantage();
+    }
+
+    public void InitializeHealthBarEnemy()
+    {
+        enemyNameText.text = enemyActiveCouCou.coucouName;
+        enemyHealthBar.GetComponent<Image>().fillAmount = enemyActiveCouCou.currentHealth / enemyActiveCouCou.maxHealth;
+        enemyHealthText.text = enemyActiveCouCou.currentHealth + "/" + enemyActiveCouCou.maxHealth;
+        enemyLevelText.text = enemyActiveCouCou.coucouLevel.ToString();
+        enemyElementSprite.sprite = coucouFinder.GetElementSprite(enemyActiveCouCou.element);
     }
 
     public void InitializeElementalAdvantage()
@@ -265,20 +245,86 @@ public class EnemyManager : MonoBehaviour
             }
         }
 
+        int rnd = Random.Range(0, enemyActiveCouCou.currentHealth);
+
+        if (rnd < 50 && enemyActiveCouCou.currentHealth < 200)
+        {
+            StartCoroutine(UseItem("Ripe Berry"));
+            return;
+        }
+        else if (rnd < enemyActiveCouCou.currentHealth / 6)
+        {
+            switch (enemyActiveCouCou.element)
+            {
+                case CouCouDatabase.Element.Flame:
+                    StartCoroutine(UseItem("Burnt Berry"));
+                    break;
+
+                case CouCouDatabase.Element.Aqua:
+                    StartCoroutine(UseItem("Frozen Berry"));
+                    break;
+
+                case CouCouDatabase.Element.Nature:
+                    StartCoroutine(UseItem("Fruitful Berry"));
+                    break;
+
+                case CouCouDatabase.Element.Umbral:
+                    StartCoroutine(UseItem("Dark Berry"));
+                    break;
+
+                case CouCouDatabase.Element.Lux:
+                    StartCoroutine(UseItem("Bright Berry"));
+                    break;
+            }
+            return;
+        }
+
         previousAbilityIndex = PerformEnemyAbility(abilityProbability);
 
         if (attackAbilities[previousAbilityIndex] != null)
         {
             // Attack display
             dialogueText.text = enemyActiveCouCou.coucouName + " used " + attackAbilities[previousAbilityIndex].abilityName;
-            StartCoroutine(battleSystem.EnemyAbility(enemyActiveCouCou.currentAttack * attackAbilities[previousAbilityIndex].damageMultiplier, attackAbilities[previousAbilityIndex].abilityName, false));
+            StartCoroutine(battleSystem.EnemyAbility(enemyActiveCouCou.currentAttack * attackAbilities[previousAbilityIndex].damageMultiplier, attackAbilities[previousAbilityIndex].uniqueIdentifier, false));
         }
         else
         {
             enemyPsychicAbilitiesUsed++;
-            StartCoroutine(battleSystem.EnemyAbility(0, utilityAbilities[previousAbilityIndex].abilityName, false));
+            StartCoroutine(battleSystem.EnemyAbility(0, utilityAbilities[previousAbilityIndex].uniqueIdentifier, false));
             dialogueText.text = enemyActiveCouCou.coucouName + " used " + utilityAbilities[previousAbilityIndex].abilityName;
         }
+    }
+
+    public IEnumerator UseItem(string name)
+    {
+        foreach (InventoryList.ItemInventory i in enemyInventory.itemInventory)
+        {
+            if (name == i.itemName)
+            {
+                yield return new WaitForSeconds(1f);
+
+                switch (i.itemAttribute)
+                {
+                    case ItemsDatabase.ItemAttribute.Health:
+                        StartCoroutine(battleSystem.IncrementallyIncreaseHP((int)(enemyActiveCouCou.currentHealth + enemyActiveCouCou.maxHealth * 0.3f), enemyActiveCouCou));
+                        yield return new WaitUntil(() => battleSystem.finishedHealthIncrement);
+                        battleSystem.finishedHealthIncrement = false;
+                        dialogueText.text = enemyActiveCouCou.coucouName + " gained " + (int)Mathf.Min(enemyActiveCouCou.maxHealth - enemyActiveCouCou.currentHealth, enemyActiveCouCou.currentHealth + enemyActiveCouCou.maxHealth * 0.3f) + " health";
+                        break;
+
+                    case ItemsDatabase.ItemAttribute.ElementalMindset:
+
+                        dialogueText.text = "The berry gave " + enemyActiveCouCou.coucouName + " " + Mathf.Min(100 - enemyActiveCouCou.currentMindset, enemyActiveCouCou.currentMindset + 5) + " more Mindset";
+                        enemyActiveCouCou.currentMindset += 10;
+                        break;
+                }
+            }
+        }
+        battleSystem.enemy = enemyActiveCouCou;
+        inventoryManager.EnemyUsedItem(name);
+
+        yield return new WaitForSeconds(2f);
+        StartCoroutine(battleSystem.PlayerTurn());
     }
 
     public void WildCouCouAttack()
@@ -313,12 +359,12 @@ public class EnemyManager : MonoBehaviour
         {
             // Attack display
             dialogueText.text = enemyActiveCouCou.coucouName + " used " + attackAbilities[previousAbilityIndex].abilityName;
-            StartCoroutine(battleSystem.EnemyAbility(enemyActiveCouCou.currentAttack * attackAbilities[previousAbilityIndex].damageMultiplier, attackAbilities[previousAbilityIndex].abilityName, false));
+            StartCoroutine(battleSystem.EnemyAbility(enemyActiveCouCou.currentAttack * attackAbilities[previousAbilityIndex].damageMultiplier, attackAbilities[previousAbilityIndex].uniqueIdentifier, false));
         }
         else
         {
             enemyPsychicAbilitiesUsed++;
-            StartCoroutine(battleSystem.EnemyAbility(0, utilityAbilities[previousAbilityIndex].abilityName, false));
+            StartCoroutine(battleSystem.EnemyAbility(0, utilityAbilities[previousAbilityIndex].uniqueIdentifier, false));
             dialogueText.text = enemyActiveCouCou.coucouName + " used " + utilityAbilities[previousAbilityIndex].abilityName;
         }
     }
@@ -397,7 +443,7 @@ public class EnemyManager : MonoBehaviour
         {
             dialogueText.text = enemyActiveCouCou.coucouName + " surprised " + battleSystem.player.coucouName + " with " + attackAbilities[previousAbilityIndex].abilityName;
             battleSystem.state = BattleState.ENEMYTURN;
-            StartCoroutine(battleSystem.EnemyAbility(enemyActiveCouCou.currentAttack * attackAbilities[0].damageMultiplier, attackAbilities[0].abilityName, true));
+            StartCoroutine(battleSystem.EnemyAbility(enemyActiveCouCou.currentAttack * attackAbilities[0].damageMultiplier, attackAbilities[0].uniqueIdentifier, true));
             return true;
         }
         else

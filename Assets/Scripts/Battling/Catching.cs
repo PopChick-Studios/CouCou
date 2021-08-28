@@ -74,7 +74,7 @@ public class Catching : MonoBehaviour
 
             dialogueText.text = "You caught " + battleSystem.enemy.coucouName + "!";
 
-            inventoryManager.AddCouCou(battleSystem.enemy);
+            inventoryManager.AddCouCou(battleSystem.enemy.coucouName, battleSystem.enemy.coucouLevel);
             enemyInventory.couCouInventory.Remove(battleSystem.enemy);
 
         }

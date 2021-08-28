@@ -34,4 +34,13 @@ public static class SaveSystem
             return null;
         }
     }
+
+    public static void DeleteAllSaveFiles()
+    {
+        string path = Application.persistentDataPath;
+        if (Directory.Exists(path))
+        {
+            Directory.Delete(path, true);
+        }
+    }
 }

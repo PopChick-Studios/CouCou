@@ -2171,7 +2171,13 @@ MonoBehaviour:
   breakBeforeColorGrading: 0
   m_BeforeTransparentBundles: []
   m_BeforeStackBundles: []
-  m_AfterStackBundles: []
+  m_AfterStackBundles:
+  - assemblyQualifiedName: DitzelGames.PostProcessingTextureOverlay.ColorEffect,
+      Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: DitzelGames.PostProcessingTextureOverlay.HardLight, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: DitzelGames.PostProcessingTextureOverlay.TextureOverlay,
+      Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
 --- !u!1 &368891496
 GameObject:
   m_ObjectHideFlags: 0
@@ -2219,8 +2225,6 @@ MonoBehaviour:
     coucouEXP: 0
     coucouVariant: 0
     element: 0
-    isCurrentlyActive: 0
-    onParty: 0
     lineupOrder: -1
     maxHealth: 0
     currentAttack: 0
@@ -2230,13 +2234,7 @@ MonoBehaviour:
     currentDetermination: 0
     isStunned: 0
     hasCollapsed: 0
-    ability1: 3
-    ability2: 4
-    ability3: 5
-    ability4: 6
   coucouParty: []
-  coucouDataList: []
-  coucouVariantList: []
   ItemsDatabaseList: []
   dialogueBox: {fileID: 1699206522}
   dialogueText: {fileID: 1372405038}
@@ -2299,8 +2297,6 @@ MonoBehaviour:
     coucouEXP: 0
     coucouVariant: 0
     element: 0
-    isCurrentlyActive: 0
-    onParty: 0
     lineupOrder: -1
     maxHealth: 0
     currentAttack: 0
@@ -2310,10 +2306,6 @@ MonoBehaviour:
     currentDetermination: 0
     isStunned: 0
     hasCollapsed: 0
-    ability1: 0
-    ability2: 0
-    ability3: 0
-    ability4: 0
   enemyCouCouParty: []
   coucouVariantList: []
   attackAbilities: []
@@ -2332,6 +2324,8 @@ MonoBehaviour:
   enemyPsychicAbilitiesUsed: 0
   turn: 0
   previousAbilityIndex: 0
+  resistanceDiminishingReturns: 1
+  attackDiminishingReturns: 1
 --- !u!114 &368891501
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2344,14 +2338,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 501a478398de2fb43962d8f2373b28b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerModel: {fileID: 0}
+  enemyModel: {fileID: 0}
   player:
     coucouName: 
     coucouLevel: 0
     coucouEXP: 0
     coucouVariant: 0
     element: 0
-    isCurrentlyActive: 0
-    onParty: 0
     lineupOrder: -1
     maxHealth: 0
     currentAttack: 0
@@ -2361,18 +2355,12 @@ MonoBehaviour:
     currentDetermination: 0
     isStunned: 0
     hasCollapsed: 0
-    ability1: 0
-    ability2: 0
-    ability3: 0
-    ability4: 0
   enemy:
     coucouName: 
     coucouLevel: 0
     coucouEXP: 0
     coucouVariant: 0
     element: 0
-    isCurrentlyActive: 0
-    onParty: 0
     lineupOrder: -1
     maxHealth: 0
     currentAttack: 0
@@ -2382,19 +2370,16 @@ MonoBehaviour:
     currentDetermination: 0
     isStunned: 0
     hasCollapsed: 0
-    ability1: 0
-    ability2: 0
-    ability3: 0
-    ability4: 0
   takeDamageFinished: 0
   dialogueText: {fileID: 1372405038}
   allyHealthBar: {fileID: 1768209996}
   allyHealthText: {fileID: 928659910}
   enemyHealthBar: {fileID: 804476748}
   enemyHealthText: {fileID: 297611667}
-  playerPlatform: {fileID: 1675302632}
-  enemyPlatform: {fileID: 1184428281}
+  playerSpawner: {fileID: 0}
+  enemySpawner: {fileID: 0}
   psychicAbilitiesUsed: 0
+  finishedHealthIncrement: 0
   state: 0
 --- !u!114 &368891502
 MonoBehaviour:
@@ -2411,6 +2396,11 @@ MonoBehaviour:
   coucouDatabase: {fileID: 11400000, guid: b43204cd7c6f9b54984e64e16d68ca8a, type: 2}
   coucouList: []
   coucouVariant: []
+  flameIcon: {fileID: 21300000, guid: 839119d1cdd8dbb478758ca6d532bbdc, type: 3}
+  aquaIcon: {fileID: 21300000, guid: 9f7dff5a0cdbc0940ab3e0f8c65da5fd, type: 3}
+  natureIcon: {fileID: 21300000, guid: 126e7f619fb1d1f499ffa07ac271253e, type: 3}
+  luxIcon: {fileID: 21300000, guid: 3c996d09805e35e42ad4556a80c25947, type: 3}
+  umbralIcon: {fileID: 21300000, guid: 0c873db1bb49b29428fe3a7fc1bd3226, type: 3}
 --- !u!114 &368891503
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2426,7 +2416,9 @@ MonoBehaviour:
   playerInventory: {fileID: 11400000, guid: 44ee79a05ad81ff4d8652799fc7d7f56, type: 2}
   enemyInventory: {fileID: 11400000, guid: e4a668288a3079545aa3cb899de54343, type: 2}
   itemDatabase: {fileID: 11400000, guid: c6789e2ec6b1e7d4da21add6fed77929, type: 2}
+  couCouDatabase: {fileID: 11400000, guid: b43204cd7c6f9b54984e64e16d68ca8a, type: 2}
   itemsDatabaseList: []
+  coucouVariantList: []
 --- !u!114 &368891504
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2553,7 +2545,7 @@ GameObject:
   - component: {fileID: 586269845}
   - component: {fileID: 586269844}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: SpawnPosition
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2628,13 +2620,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 586269843}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -5, y: 2.5, z: 5}
-  m_LocalScale: {x: 4, y: 4, z: 4}
+  m_LocalRotation: {x: 0, y: 0.9659258, z: 0, w: 0.2588191}
+  m_LocalPosition: {x: 0, y: 20, z: 0}
+  m_LocalScale: {x: 0.1, y: 10, z: 0.1}
   m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 5
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_Father: {fileID: 1184428281}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 150, z: 0}
 --- !u!1 &630600194
 GameObject:
   m_ObjectHideFlags: 0
@@ -3183,7 +3175,7 @@ GameObject:
   - component: {fileID: 704023452}
   - component: {fileID: 704023451}
   m_Layer: 0
-  m_Name: Cube (1)
+  m_Name: SpawnPosition
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3258,13 +3250,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 704023450}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5, y: 2.5, z: -15}
-  m_LocalScale: {x: 4, y: 4, z: 4}
+  m_LocalRotation: {x: 0, y: -0.258819, z: 0, w: 0.9659259}
+  m_LocalPosition: {x: 0, y: 20, z: 0.00000009536743}
+  m_LocalScale: {x: 0.1, y: 10, z: 0.1}
   m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 6
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_Father: {fileID: 1675302632}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: -30, z: 0}
 --- !u!1 &725775943
 GameObject:
   m_ObjectHideFlags: 0
@@ -4429,7 +4421,7 @@ RectTransform:
   - {fileID: 645839466}
   - {fileID: 1699206523}
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -5051,7 +5043,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1184428280
 GameObject:
@@ -5080,9 +5072,10 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1184428280}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -13.187893, y: -7.025926, z: 11.297571}
+  m_LocalPosition: {x: -13.2, y: -7, z: 11.3}
   m_LocalScale: {x: 10, y: 0.1, z: 10}
-  m_Children: []
+  m_Children:
+  - {fileID: 586269847}
   m_Father: {fileID: 1830163089}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -6804,9 +6797,10 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1675302631}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -3.187893, y: -7.025926, z: -8.702429}
+  m_LocalPosition: {x: -3, y: -7, z: -8.7}
   m_LocalScale: {x: 10, y: 0.1, z: 10}
-  m_Children: []
+  m_Children:
+  - {fileID: 704023454}
   m_Father: {fileID: 1830163089}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -7540,7 +7534,7 @@ MonoBehaviour:
     m_HighlightedColor: {r: 0.9254902, g: 0.9254902, b: 0.9254902, a: 1}
     m_PressedColor: {r: 0.81960785, g: 0.81960785, b: 0.81960785, a: 1}
     m_SelectedColor: {r: 0.9254902, g: 0.9254902, b: 0.9254902, a: 1}
-    m_DisabledColor: {r: 1, g: 1, b: 1, a: 0.5019608}
+    m_DisabledColor: {r: 0.6509804, g: 0.6509804, b: 0.6509804, a: 0.3529412}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
