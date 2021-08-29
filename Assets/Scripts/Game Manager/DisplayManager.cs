@@ -53,8 +53,8 @@ public class DisplayManager : MonoBehaviour
 
     private void Awake()
     {
-        findWildCouCou = GameObject.FindGameObjectWithTag("CannotDieOnLoad").GetComponent<FindWildCouCou>();
-        gameManager = gameObject.GetComponent<GameManager>();
+        findWildCouCou = GetComponent<FindWildCouCou>();
+        gameManager = GetComponent<GameManager>();
 
         playerInputActions = new PlayerInputActions();
 

@@ -13,5 +13,19 @@ MonoBehaviour:
   m_Name: Inventory
   m_EditorClassIdentifier: 
   inventoryOwner: Player
-  couCouInventory: []
+  couCouInventory:
+  - coucouName: Flizzard
+    coucouLevel: 15
+    coucouEXP: 0
+    coucouVariant: 4
+    element: 1
+    lineupOrder: 1
+    maxHealth: 278
+    currentAttack: 192
+    currentResistance: 2.01
+    currentHealth: 278
+    currentMindset: 30
+    currentDetermination: 10
+    isStunned: 0
+    hasCollapsed: 0
   itemInventory: []

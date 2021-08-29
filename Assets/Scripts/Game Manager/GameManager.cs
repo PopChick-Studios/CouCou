@@ -27,6 +27,8 @@ public class GameManager : MonoBehaviour
     public void SetState(GameState state)
     {
         gameState = state;
+        Debug.Log("State changed into " + state);
+
     }
 
     // Start is called before the first frame update
@@ -71,12 +73,12 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("Application Quit");
         // FOR TESTING ONLY
-        SaveSystem.DeleteAllSaveFiles();
+        //SaveSystem.DeleteAllSaveFiles();
         Application.Quit();
     }
 
     public void OnApplicationQuit()
     {
-        SaveSystem.DeleteAllSaveFiles();
+        //SaveSystem.DeleteAllSaveFiles();
     }
 }

@@ -13,9 +13,9 @@ public class FindWildCouCou : MonoBehaviour
 
     private void Awake()
     {
-        inventoryManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<InventoryManager>();
-        coucouFinder = GameObject.FindGameObjectWithTag("GameManager").GetComponent<CouCouFinder>();
-        gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
+        inventoryManager = GetComponent<InventoryManager>();
+        coucouFinder = GetComponent<CouCouFinder>();
+        gameManager = GetComponent<GameManager>();
     }
 
     private void Start()

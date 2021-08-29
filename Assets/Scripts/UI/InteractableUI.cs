@@ -7,6 +7,7 @@ using TMPro;
 public class InteractableUI : MonoBehaviour
 {
     private DisplayManager displayManager;
+    public InventoryList playerInventory;
 
     [Header("Interaction Type")]
     public DisplayManager.InteractionTypes interactionType;
@@ -37,6 +38,14 @@ public class InteractableUI : MonoBehaviour
         {
             itemName = gameObject.name;
             nameText.text = itemName;
+
+            foreach (InventoryList.CouCouInventory coucou in playerInventory.couCouInventory)
+            {
+                if (coucou.coucouName == itemName)
+                {
+                    gameObject.SetActive(false);
+                }
+            }
         }
         else
         {

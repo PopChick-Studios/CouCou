@@ -37,6 +37,7 @@ public class SatchelManager : MonoBehaviour
 
     public bool inSubmit;
     public bool inPrompt;
+    public bool isStuck;
     private Button buttonClicked;
     public GameObject currentSelectedButton;
 
@@ -154,6 +155,7 @@ public class SatchelManager : MonoBehaviour
         {
             descriptionText.text = "You don't own any items right now";
             submitButton.interactable = false;
+            itemSprite.enabled = false;
             submitButton.GetComponentInChildren<TextMeshProUGUI>().text = "";
         }
     }
@@ -162,7 +164,9 @@ public class SatchelManager : MonoBehaviour
     {
         statDisplay.SetActive(true);
 
+        scrollRect.enabled = false;
         inventoryManager.SortCouCouInventory();
+        scrollRect.enabled = true;
 
         int onPartyCount = 0;
         for (int i = 0; i < inventoryList.couCouInventory.Count; i++)
@@ -239,6 +243,7 @@ public class SatchelManager : MonoBehaviour
             descriptionText.text = "You don't own any CouCou right now";
             statDisplay.SetActive(false);
             submitButton.interactable = false;
+            itemSprite.enabled = false;
             submitButton.GetComponentInChildren<TextMeshProUGUI>().text = "";
         }
     }
@@ -282,7 +287,11 @@ public class SatchelManager : MonoBehaviour
 
     public void GoBack()
     {
-        if (inPrompt)
+        if ((isStuck && !inPrompt && !inSubmit) || battleSystem.state != BattleState.PLAYERTURN)
+        {
+            return;
+        }
+        else if (inPrompt)
         {
             submitButton.Select();
             OnSubmitCancelled();
@@ -292,10 +301,6 @@ public class SatchelManager : MonoBehaviour
             buttonClicked.Select();
             buttonClicked = null;
             inSubmit = false;
-        }
-        else if (battleSystem.state != BattleState.PLAYERTURN)
-        {
-            return;
         }
         else if (battlingUI.inSatchel)
         {
@@ -428,6 +433,10 @@ public class SatchelManager : MonoBehaviour
 
     public void NavigateSections(float direction)
     {
+        if (isStuck)
+        {
+            return;
+        }
         if (direction > 0 && selectedSection == 1 && !inSubmit)
         {
             OnCouCouSection();
@@ -468,6 +477,21 @@ public class SatchelManager : MonoBehaviour
         submitButton.interactable = true;
         selectedSection = 2;
         ClearItems();
+        DisplayCouCou();
+        scrollRect.enabled = true;
+        scrollRect.normalizedPosition = new Vector2(0, 1);
+    }
+
+    public void OpenCouCouSelect()
+    {
+        itemsSection.enabled = false;
+        giveBerryButton.gameObject.SetActive(false);
+        isStuck = true;
+        selectedSection = 2;
+        satchel.SetActive(true);
+        submitButton.interactable = true;
+        blurCamera.gameObject.SetActive(true);
+        submitButton.GetComponentInChildren<TextMeshProUGUI>().text = "Change CouCou";
         DisplayCouCou();
         scrollRect.enabled = true;
         scrollRect.normalizedPosition = new Vector2(0, 1);

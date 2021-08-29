@@ -36,18 +36,22 @@ public class BattleSystem : MonoBehaviour
     private CouCouFinder coucouFinder;
     private AbilityFinder abilityFinder;
     private GameManager gameManager;
+    private InventoryManager inventoryManager;
+    private SatchelManager satchelManager;
 
     public BattleState state;
 
     private void Awake()
     {
-        gameManager = gameObject.GetComponent<GameManager>();
-        abilityFinder = gameObject.GetComponent<AbilityFinder>();
-        coucouFinder = gameObject.GetComponent<CouCouFinder>();
-        catching = gameObject.GetComponent<Catching>();
-        battleManager = gameObject.GetComponent<BattleManager>();
-        enemyManager = gameObject.GetComponent<EnemyManager>();
+        inventoryManager = GetComponent<InventoryManager>();
+        gameManager = GetComponent<GameManager>();
+        abilityFinder = GetComponent<AbilityFinder>();
+        coucouFinder = GetComponent<CouCouFinder>();
+        catching = GetComponent<Catching>();
+        battleManager = GetComponent<BattleManager>();
+        enemyManager = GetComponent<EnemyManager>();
         battlingUI = GameObject.FindGameObjectWithTag("BattlingUI").GetComponent<BattlingUI>();
+        satchelManager = GameObject.FindGameObjectWithTag("BattlingUI").GetComponent<SatchelManager>();
 
         //playerModel = coucouFinder.FindCouCou(battleManager.activeCouCou.coucouName).coucouModel;
         //enemyModel = coucouFinder.FindCouCou(enemyManager.enemyActiveCouCou.coucouName).coucouModel;
@@ -61,6 +65,8 @@ public class BattleSystem : MonoBehaviour
 
     public void SetupBattle()
     {
+        gameManager.SetState(GameManager.GameState.Battling);
+
         //playerInScene = Instantiate(playerModel, playerSpawner);
         //enemyInScene = Instantiate(enemyModel, enemySpawner);
 
@@ -239,8 +245,18 @@ public class BattleSystem : MonoBehaviour
         {
             dialogueText.text = player.coucouName + " has collapsed";
             player.hasCollapsed = true;
-            state = BattleState.LOST;
-            StartCoroutine(EndBattle());
+            inventoryManager.SortCouCouInventory();
+
+            if (inventoryManager.HasPlayableCouCou())
+            {
+                battlingUI.OnSatchel();
+                satchelManager.OnCouCouSection();
+            }
+            else
+            {
+                state = BattleState.LOST;
+                StartCoroutine(EndBattle());
+            }
         }
         else if (player.isStunned)
         {
@@ -381,7 +397,6 @@ public class BattleSystem : MonoBehaviour
         {
             dialogueText.text = enemy.coucouName + " has collapsed";
             enemy.hasCollapsed = true;
-            yield return new WaitForSeconds(2f);
             StartCoroutine(enemyManager.NextCouCou());
         }
         else if (enemy.isStunned)
@@ -640,23 +655,15 @@ public class BattleSystem : MonoBehaviour
     {
         if (state == BattleState.WON)
         {
-            if (!catching.catchSuccessful)
-            {
-                dialogueText.text = enemy.coucouName + " has collapsed.";
-            }
-
-            yield return new WaitForSeconds(3f);
+            yield return new WaitForSeconds(2f);
 
             // Give EXP
-
             gameManager.SetState(GameManager.GameState.Wandering);
         }
         else if (state == BattleState.LOST)
         {
-            dialogueText.text = player.coucouName + " has collapsed.";
-
-            yield return new WaitForSeconds(3f);
-
+            yield return new WaitForSeconds(2f);
+            
             gameManager.SetState(GameManager.GameState.Wandering);
         }
     }

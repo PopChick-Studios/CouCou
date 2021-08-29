@@ -14,6 +14,7 @@ public class BattleManager : MonoBehaviour
     private InventoryManager inventoryManager;
     private Catching catching;
     private CouCouFinder coucouFinder;
+    private SatchelManager satchelManager;
 
     public InventoryList inventory;
     public CouCouDatabase coucouDatabase;
@@ -53,6 +54,7 @@ public class BattleManager : MonoBehaviour
         abilityFinder = GetComponent<AbilityFinder>();
         battlingUI = GameObject.FindGameObjectWithTag("BattlingUI").GetComponent<BattlingUI>();
         abilityDisplay = GameObject.FindGameObjectWithTag("BattlingUI").GetComponent<AbilityDisplay>();
+        satchelManager = GameObject.FindGameObjectWithTag("BattlingUI").GetComponent<SatchelManager>();
 
         activeCouCou = new InventoryList.CouCouInventory();
         coucouParty = new List<InventoryList.CouCouInventory>();
@@ -187,6 +189,8 @@ public class BattleManager : MonoBehaviour
 
     public IEnumerator ChangeCouCou(string name)
     {
+        satchelManager.isStuck = false;
+
         dialogueText.text = "You recall " + activeCouCou.coucouName + " for " + name;
 
         // Recall Animation

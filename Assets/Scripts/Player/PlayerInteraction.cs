@@ -16,7 +16,7 @@ public class PlayerInteraction : MonoBehaviour
     public bool OnCancelSaveButton;
 
     // Animator
-    // [SerializeField] private Animator animator;
+    // public Animator animator;
 
     // Inputs
     PlayerInputActions playerInputActions;

@@ -8,9 +8,8 @@ public class SceneLoader : MonoBehaviour
     private GameManager gameManager;
     private InventoryManager inventoryManager;
     private LightingManager lightingManager;
-    private GameManager.GameState previousState = GameManager.GameState.Wandering;
+    public GameManager.GameState previousState = GameManager.GameState.Wandering;
 
-    public GameObject findWildCouCou;
     public Animator transition;
 
     private void Awake()
@@ -25,13 +24,17 @@ public class SceneLoader : MonoBehaviour
     {
         if (previousState != gameManager.State)
         {
+            Debug.Log("State changed into " + gameManager.State + " from " + previousState);
+
             if (gameManager.State == GameManager.GameState.Battling && SceneManager.GetActiveScene().name != "BattleScene")
             {
                 LoadBattleScene();
+                Debug.Log("Loading Battle Scene");
             }
             if (gameManager.State == GameManager.GameState.Wandering && SceneManager.GetActiveScene().name != "TestingScene")
             {
                 LoadAdventureScene();
+                Debug.Log("Loading Adventure Scene");
             }
             previousState = gameManager.State;
         }
@@ -53,7 +56,6 @@ public class SceneLoader : MonoBehaviour
         transition.SetTrigger("Start");
         inventoryManager.SaveInventory();
         yield return new WaitForSeconds(1f);
-        DontDestroyOnLoad(findWildCouCou);
         SceneManager.LoadScene(sceneName);
         lightingManager.Daytime();
     }

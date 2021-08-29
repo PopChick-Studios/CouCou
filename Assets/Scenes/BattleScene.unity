@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.4384671, g: 0.48655146, b: 0.5668278, a: 1}
+  m_IndirectSpecularColor: {r: 0.4514004, g: 0.50089234, b: 0.57231706, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -688,6 +688,7 @@ GameObject:
   - component: {fileID: 79374292}
   - component: {fileID: 79374291}
   - component: {fileID: 79374290}
+  - component: {fileID: 79374293}
   m_Layer: 5
   m_Name: SatchelList
   m_TagString: Untagged
@@ -709,11 +710,11 @@ RectTransform:
   m_Father: {fileID: 630600195}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -515.8084}
-  m_SizeDelta: {x: 750, y: 1831.6167}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0, y: 1}
 --- !u!114 &79374290
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -731,11 +732,11 @@ MonoBehaviour:
     m_Right: 16
     m_Top: 16
     m_Bottom: 16
-  m_ChildAlignment: 0
+  m_ChildAlignment: 1
   m_Spacing: 20
   m_ChildForceExpandWidth: 1
-  m_ChildForceExpandHeight: 0
-  m_ChildControlWidth: 1
+  m_ChildForceExpandHeight: 1
+  m_ChildControlWidth: 0
   m_ChildControlHeight: 0
   m_ChildScaleWidth: 1
   m_ChildScaleHeight: 0
@@ -753,7 +754,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.8301887, g: 0.720602, b: 0.57564974, a: 0}
+  m_Color: {r: 0.8301887, g: 0.720602, b: 0.57564974, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -778,6 +779,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 79374288}
   m_CullTransparentMesh: 1
+--- !u!114 &79374293
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 79374288}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_HorizontalFit: 0
+  m_VerticalFit: 2
 --- !u!1 &86687801
 GameObject:
   m_ObjectHideFlags: 0
@@ -4858,7 +4873,7 @@ MonoBehaviour:
     m_HighlightedColor: {r: 0.9254902, g: 0.9254902, b: 0.9254902, a: 1}
     m_PressedColor: {r: 0.81960785, g: 0.81960785, b: 0.81960785, a: 1}
     m_SelectedColor: {r: 0.9254902, g: 0.9254902, b: 0.9254902, a: 1}
-    m_DisabledColor: {r: 1, g: 1, b: 1, a: 0.5019608}
+    m_DisabledColor: {r: 1, g: 1, b: 1, a: 0}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -4902,7 +4917,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.77254903, g: 0.61960787, b: 0.41960785, a: 1}
+  m_Color: {r: 0.7725491, g: 0.61960787, b: 0.41960788, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -7071,6 +7086,7 @@ MonoBehaviour:
   satchelSlotPrefab: {fileID: 5484765283773508640, guid: 7758af0b9678d914191742511a4de32a, type: 3}
   inSubmit: 0
   inPrompt: 0
+  isStuck: 0
   currentSelectedButton: {fileID: 0}
   itemsSection: {fileID: 1384431088}
   coucouSection: {fileID: 2033081570}
@@ -13000,7 +13016,7 @@ MonoBehaviour:
     m_HighlightedColor: {r: 0.9254902, g: 0.9254902, b: 0.9254902, a: 1}
     m_PressedColor: {r: 0.81960785, g: 0.81960785, b: 0.81960785, a: 1}
     m_SelectedColor: {r: 0.9254902, g: 0.9254902, b: 0.9254902, a: 1}
-    m_DisabledColor: {r: 0.6509804, g: 0.6509804, b: 0.6509804, a: 0.3529412}
+    m_DisabledColor: {r: 1, g: 1, b: 1, a: 0}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -13044,7 +13060,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.77254903, g: 0.61960787, b: 0.41960785, a: 1}
+  m_Color: {r: 0.7725491, g: 0.61960787, b: 0.41960788, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1

@@ -476,6 +476,8 @@ public class EnemyManager : MonoBehaviour
         }
         if (enemyActiveCouCou.hasCollapsed)
         {
+            Debug.Log("end battle");
+            battleSystem.state = BattleState.WON;
             StartCoroutine(battleSystem.EndBattle());
         }
         else

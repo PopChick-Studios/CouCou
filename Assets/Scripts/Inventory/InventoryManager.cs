@@ -97,6 +97,8 @@ public class InventoryManager : MonoBehaviour
 
     public void SaveInventory()
     {
+        SortItemInventory();
+        SortCouCouInventory();
         SaveSystem.SaveInventory(playerInventory);
         SaveSystem.SaveInventory(enemyInventory);
     }
@@ -198,6 +200,25 @@ public class InventoryManager : MonoBehaviour
         }
 
         playerInventory.couCouInventory.Add(coucou);
-        SaveInventory();
+    }
+
+    public bool HasPlayableCouCou()
+    {
+        int amount = 0;
+        foreach (InventoryList.CouCouInventory coucou in playerInventory.couCouInventory)
+        {
+            if (!coucou.hasCollapsed)
+            {
+                amount++;
+            }
+        }
+        if (amount == 0)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
     }
 }
