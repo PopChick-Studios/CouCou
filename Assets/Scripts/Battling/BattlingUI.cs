@@ -108,17 +108,36 @@ public class BattlingUI : MonoBehaviour
     public void BackToMenu()
     {
         Time.timeScale = 1;
-        if (battleSystem.state == BattleState.PLAYERTURN && inFightMenu)
+        if (battleSystem.state == BattleState.PLAYERTURN)
         {
-            Debug.Log("Out of fight menu");
-            fightButtons.SetActive(false);
-            menu.SetActive(true);
-            healthBars.SetActive(true);
-            dialogueBox.SetActive(true);
-            lastButtonPressed.GetComponent<Button>().Select();
+            if (inFightMenu)
+            {
+                Debug.Log("Out of fight menu");
+                fightButtons.SetActive(false);
+                menu.SetActive(true);
+                healthBars.SetActive(true);
+                dialogueBox.SetActive(true);
+                lastButtonPressed.GetComponent<Button>().Select();
 
-            inSatchel = false;
-            inFightMenu = false;
+                inSatchel = false;
+                inFightMenu = false;
+            }
+            else if (inPause)
+            {
+                Debug.Log("Out of pause");
+                pause.SetActive(false);
+                inPause = false;
+                lastButtonPressed.GetComponent<Button>().Select();
+            }
+            else if (inSatchel || satchelManager.inPrompt || satchelManager.inSubmit)
+            {
+                satchelManager.GoBack();
+            }
+            else
+            {
+                Debug.Log("pausing");
+                OnPause();
+            }
         }
         else if (inPause)
         {
@@ -126,10 +145,6 @@ public class BattlingUI : MonoBehaviour
             pause.SetActive(false);
             inPause = false;
             lastButtonPressed.GetComponent<Button>().Select();
-        }
-        else if (inSatchel && !satchelManager.inPrompt && !satchelManager.inSubmit)
-        {
-            satchelManager.GoBack();
         }
         else
         {

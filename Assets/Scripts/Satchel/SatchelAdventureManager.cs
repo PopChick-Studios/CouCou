@@ -36,7 +36,7 @@ public class SatchelAdventureManager : MonoBehaviour
 
     public bool inSubmit;
     public bool inPrompt;
-    public bool changingCouCou;
+    public bool changingCouCou = false;
     private Button buttonClicked;
     public GameObject currentSelectedButton;
 
@@ -262,11 +262,13 @@ public class SatchelAdventureManager : MonoBehaviour
         if (inPrompt)
         {
             submitButton.Select();
-            //OnSubmitCancelled();
         }
         else if (inSubmit)
         {
-            buttonClicked.Select();
+            if (buttonClicked != null)
+            {
+                buttonClicked.Select();
+            }
             buttonClicked = null;
             inSubmit = false;
         }
@@ -359,6 +361,10 @@ public class SatchelAdventureManager : MonoBehaviour
         if (inputNumber > inventoryList.couCouInventory.Count)
         {
             inputNumber = inventoryList.couCouInventory.Count;
+        }
+        else if (inputNumber < 1)
+        {
+            inputNumber = 1;
         }
 
         inputCouCouChange.GetComponent<TMP_InputField>().text = "";

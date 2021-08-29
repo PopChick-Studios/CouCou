@@ -110,7 +110,7 @@ public class BattleSystem : MonoBehaviour
         bool isUtility;
         float waitAfterAbility = 2f;
 
-        Debug.Log(abilityUID);
+        Debug.Log("Ability UID: " + abilityUID);
 
         if (abilityUID > 99)
         {
@@ -452,6 +452,7 @@ public class BattleSystem : MonoBehaviour
         else
         {
             Debug.Log("How did you get here?");
+            takeDamageFinished = true;
             return false;
         }
     }
@@ -637,12 +638,14 @@ public class BattleSystem : MonoBehaviour
 
         while (increase != desiredHP && coucou.currentHealth < coucou.maxHealth)
         {
-            increase = Mathf.MoveTowards(increase, desiredHP, Time.deltaTime * 500f);
+            increase = Mathf.MoveTowards(increase, desiredHP, Time.deltaTime * 250f);
             allyHealthBar.GetComponent<Image>().fillAmount = increase / coucou.maxHealth;
             allyHealthText.text = (int)increase + "/" + coucou.maxHealth;
             coucou.currentHealth = (int)increase;
-            yield return new WaitForSeconds(0.02f);
+            Debug.Log(increase);
+            yield return new WaitForSeconds(0.04f);
         }
+        Debug.Log("Finished");
         finishedHealthIncrement = true;
         if (coucou.currentHealth >= coucou.maxHealth)
         {

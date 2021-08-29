@@ -297,7 +297,10 @@ public class SatchelManager : MonoBehaviour
         }
         else if (inSubmit)
         {
-            buttonClicked.Select();
+            if (buttonClicked != null)
+            {
+                buttonClicked.Select();
+            }
             buttonClicked = null;
             inSubmit = false;
         }
@@ -403,6 +406,12 @@ public class SatchelManager : MonoBehaviour
             dialogueText.GetComponent<TextMeshProUGUI>().text = "You use " + descriptionName.text;
             StartCoroutine(enemyManager.GiveBerry(itemFinder.FindItem(descriptionName.text).element));
         }
+        selectedSection = 0;
+        blurCamera.gameObject.SetActive(false);
+        ClearItems();
+        ClearCouCou();
+        satchel.SetActive(false);
+        battlingUI.OnCloseSatchel();
         battlingUI.OnFinishTurn();
         selectedSection = 0;
     }

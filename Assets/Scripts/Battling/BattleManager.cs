@@ -38,7 +38,6 @@ public class BattleManager : MonoBehaviour
     public TextMeshProUGUI allyHealthText;
     public Image allyElementSprite;
 
-    public bool finishedIncrement;
     public bool incorrectItemUse = false;
 
     public float attackDiminishingReturns = 1;
@@ -105,6 +104,7 @@ public class BattleManager : MonoBehaviour
             if (name == i.itemName)
             {
                 itemBeingUsed = i;
+                break;
             }
         }
 
@@ -127,8 +127,8 @@ public class BattleManager : MonoBehaviour
 
             case ItemsDatabase.ItemAttribute.Health:
                 StartCoroutine(battleSystem.IncrementallyIncreaseHP((int)(activeCouCou.currentHealth + activeCouCou.maxHealth * 0.3f), activeCouCou));
-                yield return new WaitUntil(() => finishedIncrement);
-                finishedIncrement = false;
+                yield return new WaitUntil(() => battleSystem.finishedHealthIncrement);
+                battleSystem.finishedHealthIncrement = false;
                 dialogueText.text = activeCouCou.coucouName + " gained " + (int)Mathf.Min(activeCouCou.maxHealth - activeCouCou.currentHealth, activeCouCou.currentHealth + activeCouCou.maxHealth * 0.3f) + " health";
                 break;
 
@@ -193,6 +193,7 @@ public class BattleManager : MonoBehaviour
     public IEnumerator ChangeCouCou(string name)
     {
         satchelManager.isStuck = false;
+        battleSystem.state = BattleState.ENEMYTURN;
 
         dialogueText.text = "You recall " + activeCouCou.coucouName + " for " + name;
 
