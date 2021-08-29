@@ -30,6 +30,7 @@ public class PlayerInteraction : MonoBehaviour
         playerInputActions = new PlayerInputActions();
 
         playerInputActions.Wandering.Interact.performed += x => Interact();
+        playerInputActions.UI.Cancel.started += x => OnCouCouCancelButton();
         playerInputActions.UI.Submit.performed += x => FinishInteraction(interactableUI.interactionType);
     }
 

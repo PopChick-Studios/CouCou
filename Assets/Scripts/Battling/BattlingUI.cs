@@ -9,6 +9,7 @@ public class BattlingUI : MonoBehaviour
     private AbilityDisplay abilityDisplay;
     private BattleSystem battleSystem;
     private SatchelManager satchelManager;
+    private BattleManager battleManager;
 
     public GameObject satchel;
     public GameObject blurCamera;
@@ -36,6 +37,7 @@ public class BattlingUI : MonoBehaviour
 
     private void Awake()
     {
+        battleManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<BattleManager>();
         battleSystem = GameObject.FindGameObjectWithTag("GameManager").GetComponent<BattleSystem>();
         abilityDisplay = GetComponent<AbilityDisplay>();
         playerInputActions = new PlayerInputActions();
@@ -201,6 +203,12 @@ public class BattlingUI : MonoBehaviour
         healthBars.SetActive(false);
         inFightMenu = false;
         inSatchel = true;
+    }
+
+    public void OnRun()
+    {
+        OnFinishTurn();
+        StartCoroutine(battleManager.OnRun());
     }
 
     private void OnEnable()

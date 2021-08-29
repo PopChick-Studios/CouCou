@@ -60,6 +60,9 @@ public class DisplayManager : MonoBehaviour
 
         playerInputActions.Wandering.Pause.performed += x => PauseMenu();
 
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+
         HeadsUpDisplay();
 
         confirmation.SetActive(false);
@@ -79,6 +82,7 @@ public class DisplayManager : MonoBehaviour
         blurCamera.SetActive(true);
 
         Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
 
         gameManager.SetState(GameManager.GameState.Paused);
 
@@ -106,6 +110,7 @@ public class DisplayManager : MonoBehaviour
         coucouCamera.SetActive(false);
 
         Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 
     public void OpenSatchel()
@@ -144,6 +149,7 @@ public class DisplayManager : MonoBehaviour
         pause.SetActive(false);
 
         Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
 
         switch (type)
         {

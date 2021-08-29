@@ -197,7 +197,7 @@ MonoBehaviour:
     selfMindset: 30
     enemyMindset: 0
     selfDetermination: 0
-    enemyDetermination: 15
+    enemyDetermination: 30
     abilityColor: {r: 0.9725491, g: 0.79215693, b: 0.9490197, a: 1}
     canStun: 0
   - abilityName: Charm

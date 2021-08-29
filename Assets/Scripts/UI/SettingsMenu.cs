@@ -18,22 +18,8 @@ public class SettingsMenu : MonoBehaviour
     private void Start()
     {
         Resolution[] resolutionsWithoutCap = Screen.resolutions;
-
-        string debugString = "Before: ";
-        foreach (Resolution resolution in resolutionsWithoutCap)
-        {
-            debugString += resolution + ", ";
-        }
-        Debug.Log(debugString);
-        debugString = "After: ";
-
         Resolution[] resolutionsWithSmall = resolutionsWithoutCap.GroupBy(x => x.height).Select(x => x.First()).ToArray();
-
-        foreach (Resolution resolution in resolutionsWithSmall)
-        {
-            debugString += resolution + ", ";
-        }
-        Debug.Log(debugString);
+        Resolution[] resolutionsWithoutWeirdRatios = resolutionsWithSmall;
 
         finalResolutions = resolutionsWithSmall;
 
@@ -41,20 +27,31 @@ public class SettingsMenu : MonoBehaviour
 
         List<string> options = new List<string>();
 
-        debugString = "The resolutions: ";
+        string debugString = "The resolutions: ";
 
         for (int i = 0; i < resolutionsWithSmall.Length; i++)
         {
             if (resolutionsWithSmall[i].width < 1280 || resolutionsWithSmall[i].height < 720)
             {
-                finalResolutions = finalResolutions.Where(val => val.width != resolutionsWithSmall[i].width && val.height != resolutionsWithSmall[i].height).ToArray();
+                resolutionsWithoutWeirdRatios = resolutionsWithoutWeirdRatios.Where(val => val.width != resolutionsWithSmall[i].width && val.height != resolutionsWithSmall[i].height).ToArray();
                 debugString += resolutionsWithSmall[i].width + " x " + resolutionsWithSmall[i].height + ", ";
             }
         }
+        debugString += "were removed because they were too small.\nThese resolutions: ";
 
-        debugString += "were removed because they were too small.";
+
+        finalResolutions = resolutionsWithoutWeirdRatios;
+
+        for (int i = 0; i < resolutionsWithoutWeirdRatios.Length; i++)
+        {
+            if ((16/9f) / (resolutionsWithoutWeirdRatios[i].width / (float)resolutionsWithoutWeirdRatios[i].height) > 1.2)
+            {
+                finalResolutions = finalResolutions.Where(val => val.width != resolutionsWithoutWeirdRatios[i].width && val.height != resolutionsWithoutWeirdRatios[i].height).ToArray();
+                debugString += resolutionsWithoutWeirdRatios[i].width + " x " + resolutionsWithoutWeirdRatios[i].height + ", ";
+            }
+        }
+        debugString += "had weird ratios";
         Debug.Log(debugString);
-
         debugString = "Avaliable resolutions: ";
 
         int currentResolutionsIndex = 0;
@@ -73,7 +70,14 @@ public class SettingsMenu : MonoBehaviour
         Debug.Log(debugString);
 
         resolutionDropdown.AddOptions(options);
-        resolutionDropdown.value = currentResolutionsIndex;
+        if (PlayerPrefs.HasKey("resolutionIndex"))
+        {
+            resolutionDropdown.value = PlayerPrefs.GetInt("resolutionIndex");
+        }
+        else
+        {
+            resolutionDropdown.value = currentResolutionsIndex;
+        }
         resolutionDropdown.RefreshShownValue();
 
         qualityDropdown.value = QualitySettings.GetQualityLevel();
@@ -98,6 +102,7 @@ public class SettingsMenu : MonoBehaviour
     public void SetResolution(int index)
     {
         Resolution resolution = finalResolutions[index];
+        PlayerPrefs.SetInt("resolutionIndex", index);
         Screen.SetResolution(resolution.width, resolution.height, Screen.fullScreen);
     }
 }

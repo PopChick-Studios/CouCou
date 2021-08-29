@@ -20,14 +20,22 @@ public class ItemFinder : MonoBehaviour
 
     public ItemsDatabase.ItemData FindItem(string name)
     {
+        ItemsDatabase.ItemData item = null;
         for (int i = 0; i < itemDataList.Count; i++)
         {
             if (name == itemDataList[i].itemName)
             {
-                return itemDataList[i];
+                item = itemDataList[i];
             }
         }
 
-        return null;
+        if (item != null)
+        {
+            return item;
+        }
+        else
+        {
+            return null;
+        }
     }
 }

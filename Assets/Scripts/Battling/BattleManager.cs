@@ -15,6 +15,7 @@ public class BattleManager : MonoBehaviour
     private Catching catching;
     private CouCouFinder coucouFinder;
     private SatchelManager satchelManager;
+    private GameManager gameManager;
 
     public InventoryList inventory;
     public CouCouDatabase coucouDatabase;
@@ -45,6 +46,7 @@ public class BattleManager : MonoBehaviour
 
     private void Awake()
     {
+        gameManager = GetComponent<GameManager>();
         coucouFinder = GetComponent<CouCouFinder>();
         catching = GetComponent<Catching>();
         inventoryManager = GetComponent<InventoryManager>();
@@ -126,10 +128,18 @@ public class BattleManager : MonoBehaviour
                 break;
 
             case ItemsDatabase.ItemAttribute.Health:
-                StartCoroutine(battleSystem.IncrementallyIncreaseHP((int)(activeCouCou.currentHealth + activeCouCou.maxHealth * 0.3f), activeCouCou));
+                if (activeCouCou.currentHealth == activeCouCou.maxHealth)
+                {
+                    dialogueText.text = "This item can't be used right now";
+                    incorrectItemUse = true;
+                    break;
+                }
+                float healthToIncrease = activeCouCou.currentHealth + activeCouCou.maxHealth * 0.3f;
+                int previousCurrentHealth = activeCouCou.currentHealth;
+                StartCoroutine(battleSystem.IncrementallyIncreaseHP((int)healthToIncrease, activeCouCou));
                 yield return new WaitUntil(() => battleSystem.finishedHealthIncrement);
                 battleSystem.finishedHealthIncrement = false;
-                dialogueText.text = activeCouCou.coucouName + " gained " + (int)Mathf.Min(activeCouCou.maxHealth - activeCouCou.currentHealth, activeCouCou.currentHealth + activeCouCou.maxHealth * 0.3f) + " health";
+                dialogueText.text = activeCouCou.coucouName + " gained " + (int)Mathf.Min(healthToIncrease - previousCurrentHealth, activeCouCou.maxHealth - previousCurrentHealth) + " health";
                 break;
 
             case ItemsDatabase.ItemAttribute.Resistance:
@@ -245,6 +255,23 @@ public class BattleManager : MonoBehaviour
         else
         {
             return false;
+        }
+    }
+
+    public IEnumerator OnRun()
+    {
+        int rnd = Random.Range(0, battleSystem.enemy.currentDetermination);
+        if (rnd > 30 && enemyManager.wild)
+        {
+            dialogueText.text = "You successfully retreat";
+            yield return new WaitForSeconds(1f);
+            gameManager.SetState(GameManager.GameState.Wandering);
+        }
+        else
+        {
+            dialogueText.text = "The " + battleSystem.enemy.coucouName + " won't let you escape so easily";
+            yield return new WaitForSeconds(2f);
+            battleSystem.EnemyTurn();
         }
     }
 }

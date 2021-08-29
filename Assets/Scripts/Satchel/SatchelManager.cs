@@ -353,7 +353,7 @@ public class SatchelManager : MonoBehaviour
             scrollRectEnsureVisible.CenterOnItem(currentSelectedButton.GetComponent<RectTransform>());
             itemSprite.sprite = coucouFinder.GetElementSprite(inventoryList.couCouInventory[satchelSlot.uniqueIdentifier].element);
 
-            if (descriptionName.text == battleSystem.player.coucouName)
+            if (descriptionName.text == battleSystem.player.coucouName || inventoryList.couCouInventory[satchelSlot.uniqueIdentifier].hasCollapsed)
             {
                 submitButton.interactable = false;
             }
@@ -404,7 +404,7 @@ public class SatchelManager : MonoBehaviour
         else if (selectedSection == 3)
         {
             dialogueText.GetComponent<TextMeshProUGUI>().text = "You use " + descriptionName.text;
-            StartCoroutine(enemyManager.GiveBerry(itemFinder.FindItem(descriptionName.text).element));
+            StartCoroutine(enemyManager.GiveBerry(itemFinder.FindItem(descriptionName.text).element, descriptionName.text));
         }
         selectedSection = 0;
         blurCamera.gameObject.SetActive(false);
@@ -413,11 +413,14 @@ public class SatchelManager : MonoBehaviour
         satchel.SetActive(false);
         battlingUI.OnCloseSatchel();
         battlingUI.OnFinishTurn();
-        selectedSection = 0;
     }
 
     public void OnSubmitCancelled()
     {
+        if (selectedSection == 3)
+        {
+            selectedSection = 1;
+        }
         submitButton.Select();
         inPrompt = false;
         prompt.SetActive(false);

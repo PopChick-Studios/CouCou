@@ -11,6 +11,7 @@ public class EnemyManager : MonoBehaviour
     private BattleSystem battleSystem;
     private CouCouFinder coucouFinder;
     private InventoryManager inventoryManager;
+    private BattlingUI battlingUI;
 
     public TextMeshProUGUI dialogueText;
 
@@ -61,6 +62,7 @@ public class EnemyManager : MonoBehaviour
         battleSystem = gameObject.GetComponent<BattleSystem>();
         abilityFinder = gameObject.GetComponent<AbilityFinder>();
         battleManager = gameObject.GetComponent<BattleManager>();
+        battlingUI = GameObject.FindGameObjectWithTag("BattlingUI").GetComponent<BattlingUI>();
     }
 
     void Start()
@@ -306,15 +308,17 @@ public class EnemyManager : MonoBehaviour
                 switch (i.itemAttribute)
                 {
                     case ItemsDatabase.ItemAttribute.Health:
-                        StartCoroutine(battleSystem.IncrementallyIncreaseHP((int)(enemyActiveCouCou.currentHealth + enemyActiveCouCou.maxHealth * 0.3f), enemyActiveCouCou));
+                        float healthToIncrease = enemyActiveCouCou.currentHealth + enemyActiveCouCou.maxHealth * 0.3f;
+                        int previousCurrentHealth = enemyActiveCouCou.currentHealth;
+                        StartCoroutine(battleSystem.IncrementallyIncreaseHP((int)healthToIncrease, enemyActiveCouCou));
                         yield return new WaitUntil(() => battleSystem.finishedHealthIncrement);
                         battleSystem.finishedHealthIncrement = false;
-                        dialogueText.text = enemyActiveCouCou.coucouName + " gained " + (int)Mathf.Min(enemyActiveCouCou.maxHealth - enemyActiveCouCou.currentHealth, enemyActiveCouCou.currentHealth + enemyActiveCouCou.maxHealth * 0.3f) + " health";
+                        dialogueText.text = enemyActiveCouCou.coucouName + " gained " + (int)Mathf.Min(healthToIncrease - previousCurrentHealth, enemyActiveCouCou.maxHealth - previousCurrentHealth) + " health";
                         break;
 
                     case ItemsDatabase.ItemAttribute.ElementalMindset:
 
-                        dialogueText.text = "The berry gave " + enemyActiveCouCou.coucouName + " " + Mathf.Min(100 - enemyActiveCouCou.currentMindset, enemyActiveCouCou.currentMindset + 5) + " more Mindset";
+                        dialogueText.text = "The berry gave " + enemyActiveCouCou.coucouName + " " + Mathf.Min(100 - enemyActiveCouCou.currentMindset, 10) + " more Mindset";
                         enemyActiveCouCou.currentMindset += 10;
                         break;
                 }
@@ -369,8 +373,10 @@ public class EnemyManager : MonoBehaviour
         }
     }
 
-    public IEnumerator GiveBerry(CouCouDatabase.Element element)
+    public IEnumerator GiveBerry(CouCouDatabase.Element element, string berryName)
     {
+        Debug.Log("Enemy " + enemyActiveCouCou.element + " vs Berry " + element);
+
         if (enemyActiveCouCou.element == element)
         {
             dialogueText.text = "The wild " + enemyActiveCouCou.coucouName + " gained " + Mathf.Min(100 - enemyActiveCouCou.currentMindset, 20) + " mindset";
@@ -384,7 +390,12 @@ public class EnemyManager : MonoBehaviour
         {
             dialogueText.text = "The wild " + enemyActiveCouCou.coucouName + " didn't like that berry";
         }
+
+        inventoryManager.UsedItem(berryName);
+
         yield return new WaitForSeconds(2f);
+        battleSystem.EnemyTurn();
+        battlingUI.OnFinishTurn();
     }
 
     public int PerformEnemyAbility(float[] probability)

@@ -2878,7 +2878,6 @@ MonoBehaviour:
   allyLevelText: {fileID: 456843822}
   allyHealthText: {fileID: 928659910}
   allyElementSprite: {fileID: 778312537}
-  finishedIncrement: 0
   incorrectItemUse: 0
   attackDiminishingReturns: 1
   resistanceDiminishingReturns: 1
@@ -4894,7 +4893,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1074471357}
         m_TargetAssemblyTypeName: SatchelManager, Assembly-CSharp
-        m_MethodName: OnSubmitPressed
+        m_MethodName: OnGiveBerry
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -5390,7 +5389,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf0770f39bc838249bedb49a125a8c2e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  usingMouse: 0
   defaultButton: {fileID: 1593002707}
 --- !u!1 &793272015
 GameObject:
@@ -7229,9 +7227,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 368891503}
-        m_TargetAssemblyTypeName: InventoryManager, Assembly-CSharp
-        m_MethodName: SaveInventory
+      - m_Target: {fileID: 1074471355}
+        m_TargetAssemblyTypeName: BattlingUI, Assembly-CSharp
+        m_MethodName: OnRun
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -13520,7 +13518,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf0770f39bc838249bedb49a125a8c2e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  usingMouse: 0
   defaultButton: {fileID: 771398650}
 --- !u!1 &2033081568
 GameObject:

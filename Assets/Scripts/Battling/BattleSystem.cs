@@ -108,7 +108,7 @@ public class BattleSystem : MonoBehaviour
         AbilitiesDatabase.AttackAbilityData attackAbility = null;
         AbilitiesDatabase.UtilityAbilityData utilityAbility = null;
         bool isUtility;
-        float waitAfterAbility = 2f;
+        float waitAfterAbility = 2.5f;
 
         Debug.Log("Ability UID: " + abilityUID);
 
@@ -137,6 +137,7 @@ public class BattleSystem : MonoBehaviour
 
         if (isUtility)
         {
+            yield return new WaitForSeconds(waitAfterAbility);
             if (utilityAbility.enemyMindset)
             {
                 enemyPsychicAbilitiesUsed++;
@@ -159,7 +160,7 @@ public class BattleSystem : MonoBehaviour
             }
             if (utilityAbility.selfMindset > 0)
             {
-                dialogueText.text = enemy.coucouName + " gained " + (int)Mathf.Min(100 - enemy.currentMindset, utilityAbility.selfMindset) + " mindset";
+                dialogueText.text = enemy.coucouName + " gained " + Mathf.Min(100 - enemy.currentMindset, utilityAbility.selfMindset).ToString() + " mindset";
                 enemy.currentMindset += (int)utilityAbility.selfMindset;
                 if (enemy.currentMindset > 100)
                 {
@@ -226,21 +227,22 @@ public class BattleSystem : MonoBehaviour
             isDead = TakeDamage(damageAfterResistance * damageModifier);
             yield return new WaitUntil(() => takeDamageFinished);
             takeDamageFinished = false;
+
+            if (crit)
+            {
+                dialogueText.text = enemy.coucouName + " critically hit!";
+            }
+            else if (abilityDisadvantage)
+            {
+                dialogueText.text = "The attack wasn't very outstanding...";
+            }
+            else if (abilityAdvantage)
+            {
+                dialogueText.text = "The attack was glorious!";
+            }
+            yield return new WaitForSeconds(2f);
         }
 
-        if (crit)
-        {
-            dialogueText.text = enemy.coucouName + " critically hit!";
-        }
-        else if (abilityDisadvantage)
-        {
-            dialogueText.text = "The attack wasn't very outstanding...";
-        }
-        else if (abilityAdvantage)
-        {
-            dialogueText.text = "The attack was glorious!";
-        }
-        yield return new WaitForSeconds(2f);
         if (isDead)
         {
             dialogueText.text = player.coucouName + " has collapsed";
@@ -275,9 +277,9 @@ public class BattleSystem : MonoBehaviour
 
     public IEnumerator UseAbility(AbilityUID button)
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(2f);
 
-        float waitAfterAbility = 2f;
+        float waitAfterAbility = 2.5f;
 
         int abilityUID = button.abilityUID;
         bool isUtility = button.isUtility;
@@ -642,10 +644,8 @@ public class BattleSystem : MonoBehaviour
             allyHealthBar.GetComponent<Image>().fillAmount = increase / coucou.maxHealth;
             allyHealthText.text = (int)increase + "/" + coucou.maxHealth;
             coucou.currentHealth = (int)increase;
-            Debug.Log(increase);
             yield return new WaitForSeconds(0.04f);
         }
-        Debug.Log("Finished");
         finishedHealthIncrement = true;
         if (coucou.currentHealth >= coucou.maxHealth)
         {

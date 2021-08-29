@@ -55,6 +55,7 @@ public class SceneLoader : MonoBehaviour
     {
         transition.SetTrigger("Start");
         inventoryManager.SaveInventory();
+        PlayerPrefs.Save();
         yield return new WaitForSeconds(1f);
         SceneManager.LoadScene(sceneName);
         lightingManager.Daytime();
