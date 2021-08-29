@@ -76,6 +76,8 @@ public class Catching : MonoBehaviour
 
             inventoryManager.AddCouCou(battleSystem.enemy.coucouName, battleSystem.enemy.coucouLevel);
             enemyInventory.couCouInventory.Remove(battleSystem.enemy);
+            battleSystem.state = BattleState.WON;
+            StartCoroutine(battleSystem.EndBattle());
 
         }
     }

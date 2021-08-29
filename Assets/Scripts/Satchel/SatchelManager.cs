@@ -79,7 +79,6 @@ public class SatchelManager : MonoBehaviour
         battlingUI = GameObject.FindGameObjectWithTag("BattlingUI").GetComponent<BattlingUI>();
 
         playerInputActions = new PlayerInputActions();
-        playerInputActions.UI.Cancel.started += x => GoBack();
         playerInputActions.UI.NavigateSections.performed += x => NavigateSections(x.ReadValue<float>());
 
         satchel.SetActive(false);
@@ -304,19 +303,13 @@ public class SatchelManager : MonoBehaviour
         }
         else if (battlingUI.inSatchel)
         {
-            OnCloseSatchel();
-            battlingUI.BackToMenu();
+            selectedSection = 0;
+            blurCamera.gameObject.SetActive(false);
+            ClearItems();
+            ClearCouCou();
+            satchel.SetActive(false);
+            battlingUI.OnCloseSatchel();
         }
-    }
-
-    public void OnCloseSatchel()
-    {
-        selectedSection = 0;
-        blurCamera.gameObject.SetActive(false);
-        ClearItems();
-        ClearCouCou();
-        satchel.SetActive(false);
-        battlingUI.BackToMenu();
     }
 
     public void UpdateDescription()

@@ -98,74 +98,77 @@ public class BattleManager : MonoBehaviour
     public IEnumerator UseItem(string name)
     {
         bool usedCapsule = false;
+        InventoryList.ItemInventory itemBeingUsed = new InventoryList.ItemInventory();
 
         foreach (InventoryList.ItemInventory i in inventory.itemInventory)
         {
             if (name == i.itemName)
             {
-                yield return new WaitForSeconds(1f);
-
-                switch (i.itemAttribute)
-                {
-                    case ItemsDatabase.ItemAttribute.Capsule:
-                        if (enemyManager.wild)
-                        {
-                            dialogueText.text = inventory.inventoryOwner + " throws out a " + i.itemName;
-                            usedCapsule = true;
-                        }
-                        else
-                        {
-                            dialogueText.text = "This item can't be used right now";
-                            incorrectItemUse = true;
-                        }                        
-                        break;
-
-                    case ItemsDatabase.ItemAttribute.Health:
-                        StartCoroutine(battleSystem.IncrementallyIncreaseHP((int)(activeCouCou.currentHealth + activeCouCou.maxHealth * 0.3f), activeCouCou));
-                        yield return new WaitUntil(() => finishedIncrement);
-                        finishedIncrement = false;
-                        dialogueText.text = activeCouCou.coucouName + " gained " + (int)Mathf.Min(activeCouCou.maxHealth - activeCouCou.currentHealth, activeCouCou.currentHealth + activeCouCou.maxHealth * 0.3f) + " health";
-                        break;
-
-                    case ItemsDatabase.ItemAttribute.Resistance:
-                        float resistance = activeCouCou.currentResistance * 1.15f * resistanceDiminishingReturns;
-                        dialogueText.text = activeCouCou.coucouName + " gained " + (Mathf.Round(resistance - activeCouCou.currentResistance * 100) / 100) + " resistance";
-                        activeCouCou.currentResistance = (int)resistance;
-                        resistanceDiminishingReturns *= 0.87f;
-                        break;
-
-                    case ItemsDatabase.ItemAttribute.Attack:
-                        float attack = activeCouCou.currentAttack * 1.15f * attackDiminishingReturns;
-                        dialogueText.text = activeCouCou.coucouName + " gained " + (Mathf.Round(attack - activeCouCou.currentAttack * 100) / 100) + " attack";
-                        activeCouCou.currentAttack = (int)attack;
-                        attackDiminishingReturns *= 0.87f;
-                        break;
-
-                    case ItemsDatabase.ItemAttribute.ElementalMindset:
-                        if (activeCouCou.element != i.element)
-                        {
-                            dialogueBox.SetActive(true);
-                            dialogueText.text = "This berry can't be used with " + activeCouCou.coucouName;
-                            yield return new WaitForSeconds(2f);
-                            dialogueBox.SetActive(false);
-                            incorrectItemUse = true;
-                           break;
-                        }
-                        int mindset = 10;
-                        dialogueText.text = "The berry gave " + activeCouCou.coucouName + " " + Mathf.Min(100 - activeCouCou.currentMindset, mindset) + " more Mindset";
-                        activeCouCou.currentMindset += mindset;
-
-                        break;
-
-                    default:
-                        dialogueBox.SetActive(true);
-                        dialogueText.text = "This item can't be used right now";
-                        yield return new WaitForSeconds(2f);
-                        dialogueBox.SetActive(false);
-                        incorrectItemUse = true;
-                        break;
-                }
+                itemBeingUsed = i;
             }
+        }
+
+        yield return new WaitForSeconds(1f);
+
+        switch (itemBeingUsed.itemAttribute)
+        {
+            case ItemsDatabase.ItemAttribute.Capsule:
+                if (enemyManager.wild)
+                {
+                    dialogueText.text = inventory.inventoryOwner + " throws out a " + itemBeingUsed.itemName;
+                    usedCapsule = true;
+                }
+                else
+                {
+                    dialogueText.text = "This item can't be used right now";
+                    incorrectItemUse = true;
+                }
+                break;
+
+            case ItemsDatabase.ItemAttribute.Health:
+                StartCoroutine(battleSystem.IncrementallyIncreaseHP((int)(activeCouCou.currentHealth + activeCouCou.maxHealth * 0.3f), activeCouCou));
+                yield return new WaitUntil(() => finishedIncrement);
+                finishedIncrement = false;
+                dialogueText.text = activeCouCou.coucouName + " gained " + (int)Mathf.Min(activeCouCou.maxHealth - activeCouCou.currentHealth, activeCouCou.currentHealth + activeCouCou.maxHealth * 0.3f) + " health";
+                break;
+
+            case ItemsDatabase.ItemAttribute.Resistance:
+                float resistance = activeCouCou.currentResistance * 1.15f * resistanceDiminishingReturns;
+                dialogueText.text = activeCouCou.coucouName + " gained " + (Mathf.Round(resistance - activeCouCou.currentResistance * 100) / 100) + " resistance";
+                activeCouCou.currentResistance = (int)resistance;
+                resistanceDiminishingReturns *= 0.87f;
+                break;
+
+            case ItemsDatabase.ItemAttribute.Attack:
+                float attack = activeCouCou.currentAttack * 1.15f * attackDiminishingReturns;
+                dialogueText.text = activeCouCou.coucouName + " gained " + (Mathf.Round(attack - activeCouCou.currentAttack * 100) / 100) + " attack";
+                activeCouCou.currentAttack = (int)attack;
+                attackDiminishingReturns *= 0.87f;
+                break;
+
+            case ItemsDatabase.ItemAttribute.ElementalMindset:
+                if (activeCouCou.element != itemBeingUsed.element)
+                {
+                    dialogueBox.SetActive(true);
+                    dialogueText.text = "This berry can't be used with " + activeCouCou.coucouName;
+                    yield return new WaitForSeconds(2f);
+                    dialogueBox.SetActive(false);
+                    incorrectItemUse = true;
+                    break;
+                }
+                int mindset = 10;
+                dialogueText.text = "The berry gave " + activeCouCou.coucouName + " " + Mathf.Min(100 - activeCouCou.currentMindset, mindset) + " more Mindset";
+                activeCouCou.currentMindset += mindset;
+
+                break;
+
+            default:
+                dialogueBox.SetActive(true);
+                dialogueText.text = "This item can't be used right now";
+                yield return new WaitForSeconds(2f);
+                dialogueBox.SetActive(false);
+                incorrectItemUse = true;
+                break;
         }
 
         if (incorrectItemUse)
