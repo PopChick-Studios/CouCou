@@ -50,7 +50,6 @@ public class DisplayManager : MonoBehaviour
 
     // Inputs
     PlayerInputActions playerInputActions;
-    public bool isPaused = false;
 
     private void Awake()
     {
@@ -78,7 +77,6 @@ public class DisplayManager : MonoBehaviour
             return;
         }
         Time.timeScale = 0;
-
         options.SetActive(false);
         HUD.SetActive(false);
         interaction.SetActive(false);
@@ -107,7 +105,6 @@ public class DisplayManager : MonoBehaviour
     {
         gameManager.SetState(GameManager.GameState.Wandering);
         Time.timeScale = 1;
-
         blurCamera.SetActive(false);
         options.SetActive(false);
         HUD.SetActive(true);

@@ -3335,6 +3335,8 @@ MonoBehaviour:
   coucouDatabase: {fileID: 11400000, guid: b43204cd7c6f9b54984e64e16d68ca8a, type: 2}
   satchelList: {fileID: 1010741781}
   abilitiesDescriptionUI: {fileID: 817610208}
+  abilitiesElementChart: {fileID: 1502917852}
+  elementChart: {fileID: 1273924215}
   scrollRect: {fileID: 581978789}
   blurCamera: {fileID: 1922908088}
   satchel: {fileID: 1922908085}

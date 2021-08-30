@@ -13,12 +13,15 @@ public class SatchelAdventureManager : MonoBehaviour
     private ItemFinder itemFinder;
     private InventoryManager inventoryManager;
     private AbilityDescriptions abilityDescriptions;
+    private DisplayManager displayManager;
 
     public CouCouDatabase coucouDatabase;
     private List<CouCouDatabase.CouCouData> coucouDataList;
 
     public GameObject satchelList;
     public GameObject abilitiesDescriptionUI;
+    public GameObject abilitiesElementChart;
+    public GameObject elementChart;
 
     public ScrollRect scrollRect;
     public Camera blurCamera;
@@ -72,10 +75,12 @@ public class SatchelAdventureManager : MonoBehaviour
         scrollRectEnsureVisible = satchelList.GetComponentInParent<ScrollRectEnsureVisible>();
         coucouFinder = GameObject.FindGameObjectWithTag("GameManager").GetComponent<CouCouFinder>();
         itemFinder = GameObject.FindGameObjectWithTag("GameManager").GetComponent<ItemFinder>();
+        displayManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<DisplayManager>();
         abilityDescriptions = GetComponent<AbilityDescriptions>();
 
         playerInputActions = new PlayerInputActions();
         playerInputActions.UI.NavigateSections.performed += x => NavigateSections(x.ReadValue<float>());
+        playerInputActions.UI.OpenElementChart.started += x => OnElementChartToggle();
         changeCouCouOrder.SetActive(false);
         satchel.SetActive(false);
         abilitiesDescriptionUI.SetActive(false);
@@ -86,6 +91,26 @@ public class SatchelAdventureManager : MonoBehaviour
         foreach (CouCouDatabase.CouCouData c in coucouDatabase.coucouData)
         {
             coucouDataList.Add(c);
+        }
+    }
+
+    public void OnElementChartToggle()
+    {
+        if (satchel.activeInHierarchy && !abilitiesElementChart.activeInHierarchy && !elementChart.activeInHierarchy)
+        {
+            if (inSubmit)
+            {
+                abilitiesElementChart.SetActive(true);
+            }
+            else
+            {
+                elementChart.SetActive(true);
+            }
+        }
+        else if (satchel.activeInHierarchy && (abilitiesElementChart.activeInHierarchy || elementChart.activeInHierarchy))
+        {
+            elementChart.SetActive(false);
+            abilitiesElementChart.SetActive(false);
         }
     }
 
