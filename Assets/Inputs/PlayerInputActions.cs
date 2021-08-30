@@ -323,6 +323,14 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Quaternion"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""OpenElementChart"",
+                    ""type"": ""Button"",
+                    ""id"": ""ac8c060e-30fe-4bed-9fc7-695979085ad2"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -875,6 +883,28 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                     ""action"": ""NavigateSections"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e6304a56-059d-4ac0-b1d0-5fdded8d2bf3"",
+                    ""path"": ""<Keyboard>/tab"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""OpenElementChart"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""83f75335-8cf3-4770-8db3-b0c5452a84a6"",
+                    ""path"": ""<Gamepad>/select"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""OpenElementChart"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -931,6 +961,7 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
         m_UI_RightClick = m_UI.FindAction("RightClick", throwIfNotFound: true);
         m_UI_TrackedDevicePosition = m_UI.FindAction("TrackedDevicePosition", throwIfNotFound: true);
         m_UI_TrackedDeviceOrientation = m_UI.FindAction("TrackedDeviceOrientation", throwIfNotFound: true);
+        m_UI_OpenElementChart = m_UI.FindAction("OpenElementChart", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -1072,6 +1103,7 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
     private readonly InputAction m_UI_RightClick;
     private readonly InputAction m_UI_TrackedDevicePosition;
     private readonly InputAction m_UI_TrackedDeviceOrientation;
+    private readonly InputAction m_UI_OpenElementChart;
     public struct UIActions
     {
         private @PlayerInputActions m_Wrapper;
@@ -1087,6 +1119,7 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
         public InputAction @RightClick => m_Wrapper.m_UI_RightClick;
         public InputAction @TrackedDevicePosition => m_Wrapper.m_UI_TrackedDevicePosition;
         public InputAction @TrackedDeviceOrientation => m_Wrapper.m_UI_TrackedDeviceOrientation;
+        public InputAction @OpenElementChart => m_Wrapper.m_UI_OpenElementChart;
         public InputActionMap Get() { return m_Wrapper.m_UI; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1129,6 +1162,9 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                 @TrackedDeviceOrientation.started -= m_Wrapper.m_UIActionsCallbackInterface.OnTrackedDeviceOrientation;
                 @TrackedDeviceOrientation.performed -= m_Wrapper.m_UIActionsCallbackInterface.OnTrackedDeviceOrientation;
                 @TrackedDeviceOrientation.canceled -= m_Wrapper.m_UIActionsCallbackInterface.OnTrackedDeviceOrientation;
+                @OpenElementChart.started -= m_Wrapper.m_UIActionsCallbackInterface.OnOpenElementChart;
+                @OpenElementChart.performed -= m_Wrapper.m_UIActionsCallbackInterface.OnOpenElementChart;
+                @OpenElementChart.canceled -= m_Wrapper.m_UIActionsCallbackInterface.OnOpenElementChart;
             }
             m_Wrapper.m_UIActionsCallbackInterface = instance;
             if (instance != null)
@@ -1166,6 +1202,9 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                 @TrackedDeviceOrientation.started += instance.OnTrackedDeviceOrientation;
                 @TrackedDeviceOrientation.performed += instance.OnTrackedDeviceOrientation;
                 @TrackedDeviceOrientation.canceled += instance.OnTrackedDeviceOrientation;
+                @OpenElementChart.started += instance.OnOpenElementChart;
+                @OpenElementChart.performed += instance.OnOpenElementChart;
+                @OpenElementChart.canceled += instance.OnOpenElementChart;
             }
         }
     }
@@ -1211,5 +1250,6 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
         void OnRightClick(InputAction.CallbackContext context);
         void OnTrackedDevicePosition(InputAction.CallbackContext context);
         void OnTrackedDeviceOrientation(InputAction.CallbackContext context);
+        void OnOpenElementChart(InputAction.CallbackContext context);
     }
 }

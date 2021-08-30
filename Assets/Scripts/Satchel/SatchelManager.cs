@@ -15,11 +15,13 @@ public class SatchelManager : MonoBehaviour
     private BattleSystem battleSystem;
     private EnemyManager enemyManager;
     private InventoryManager inventoryManager;
+    private AbilityDescriptions abilityDescriptions;
 
     public CouCouDatabase coucouDatabase;
     private List<CouCouDatabase.CouCouData> coucouDataList;
 
     public GameObject satchelList;
+    public GameObject abilitiesDescriptionUI;
 
     public ScrollRect scrollRect;
     public Camera blurCamera;
@@ -77,11 +79,13 @@ public class SatchelManager : MonoBehaviour
         itemFinder = GameObject.FindGameObjectWithTag("GameManager").GetComponent<ItemFinder>();
         battleManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<BattleManager>();
         battlingUI = GameObject.FindGameObjectWithTag("BattlingUI").GetComponent<BattlingUI>();
+        abilityDescriptions = GameObject.FindGameObjectWithTag("BattlingUI").GetComponent<AbilityDescriptions>();
 
         playerInputActions = new PlayerInputActions();
         playerInputActions.UI.NavigateSections.performed += x => NavigateSections(x.ReadValue<float>());
 
         satchel.SetActive(false);
+        abilitiesDescriptionUI.SetActive(false);
     }
 
     private void Start()
@@ -282,6 +286,11 @@ public class SatchelManager : MonoBehaviour
         inSubmit = true;
         buttonClicked = button;
         submitButton.Select();
+        if (selectedSection == 2)
+        {
+            abilityDescriptions.DisplayAbilityDescriptions(coucouFinder.FindCouCou(descriptionName.text));
+            abilitiesDescriptionUI.SetActive(true);
+        }
     }
 
     public void GoBack()
@@ -303,6 +312,7 @@ public class SatchelManager : MonoBehaviour
             }
             buttonClicked = null;
             inSubmit = false;
+            abilitiesDescriptionUI.SetActive(false);
         }
         else if (battlingUI.inSatchel)
         {
@@ -458,6 +468,7 @@ public class SatchelManager : MonoBehaviour
         {
             return;
         }
+        abilitiesDescriptionUI.SetActive(false);
         submitButton.GetComponentInChildren<TextMeshProUGUI>().text = "Use Item";
         blurCamera.gameObject.SetActive(true);
         satchel.SetActive(true);

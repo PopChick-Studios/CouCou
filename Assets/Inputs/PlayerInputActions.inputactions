@@ -310,6 +310,14 @@
                     "expectedControlType": "Quaternion",
                     "processors": "",
                     "interactions": ""
+                },
+                {
+                    "name": "OpenElementChart",
+                    "type": "Button",
+                    "id": "ac8c060e-30fe-4bed-9fc7-695979085ad2",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -862,6 +870,28 @@
                     "action": "NavigateSections",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "e6304a56-059d-4ac0-b1d0-5fdded8d2bf3",
+                    "path": "<Keyboard>/tab",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "OpenElementChart",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "83f75335-8cf3-4770-8db3-b0c5452a84a6",
+                    "path": "<Gamepad>/select",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "OpenElementChart",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         }

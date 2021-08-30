@@ -12,11 +12,13 @@ public class SatchelAdventureManager : MonoBehaviour
     private CouCouFinder coucouFinder;
     private ItemFinder itemFinder;
     private InventoryManager inventoryManager;
+    private AbilityDescriptions abilityDescriptions;
 
     public CouCouDatabase coucouDatabase;
     private List<CouCouDatabase.CouCouData> coucouDataList;
 
     public GameObject satchelList;
+    public GameObject abilitiesDescriptionUI;
 
     public ScrollRect scrollRect;
     public Camera blurCamera;
@@ -70,13 +72,13 @@ public class SatchelAdventureManager : MonoBehaviour
         scrollRectEnsureVisible = satchelList.GetComponentInParent<ScrollRectEnsureVisible>();
         coucouFinder = GameObject.FindGameObjectWithTag("GameManager").GetComponent<CouCouFinder>();
         itemFinder = GameObject.FindGameObjectWithTag("GameManager").GetComponent<ItemFinder>();
+        abilityDescriptions = GetComponent<AbilityDescriptions>();
 
         playerInputActions = new PlayerInputActions();
-        playerInputActions.UI.Cancel.started += x => GoBack();
         playerInputActions.UI.NavigateSections.performed += x => NavigateSections(x.ReadValue<float>());
         changeCouCouOrder.SetActive(false);
         satchel.SetActive(false);
-        
+        abilitiesDescriptionUI.SetActive(false);
     }
 
     private void Start()
@@ -254,7 +256,12 @@ public class SatchelAdventureManager : MonoBehaviour
         dialogueBox.SetActive(false);
         inSubmit = true;
         buttonClicked = button;
-        //submitButton.Select();
+        submitButton.Select();
+        if (selectedSection == 2)
+        {
+            abilityDescriptions.DisplayAbilityDescriptions(coucouFinder.FindCouCou(descriptionName.text));
+            abilitiesDescriptionUI.SetActive(true);
+        }
     }
 
     public void GoBack()
@@ -271,19 +278,21 @@ public class SatchelAdventureManager : MonoBehaviour
             }
             buttonClicked = null;
             inSubmit = false;
+            abilitiesDescriptionUI.SetActive(false);
         }
         else if (changingCouCou)
         {
             changeCouCouOrder.SetActive(false);
             inputCouCouChange.GetComponent<TMP_InputField>().text = "";
             changingCouCou = false;
+            abilitiesDescriptionUI.SetActive(false);
         }
         else
         {
             OnCloseSatchel();
         }
     }
-    
+
     public void OnCloseSatchel()
     {
         selectedSection = 0;
@@ -340,7 +349,7 @@ public class SatchelAdventureManager : MonoBehaviour
     {
         if (selectedSection == 1)
         {
-            
+
         }
         else if (selectedSection == 2)
         {
@@ -466,6 +475,7 @@ public class SatchelAdventureManager : MonoBehaviour
         {
             return;
         }
+        abilitiesDescriptionUI.SetActive(false);
         submitButton.GetComponentInChildren<TextMeshProUGUI>().text = "Use Item";
         blurCamera.gameObject.SetActive(true);
         satchel.SetActive(true);

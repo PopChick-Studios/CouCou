@@ -14,6 +14,8 @@ public class CouCouFinder : MonoBehaviour
     public Sprite natureIcon;
     public Sprite luxIcon;
     public Sprite umbralIcon;
+    public Sprite normalIcon;
+    public Sprite psychicIcon;
 
     private void Awake()
     {
@@ -57,6 +59,10 @@ public class CouCouFinder : MonoBehaviour
                 return luxIcon;
             case CouCouDatabase.Element.Umbral:
                 return umbralIcon;
+            case CouCouDatabase.Element.Normal:
+                return normalIcon;
+            case CouCouDatabase.Element.Psychic:
+                return psychicIcon;
             default:
                 return null;
         }

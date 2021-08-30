@@ -10,6 +10,7 @@ public class DisplayManager : MonoBehaviour
 {
     private GameManager gameManager;
     private FindWildCouCou findWildCouCou;
+    private SatchelAdventureManager satchelAdventureManager;
 
     [Header("Blur Camera")]
     public GameObject blurCamera;
@@ -55,6 +56,7 @@ public class DisplayManager : MonoBehaviour
     {
         findWildCouCou = GetComponent<FindWildCouCou>();
         gameManager = GetComponent<GameManager>();
+        satchelAdventureManager = GameObject.FindGameObjectWithTag("AdventureUI").GetComponent<SatchelAdventureManager>();
 
         playerInputActions = new PlayerInputActions();
 
@@ -70,6 +72,11 @@ public class DisplayManager : MonoBehaviour
 
     public void PauseMenu()
     {
+        if (satchelAdventureManager.inSubmit || satchelAdventureManager.changingCouCou)
+        {
+            satchelAdventureManager.GoBack();
+            return;
+        }
         Time.timeScale = 0;
 
         options.SetActive(false);
