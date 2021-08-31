@@ -11,6 +11,7 @@ public class DisplayManager : MonoBehaviour
     private GameManager gameManager;
     private FindWildCouCou findWildCouCou;
     private SatchelAdventureManager satchelAdventureManager;
+    private PlayerInteraction playerInteraction;
 
     [Header("Blur Camera")]
     public GameObject blurCamera;
@@ -56,6 +57,7 @@ public class DisplayManager : MonoBehaviour
         findWildCouCou = GetComponent<FindWildCouCou>();
         gameManager = GetComponent<GameManager>();
         satchelAdventureManager = GameObject.FindGameObjectWithTag("AdventureUI").GetComponent<SatchelAdventureManager>();
+        playerInteraction = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerInteraction>();
 
         playerInputActions = new PlayerInputActions();
 
@@ -74,24 +76,27 @@ public class DisplayManager : MonoBehaviour
         if (satchelAdventureManager.inSubmit || satchelAdventureManager.changingCouCou)
         {
             satchelAdventureManager.GoBack();
-            return;
         }
-        Time.timeScale = 0;
-        options.SetActive(false);
-        HUD.SetActive(false);
-        interaction.SetActive(false);
-        satchel.SetActive(false);
-        pause.SetActive(true);
-        coucouCamera.SetActive(false);
-        confirmation.SetActive(false);
-        blurCamera.SetActive(true);
+        else if (!playerInteraction.interacting)
+        {
+            Time.timeScale = 0;
+            options.SetActive(false);
+            HUD.SetActive(false);
+            interaction.SetActive(false);
+            satchel.SetActive(false);
+            pause.SetActive(true);
+            coucouCamera.SetActive(false);
+            confirmation.SetActive(false);
+            blurCamera.SetActive(true);
+            Debug.Log("Blur ON");
 
-        Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
 
-        gameManager.SetState(GameManager.GameState.Paused);
+            gameManager.SetState(GameManager.GameState.Paused);
 
-        continueButton.Select();
+            continueButton.Select();
+        }
     }
 
     public void OnConfirmation()
@@ -106,6 +111,7 @@ public class DisplayManager : MonoBehaviour
         gameManager.SetState(GameManager.GameState.Wandering);
         Time.timeScale = 1;
         blurCamera.SetActive(false);
+        Debug.Log("Blur OFF");
         options.SetActive(false);
         HUD.SetActive(true);
         interaction.SetActive(false);
@@ -120,6 +126,8 @@ public class DisplayManager : MonoBehaviour
     public void OpenSatchel()
     {
         satchel.SetActive(true);
+        satchelAdventureManager.ClearCouCou();
+        satchelAdventureManager.DisplayItems();
         interaction.SetActive(false);
         pause.SetActive(false);
         coucouCamera.SetActive(true);

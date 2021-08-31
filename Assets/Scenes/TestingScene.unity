@@ -8402,6 +8402,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   OnSaveButton: 0
   OnCancelSaveButton: 0
+  interacting: 0
 --- !u!1 &790233988
 GameObject:
   m_ObjectHideFlags: 0
@@ -12494,7 +12495,6 @@ MonoBehaviour:
   coucouUIYes: {fileID: 379088034}
   continueButton: {fileID: 420695041}
   confirmationQuitButton: {fileID: 3618425}
-  isPaused: 0
 --- !u!114 &1153232380
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12535,6 +12535,8 @@ MonoBehaviour:
   couCouDatabase: {fileID: 11400000, guid: b43204cd7c6f9b54984e64e16d68ca8a, type: 2}
   itemsDatabaseList: []
   coucouVariantList: []
+  experienceIncrement: 0
+  experienceGained: 0
 --- !u!114 &1153232382
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20175,7 +20177,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 51ef2210b39e6764a9e7199727f1a326, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 6a67362d693edaf438f3971e7b0c674a, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

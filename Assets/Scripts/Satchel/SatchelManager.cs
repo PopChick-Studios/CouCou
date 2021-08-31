@@ -471,23 +471,26 @@ public class SatchelManager : MonoBehaviour
 
     public void NavigateSections(float direction)
     {
-        if (isStuck)
+        if (satchel.activeInHierarchy)
         {
-            return;
-        }
-        if (direction > 0 && selectedSection == 1 && !inSubmit)
-        {
-            OnCouCouSection();
-        }
-        else if (direction < 0 && selectedSection == 2 && !inSubmit)
-        {
-            OnItemSection();
+            if (isStuck)
+            {
+                return;
+            }
+            if (direction > 0 && selectedSection == 1 && !inSubmit)
+            {
+                OnCouCouSection();
+            }
+            else if (direction < 0 && selectedSection == 2 && !inSubmit)
+            {
+                OnItemSection();
+            }
         }
     }
 
     public void OnItemSection()
     {
-        if (selectedSection == 1)
+        if (selectedSection == 1 || isStuck)
         {
             return;
         }

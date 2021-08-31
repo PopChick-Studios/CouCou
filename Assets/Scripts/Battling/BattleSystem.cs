@@ -19,6 +19,7 @@ public class BattleSystem : MonoBehaviour
 
     public TextMeshProUGUI dialogueText;
     public Image allyHealthBar;
+    public Image experienceBar;
     public TextMeshProUGUI allyHealthText;
     public Image enemyHealthBar;
     public TextMeshProUGUI enemyHealthText;
@@ -66,6 +67,8 @@ public class BattleSystem : MonoBehaviour
     public void SetupBattle()
     {
         gameManager.SetState(GameManager.GameState.Battling);
+
+        Cursor.lockState = CursorLockMode.None;
 
         //playerInScene = Instantiate(playerModel, playerSpawner);
         //enemyInScene = Instantiate(enemyModel, enemySpawner);
@@ -660,7 +663,14 @@ public class BattleSystem : MonoBehaviour
         {
             yield return new WaitForSeconds(2f);
 
-            // Give EXP
+            inventoryManager.AddExperience(player, player.coucouLevel, enemy.coucouLevel);
+
+            yield return new WaitUntil(() => inventoryManager.experienceIncrement);
+
+            dialogueText.text = player.coucouName + " gained " + inventoryManager.experienceGained + " experience";
+
+            yield return new WaitForSeconds(2f);
+
             gameManager.SetState(GameManager.GameState.Wandering);
         }
         else if (state == BattleState.LOST)

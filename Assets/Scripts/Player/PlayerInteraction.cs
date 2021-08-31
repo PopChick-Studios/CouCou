@@ -14,6 +14,7 @@ public class PlayerInteraction : MonoBehaviour
     // Saving game
     public bool OnSaveButton;
     public bool OnCancelSaveButton;
+    public bool interacting;
 
     // Animator
     // public Animator animator;
@@ -31,7 +32,8 @@ public class PlayerInteraction : MonoBehaviour
 
         playerInputActions.Wandering.Interact.performed += x => Interact();
         playerInputActions.UI.Cancel.started += x => OnCouCouCancelButton();
-        playerInputActions.UI.Submit.performed += x => FinishInteraction(interactableUI.interactionType);
+        playerInputActions.UI.Submit.started += x => FinishInteraction(interactableUI.interactionType);
+        playerInputActions.UI.Cancel.started += x => FinishInteraction(interactableUI.interactionType);
     }
 
     private void Interact()
@@ -40,6 +42,8 @@ public class PlayerInteraction : MonoBehaviour
         {
             if (interactableUI.canInteract)
             {
+                interacting = true;
+
                 displayManager.OnInteraction(interactableUI.interactionType, interactableUI);
                 // animator.SetTrigger("interactPickUp");
 
@@ -85,6 +89,8 @@ public class PlayerInteraction : MonoBehaviour
 
             OnCancelSaveButton = false;
         }
+
+        interacting = false;
     }
 
     public void OnSaveGame()
@@ -111,6 +117,8 @@ public class PlayerInteraction : MonoBehaviour
         displayManager.HeadsUpDisplay();
         playerInputActions.UI.Disable();
         playerInputActions.Wandering.Enable();
+
+        interacting = false;
     }
 
     private void OnTriggerEnter(Collider other)

@@ -8,6 +8,7 @@ public class SceneLoader : MonoBehaviour
     private GameManager gameManager;
     private InventoryManager inventoryManager;
     private LightingManager lightingManager;
+    private DialogueManager dialogueManager;
     public GameManager.GameState previousState = GameManager.GameState.Wandering;
 
     public Animator transition;
@@ -43,7 +44,14 @@ public class SceneLoader : MonoBehaviour
 
     public void LoadBattleScene()
     {
-        StartCoroutine(LoadScene("BattleScene"));
+        if (inventoryManager.HasPlayableCouCou())
+        {
+            StartCoroutine(LoadScene("BattleScene"));
+        }
+        else
+        {
+
+        }
     }
 
     public void LoadAdventureScene()

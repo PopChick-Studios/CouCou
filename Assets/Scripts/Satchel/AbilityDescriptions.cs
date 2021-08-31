@@ -6,10 +6,8 @@ using UnityEngine.UI;
 
 public class AbilityDescriptions : MonoBehaviour
 {
-    private SatchelManager satchelManager;
     private CouCouFinder couCouFinder;
     private AbilityFinder abilityFinder;
-    private BattleSystem battleSystem;
 
     public AbilitiesDatabase abilitiesDatabase;
     public List<AbilitiesDatabase.AttackAbilityData> attackAbilitiesList;
@@ -37,10 +35,8 @@ public class AbilityDescriptions : MonoBehaviour
 
     private void Awake()
     {
-        satchelManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<SatchelManager>();
         couCouFinder = GameObject.FindGameObjectWithTag("GameManager").GetComponent<CouCouFinder>();
         abilityFinder = GameObject.FindGameObjectWithTag("GameManager").GetComponent<AbilityFinder>();
-        battleSystem = GameObject.FindGameObjectWithTag("GameManager").GetComponent<BattleSystem>();
 
         attackAbilitiesList = new List<AbilitiesDatabase.AttackAbilityData>();
         utilityAbilitiesList = new List<AbilitiesDatabase.UtilityAbilityData>();
@@ -66,9 +62,6 @@ public class AbilityDescriptions : MonoBehaviour
             Image abilityElement = null;
             TextMeshProUGUI nameDisplay = null;
             TextMeshProUGUI descriptionDisplay = null;
-            AbilitiesDatabase.AttackAbilityData attackAbility = null;
-            AbilitiesDatabase.UtilityAbilityData utilityAbility = null;
-
             switch (i)
             {
                 case 0:
@@ -104,16 +97,14 @@ public class AbilityDescriptions : MonoBehaviour
 
             if (abilityUID > 99)
             {
-                utilityAbility = abilityFinder.FindUtilityAbility(abilityUID);
-
+                AbilitiesDatabase.UtilityAbilityData utilityAbility = abilityFinder.FindUtilityAbility(abilityUID);
                 nameDisplay.text = utilityAbility.abilityName;
                 descriptionDisplay.text = utilityAbility.description;
                 abilityElement.sprite = couCouFinder.GetElementSprite(utilityAbility.coucouElement);
             }
             else if (abilityUID <= 99 && abilityUID != -1)
             {
-                attackAbility = abilityFinder.FindAttackAbility(abilityUID);
-
+                AbilitiesDatabase.AttackAbilityData attackAbility = abilityFinder.FindAttackAbility(abilityUID);
                 nameDisplay.text = attackAbility.abilityName;
                 descriptionDisplay.text = attackAbility.description;
                 abilityElement.sprite = couCouFinder.GetElementSprite(attackAbility.coucouElement);

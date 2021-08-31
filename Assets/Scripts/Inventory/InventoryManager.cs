@@ -1,12 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using System.Linq;
 
 public class InventoryManager : MonoBehaviour
 {
     private ItemFinder itemFinder;
     private CouCouFinder coucouFinder;
+    private BattleSystem battleSystem;
+    private BattleManager battleManager;
 
     public InventoryList playerInventory;
     public InventoryList enemyInventory;
@@ -15,12 +18,15 @@ public class InventoryManager : MonoBehaviour
     public List<ItemsDatabase.ItemData> itemsDatabaseList;
     public List<CouCouDatabase.CouCouVariant> coucouVariantList;
 
+    public bool experienceIncrement = false;
+    public int experienceGained = 0;
+
     private void Awake()
     {
+        battleSystem = GameObject.FindGameObjectWithTag("GameManager").GetComponent<BattleSystem>();
+        battleManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<BattleManager>();
         coucouFinder = GameObject.FindGameObjectWithTag("GameManager").GetComponent<CouCouFinder>();
         itemFinder = GameObject.FindGameObjectWithTag("GameManager").GetComponent<ItemFinder>();
-
-
 
         coucouVariantList = new List<CouCouDatabase.CouCouVariant>();
         itemsDatabaseList = new List<ItemsDatabase.ItemData>();
@@ -220,5 +226,50 @@ public class InventoryManager : MonoBehaviour
         {
             return true;
         }
+    }
+
+    public void AddExperience(InventoryList.CouCouInventory playerCouCou, int playerLevel, int enemyLevel)
+    {
+        float expToAdd = Mathf.Max(enemyLevel - playerLevel, 1) * 100 * playerLevel;
+        Debug.Log("exp to add " + expToAdd);
+        experienceIncrement = false;
+        StartCoroutine(IncrementallyIncreaseEXP(expToAdd, playerCouCou, enemyLevel, playerLevel));
+
+    }
+
+    public IEnumerator IncrementallyIncreaseEXP(float desiredEXP, InventoryList.CouCouInventory coucou, int enemyLevel, int playerLevel)
+    {
+        float increase = coucou.coucouEXP;
+        float maxEXP = Mathf.Pow(4 * coucou.coucouLevel, 2) / 5;
+
+        while (increase != desiredEXP && coucou.coucouEXP < maxEXP)
+        {
+            increase = Mathf.MoveTowards(increase, desiredEXP, Time.deltaTime * 1000f);
+            battleSystem.experienceBar.fillAmount = increase / maxEXP;
+            coucou.coucouEXP = increase;
+            yield return new WaitForSeconds(0.02f);
+        }
+        if (coucou.coucouEXP >= maxEXP)
+        {
+            Debug.Log("level up");
+            coucou.coucouLevel++;
+            battleSystem.experienceBar.fillAmount = 0;
+            coucou.coucouEXP = 0;
+
+            battleSystem.dialogueText.text = coucou.coucouName + " leveled up!";
+            battleManager.allyLevelText.text = coucou.coucouLevel.ToString();
+            yield return new WaitForSeconds(2f);
+
+            if (coucou.coucouEXP < desiredEXP)
+            {
+                StartCoroutine(IncrementallyIncreaseEXP(desiredEXP - increase, coucou, enemyLevel, playerLevel));
+            }
+        }
+        else
+        {
+            experienceGained = Mathf.RoundToInt((enemyLevel - playerLevel + 100) * playerLevel - increase);
+            experienceIncrement = true;
+        }
+        yield break;
     }
 }

@@ -65,7 +65,6 @@ public class BattleManager : MonoBehaviour
 
     private void Start()
     {
-
         foreach (InventoryList.CouCouInventory c in inventory.couCouInventory)
         {
             if (c.lineupOrder < 6)
@@ -74,7 +73,37 @@ public class BattleManager : MonoBehaviour
             }
         }
 
-        activeCouCou = coucouParty[0];
+        for (int a = 0; a < coucouParty.Count; a++)
+        {
+            int level;
+            int bonusStatsPer5;
+            int bonusStatsPer1;
+
+            for (int i = 0; i < coucouDatabase.coucouVariant.Count; i++)
+            {
+                level = coucouParty[a].coucouLevel;
+                bonusStatsPer5 = Mathf.FloorToInt(level / 5);
+                bonusStatsPer1 = level - bonusStatsPer5 - 1;
+
+                if (coucouParty[a].coucouVariant == coucouDatabase.coucouVariant[i].variant)
+                {
+                    coucouParty[a].maxHealth = coucouDatabase.coucouVariant[i].hp + (coucouDatabase.coucouVariant[i].bonusHP * bonusStatsPer1) + (coucouDatabase.coucouVariant[i].bonusHPPer5 * bonusStatsPer5);
+                    coucouParty[a].currentAttack = coucouDatabase.coucouVariant[i].attack + (coucouDatabase.coucouVariant[i].bonusAttack * bonusStatsPer1) + (coucouDatabase.coucouVariant[i].bonusAttackPer5 * bonusStatsPer5);
+                    coucouParty[a].currentResistance = coucouDatabase.coucouVariant[i].resistance + (coucouDatabase.coucouVariant[i].bonusResistance * bonusStatsPer1) + (coucouDatabase.coucouVariant[i].bonusResistancePer5 * bonusStatsPer5);
+                    coucouParty[a].currentMindset = coucouDatabase.coucouVariant[i].mindset;
+                    coucouParty[a].currentDetermination = coucouDatabase.coucouVariant[i].determination;
+                }
+            }
+        }
+
+        for (int a = 0; a < coucouParty.Count; a++)
+        {
+            if (!coucouParty[a].hasCollapsed)
+            {
+                activeCouCou = coucouParty[a];
+                break;
+            }
+        }
 
         battleSystem.player = activeCouCou;
         InitializeHealthBarAlly();
@@ -83,11 +112,14 @@ public class BattleManager : MonoBehaviour
 
     public void InitializeHealthBarAlly()
     {
+        float maxEXP = Mathf.Pow(4 * activeCouCou.coucouLevel, 2) / 5;
+
         allyNameText.text = activeCouCou.coucouName;
         allyHealthBar.GetComponent<Image>().fillAmount = activeCouCou.currentHealth / (float)activeCouCou.maxHealth;
+        battleSystem.experienceBar.fillAmount = activeCouCou.coucouEXP / maxEXP;
         allyHealthText.text = activeCouCou.currentHealth + "/" + activeCouCou.maxHealth;
         allyLevelText.text = activeCouCou.coucouLevel.ToString();
-        allyElementSprite.sprite = coucouFinder.GetElementSprite(activeCouCou.element); 
+        allyElementSprite.sprite = coucouFinder.GetElementSprite(activeCouCou.element);
     }
 
     public void InitializeAbilities()

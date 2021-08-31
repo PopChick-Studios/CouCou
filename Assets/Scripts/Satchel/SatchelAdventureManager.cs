@@ -323,6 +323,7 @@ public class SatchelAdventureManager : MonoBehaviour
         selectedSection = 0;
 
         blurCamera.gameObject.SetActive(false);
+        Debug.Log("Blur OFF - On Close Satchel");
         ClearItems();
         ClearCouCou();
         satchel.SetActive(false);
@@ -484,13 +485,16 @@ public class SatchelAdventureManager : MonoBehaviour
 
     public void NavigateSections(float direction)
     {
-        if (direction > 0 && selectedSection == 1 && !inSubmit)
+        if (satchel.activeInHierarchy)
         {
-            OnCouCouSection();
-        }
-        else if (direction < 0 && selectedSection == 2 && !inSubmit)
-        {
-            OnItemSection();
+            if (direction > 0 && selectedSection == 1 && !inSubmit)
+            {
+                OnCouCouSection();
+            }
+            else if (direction < 0 && selectedSection == 2 && !inSubmit)
+            {
+                OnItemSection();
+            }
         }
     }
 
@@ -503,6 +507,7 @@ public class SatchelAdventureManager : MonoBehaviour
         abilitiesDescriptionUI.SetActive(false);
         submitButton.GetComponentInChildren<TextMeshProUGUI>().text = "Use Item";
         blurCamera.gameObject.SetActive(true);
+        Debug.Log("Blur ON - On Items Section");
         satchel.SetActive(true);
         submitButton.interactable = true;
         selectedSection = 1;
@@ -520,6 +525,7 @@ public class SatchelAdventureManager : MonoBehaviour
         }
         submitButton.GetComponentInChildren<TextMeshProUGUI>().text = "Change CouCou Position";
         blurCamera.gameObject.SetActive(true);
+        Debug.Log("Blur ON - On CouCou Section");
         satchel.SetActive(true);
         submitButton.interactable = true;
         selectedSection = 2;
