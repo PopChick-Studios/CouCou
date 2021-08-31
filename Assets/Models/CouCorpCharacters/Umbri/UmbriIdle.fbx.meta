@@ -1,83 +1,11 @@
 fileFormatVersion: 2
-guid: fcf1bbb8f23b14c4c865c29c9d7b4ca1
+guid: f84e857bf2a149148a0564f0faf6df7c
 ModelImporter:
   serializedVersion: 20200
   internalIDToNameTable:
   - first:
-      74: -8515560403302317629
-    second: Cube.001|Cube.001Action
-  - first:
-      74: 4678621163662227772
-    second: Cube.001|Cube.012Action
-  - first:
-      74: -342604377690312271
-    second: Cube.001|PointAction
-  - first:
-      74: -8289317628452616927
-    second: Cube.001|PointAction.003
-  - first:
-      74: -2318108095959758255
-    second: Cube.001|PointAction.004
-  - first:
-      74: -2328544213056023604
-    second: Cube.012|Cube.001Action
-  - first:
-      74: 4795700235541847013
-    second: Cube.012|Cube.012Action
-  - first:
-      74: -7578630379453174749
-    second: Cube.012|PointAction
-  - first:
-      74: -1728958650534999242
-    second: Cube.012|PointAction.003
-  - first:
-      74: 9210972087369688985
-    second: Cube.012|PointAction.004
-  - first:
-      74: 6687709110994629591
-    second: Point|Cube.001Action
-  - first:
-      74: -3506763373044750227
-    second: Point|Cube.012Action
-  - first:
-      74: 1987535635640810422
-    second: Point|PointAction
-  - first:
-      74: -5715898061986195088
-    second: Point|PointAction.003
-  - first:
-      74: -5051534792591780017
-    second: Point|PointAction.004
-  - first:
-      74: -4143406743946145036
-    second: Point.001|Cube.001Action
-  - first:
-      74: 5050395331211777310
-    second: Point.001|Cube.012Action
-  - first:
-      74: 5666493574845161847
-    second: Point.001|PointAction
-  - first:
-      74: 6747359463468678602
-    second: Point.001|PointAction.003
-  - first:
-      74: -4301576647194983009
-    second: Point.001|PointAction.004
-  - first:
-      74: -6230235145602206536
-    second: Point.002|Cube.001Action
-  - first:
-      74: 6081260026166022939
-    second: Point.002|Cube.012Action
-  - first:
-      74: 5095936762368020762
-    second: Point.002|PointAction
-  - first:
-      74: 3783584326807691471
-    second: Point.002|PointAction.003
-  - first:
-      74: 6281907339625310702
-    second: Point.002|PointAction.004
+      74: 4781951162920444690
+    second: Armature|ArmatureAction
   externalObjects: {}
   materials:
     materialImportMode: 2
@@ -109,7 +37,7 @@ ModelImporter:
     isReadable: 0
   meshes:
     lODScreenPercentages: []
-    globalScale: 2
+    globalScale: 0.5
     meshCompression: 0
     addColliders: 0
     useSRGBMaterialColor: 1
@@ -160,7 +88,7 @@ ModelImporter:
     armStretch: 0.05
     legStretch: 0.05
     feetSpacing: 0
-    globalScale: 0.02
+    globalScale: 0.005
     rootMotionBoneName: 
     hasTranslationDoF: 0
     hasExtraRoot: 0
