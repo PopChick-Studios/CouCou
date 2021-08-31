@@ -47,6 +47,7 @@ public class CameraFollow : MonoBehaviour
     {
         if (gameManager.State == GameManager.GameState.Wandering)
         {
+            int inverted = 1;
             Vector2 rotation = (inputRotationMouse * 0.1f) + inputRotationJoystick;
 
             if((Mathf.Abs(inputRotationJoystick.y) < 0.3 && inputRotationJoystick.magnitude != 0) || (Mathf.Abs(inputRotationMouse.y) < 1.4 && inputRotationMouse.magnitude != 0))
@@ -54,9 +55,14 @@ public class CameraFollow : MonoBehaviour
                 rotation.y = 0;
             }
 
+            if (PlayerPrefs.HasKey("InvertY"))
+            {
+                inverted = PlayerPrefs.GetInt("InvertY");
+            }
+
             // Rotate according to the input and the sensitivity
             rotY += rotation.x * inputSensitivity * Time.deltaTime;
-            rotX += rotation.y * inputSensitivity * Time.deltaTime;
+            rotX += inverted * rotation.y * inputSensitivity * Time.deltaTime;
 
             // Clamps the angle so it can't go above or below certain angles
             rotX = Mathf.Clamp(rotX, lowerClampAngle, upperClampAngle);

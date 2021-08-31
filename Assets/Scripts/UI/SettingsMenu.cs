@@ -105,4 +105,16 @@ public class SettingsMenu : MonoBehaviour
         PlayerPrefs.SetInt("resolutionIndex", index);
         Screen.SetResolution(resolution.width, resolution.height, Screen.fullScreen);
     }
+
+    public void InvertY(bool isInverted)
+    {
+        if (isInverted)
+        {
+            PlayerPrefs.SetInt("InvertY", -1);
+        }
+        else
+        {
+            PlayerPrefs.SetInt("InvertY", 1);
+        }
+    }
 }
