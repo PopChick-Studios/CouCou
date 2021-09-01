@@ -27,8 +27,6 @@ public class GameManager : MonoBehaviour
     public void SetState(GameState state)
     {
         gameState = state;
-        Debug.Log("State changed into " + state);
-
     }
 
     // Start is called before the first frame update

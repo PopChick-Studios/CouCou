@@ -14,8 +14,8 @@ public class DialogueManager : MonoBehaviour
     private Queue<string> sentences;
     private string currentSentence = "";
 
-    private bool dialogueOccuring = false;
-    private bool dialogueFinished = true;
+    public bool dialogueOccuring = false;
+    public bool dialogueFinished = true;
 
     private void Awake()
     {
@@ -45,6 +45,10 @@ public class DialogueManager : MonoBehaviour
 
     public void StartDialogue(Dialogue dialogue)
     {
+        if (!dialogueFinished)
+        {
+            return;
+        }
         animatior.SetBool("DialogueIsOpen", true);
         dialogueFinished = false;
         nameText.text = dialogue.name;
@@ -60,7 +64,6 @@ public class DialogueManager : MonoBehaviour
 
     public void CompleteSentence()
     {
-        Debug.Log("Completed Sentence");
         dialogueOccuring = false;
         StopAllCoroutines();
         dialogueText.text = currentSentence;
@@ -73,7 +76,6 @@ public class DialogueManager : MonoBehaviour
             EndDialogue();
             return;
         }
-        Debug.Log("Loading Sentence");
         currentSentence = sentences.Dequeue();
         StartCoroutine(TypeSentence(currentSentence));
     }
@@ -86,7 +88,7 @@ public class DialogueManager : MonoBehaviour
         foreach (char letter in sentence.ToCharArray())
         {
             dialogueText.text += letter;
-            yield return new WaitForSeconds(0.02f);
+            yield return new WaitForSeconds(0.04f);
         }
 
         dialogueOccuring = false;

@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using System.Linq;
 
 public class InventoryManager : MonoBehaviour
@@ -19,7 +18,10 @@ public class InventoryManager : MonoBehaviour
     public List<CouCouDatabase.CouCouVariant> coucouVariantList;
 
     public bool experienceIncrement = false;
+    public bool partyExperienceAdd = false;
     public int experienceGained = 0;
+    public int restOfPartyGains = 0;
+    public List<string> partyLevelUps;
 
     private void Awake()
     {
@@ -28,6 +30,7 @@ public class InventoryManager : MonoBehaviour
         coucouFinder = GameObject.FindGameObjectWithTag("GameManager").GetComponent<CouCouFinder>();
         itemFinder = GameObject.FindGameObjectWithTag("GameManager").GetComponent<ItemFinder>();
 
+        partyLevelUps = new List<string>();
         coucouVariantList = new List<CouCouDatabase.CouCouVariant>();
         itemsDatabaseList = new List<ItemsDatabase.ItemData>();
 
@@ -234,7 +237,7 @@ public class InventoryManager : MonoBehaviour
         Debug.Log("exp to add " + expToAdd);
         experienceIncrement = false;
         StartCoroutine(IncrementallyIncreaseEXP(expToAdd, playerCouCou, enemyLevel, playerLevel));
-
+        
     }
 
     public IEnumerator IncrementallyIncreaseEXP(float desiredEXP, InventoryList.CouCouInventory coucou, int enemyLevel, int playerLevel)
@@ -269,6 +272,26 @@ public class InventoryManager : MonoBehaviour
         {
             experienceGained = Mathf.RoundToInt((enemyLevel - playerLevel + 100) * playerLevel - increase);
             experienceIncrement = true;
+
+            restOfPartyGains = experienceGained / 3;
+
+            for (int i = 0; i < playerInventory.couCouInventory.Count; i++)
+            {
+                if (playerInventory.couCouInventory[i].lineupOrder != 1 && playerInventory.couCouInventory[i].lineupOrder < 5)
+                {
+                    float maxEXPForI = Mathf.Pow(4 * playerInventory.couCouInventory[i].coucouLevel, 2) / 5;
+                    playerInventory.couCouInventory[i].coucouEXP += restOfPartyGains;
+
+                    if (playerInventory.couCouInventory[i].coucouEXP > maxEXPForI)
+                    {
+                        playerInventory.couCouInventory[i].coucouLevel++;
+                        partyLevelUps.Add(playerInventory.couCouInventory[i].coucouName);
+                        playerInventory.couCouInventory[i].coucouEXP -= maxEXPForI;
+                    }
+                }
+            }
+
+            partyExperienceAdd = true;
         }
         yield break;
     }

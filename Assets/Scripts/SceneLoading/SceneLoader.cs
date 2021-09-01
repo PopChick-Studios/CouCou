@@ -25,8 +25,6 @@ public class SceneLoader : MonoBehaviour
     {
         if (previousState != gameManager.State)
         {
-            Debug.Log("State changed into " + gameManager.State + " from " + previousState);
-
             if (gameManager.State == GameManager.GameState.Battling && SceneManager.GetActiveScene().name != "BattleScene")
             {
                 LoadBattleScene();

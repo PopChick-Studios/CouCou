@@ -10,25 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 702f33a5e8631ca4996ad7764405fcba, type: 3}
-  m_Name: EnemyInventory
+  m_Name: Shorter2Inventory
   m_EditorClassIdentifier: 
   preGameDialogue:
-    name: 
+    name: Shorter
     sentences: []
-  starterCouCou:
-    coucouName: 
-    coucouLevel: 0
-    coucouEXP: 0
-    coucouVariant: 0
-    element: 0
-    lineupOrder: -1
-    maxHealth: 0
-    currentAttack: 0
-    currentResistance: 0
-    currentHealth: 0
-    currentMindset: 0
-    currentDetermination: 0
-    isStunned: 0
-    hasCollapsed: 0
   couCouInventory: []
   itemInventory: []

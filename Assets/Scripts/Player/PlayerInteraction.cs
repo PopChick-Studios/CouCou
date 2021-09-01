@@ -10,6 +10,10 @@ public class PlayerInteraction : MonoBehaviour
     private InteractableUI interactableUI;
     private DisplayManager displayManager;
     private InventoryManager inventoryManager;
+    private DialogueTrigger dialogueTrigger;
+    private DialogueManager dialogueManager;
+
+    public Dialogue dialogue;
 
     // Saving game
     public bool OnSaveButton;
@@ -27,10 +31,11 @@ public class PlayerInteraction : MonoBehaviour
         inventoryManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<InventoryManager>();
         gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
         displayManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<DisplayManager>();
+        dialogueManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<DialogueManager>();
 
         playerInputActions = new PlayerInputActions();
 
-        playerInputActions.Wandering.Interact.performed += x => Interact();
+        playerInputActions.Wandering.Interact.started += x => Interact();
         playerInputActions.UI.Cancel.started += x => OnCouCouCancelButton();
         playerInputActions.UI.Submit.started += x => FinishInteraction(interactableUI.interactionType);
         playerInputActions.UI.Cancel.started += x => FinishInteraction(interactableUI.interactionType);
@@ -40,7 +45,7 @@ public class PlayerInteraction : MonoBehaviour
     {
         if (interactableUI != null && gameManager.State == GameManager.GameState.Wandering)
         {
-            if (interactableUI.canInteract)
+            if (interactableUI.canInteract && interactableUI.interactionType != DisplayManager.InteractionTypes.CouCorp)
             {
                 interacting = true;
 
@@ -57,6 +62,16 @@ public class PlayerInteraction : MonoBehaviour
                 {
                     inventoryManager.FoundItem(interactableUI.itemName, interactableUI.itemAmount);
                 }
+            }
+            else if (interactableUI.interactionType == DisplayManager.InteractionTypes.CouCorp && dialogueManager.dialogueFinished)
+            {
+                if (!inventoryManager.HasPlayableCouCou())
+                {
+                    FindObjectOfType<DialogueManager>().StartDialogue(dialogue);
+                    return;
+                }
+                dialogueTrigger = interactableUI.gameObject.GetComponent<DialogueTrigger>();
+                dialogueTrigger.InteractDialogue();
             }
         }
     }

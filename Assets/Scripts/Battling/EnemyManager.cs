@@ -47,8 +47,14 @@ public class EnemyManager : MonoBehaviour
 
     private void Awake()
     {
-        // CHANGE THIS WHEN YOU CREATE THE INTO BATTLE SCRIPT
-        wild = true;
+        if (string.IsNullOrEmpty(enemyInventory.preGameDialogue.name))
+        {
+            wild = true;
+        }
+        else
+        {
+            wild = false;
+        }
 
         attackAbilities = new List<AbilitiesDatabase.AttackAbilityData>();
         utilityAbilities = new List<AbilitiesDatabase.UtilityAbilityData>();
@@ -73,6 +79,7 @@ public class EnemyManager : MonoBehaviour
         }
         foreach (InventoryList.CouCouInventory c in enemyInventory.couCouInventory)
         {
+            Debug.Log("Adding " + c.coucouName + " to enemy party");
             if (c.lineupOrder < 6)
             {
                 enemyCouCouParty.Add(c);
@@ -247,14 +254,29 @@ public class EnemyManager : MonoBehaviour
             }
         }
 
+        bool hasRipe = false;
+        bool hasElemental = false;
+
+        foreach (InventoryList.ItemInventory item in enemyInventory.itemInventory)
+        {
+            if (item.itemName == "Ripe Berry")
+            {
+                hasRipe = true;
+            }
+            else if (item.element == enemyActiveCouCou.element)
+            {
+                hasElemental = true;
+            }
+        }
+
         int rnd = Random.Range(0, enemyActiveCouCou.currentHealth);
 
-        if (rnd < 50 && enemyActiveCouCou.currentHealth < 200)
+        if (rnd < 50 && enemyActiveCouCou.currentHealth < 200 && hasRipe)
         {
             StartCoroutine(UseItem("Ripe Berry"));
             return;
         }
-        else if (rnd < enemyActiveCouCou.currentHealth / 6)
+        else if (rnd < 5 * enemyActiveCouCou.currentHealth / 6 && hasElemental)
         {
             switch (enemyActiveCouCou.element)
             {
@@ -299,6 +321,8 @@ public class EnemyManager : MonoBehaviour
 
     public IEnumerator UseItem(string name)
     {
+        Debug.Log("Enemy used " + name);
+
         foreach (InventoryList.ItemInventory i in enemyInventory.itemInventory)
         {
             if (name == i.itemName)
@@ -465,18 +489,20 @@ public class EnemyManager : MonoBehaviour
 
     public IEnumerator NextCouCou()
     {
-        foreach (InventoryList.CouCouInventory i in enemyCouCouParty)
+        foreach (InventoryList.CouCouInventory coucou in enemyCouCouParty)
         {
-            if (!i.hasCollapsed)
+            if (!coucou.hasCollapsed)
             {
-                dialogueText.text = enemyInventory.inventoryOwner + " swaps " + enemyActiveCouCou.coucouName + " with " + i.coucouName;
-                
+                dialogueText.text = enemyInventory.preGameDialogue.name + " swaps " + enemyActiveCouCou.coucouName + " with " + coucou.coucouName;
+                enemyCouCouParty.Remove(coucou);
                 yield return new WaitForSeconds(2f);
 
                 // Swapping animation
 
-                enemyActiveCouCou = i;
-                battleSystem.enemy = i;
+                enemyActiveCouCou = coucou;
+                enemyCouCouParty.Insert(0, enemyActiveCouCou);
+
+                battleSystem.enemy = coucou;
 
                 InitializeEnemyCouCou();
 

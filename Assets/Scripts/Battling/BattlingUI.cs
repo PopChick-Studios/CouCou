@@ -46,7 +46,6 @@ public class BattlingUI : MonoBehaviour
         pause.SetActive(false);
         prompt.SetActive(false);
         fightButtons.SetActive(false);
-        menu.SetActive(true);
         confirmation.SetActive(false);
 
         lastButtonPressed = menuFirstButton;
@@ -55,7 +54,6 @@ public class BattlingUI : MonoBehaviour
     private void Start()
     {
         satchelManager = GameObject.FindGameObjectWithTag("BattlingUI").GetComponent<SatchelManager>();
-        OnNewRound();
     }
 
     public void OnPause()

@@ -10,6 +10,7 @@ public class BattleSystem : MonoBehaviour
 {
     public GameObject playerModel;
     public GameObject enemyModel;
+    public GameObject menu;
     private GameObject playerInScene;
     private GameObject enemyInScene;
 
@@ -18,6 +19,8 @@ public class BattleSystem : MonoBehaviour
     public bool takeDamageFinished = false;
 
     public TextMeshProUGUI dialogueText;
+    public TextMeshProUGUI speakerText;
+    public TextMeshProUGUI sentenceText;
     public Image allyHealthBar;
     public Image experienceBar;
     public TextMeshProUGUI allyHealthText;
@@ -29,6 +32,7 @@ public class BattleSystem : MonoBehaviour
     public int enemyPsychicAbilitiesUsed = 0;
     public int playerPsychicAbilitiesUsed = 0;
     public bool finishedHealthIncrement;
+    public bool dialogueFinished;
 
     private BattleManager battleManager;
     private EnemyManager enemyManager;
@@ -69,15 +73,53 @@ public class BattleSystem : MonoBehaviour
         gameManager.SetState(GameManager.GameState.Battling);
 
         Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
 
         //playerInScene = Instantiate(playerModel, playerSpawner);
         //enemyInScene = Instantiate(enemyModel, enemySpawner);
+        if (!enemyManager.wild)
+        {
+            dialogueFinished = false;
+            StartCoroutine(StartingDialogue());
+        }
 
         StartCoroutine(PlayerTurn());
     }
 
+    public IEnumerator StartingDialogue()
+    {
+        menu.SetActive(false);
+        dialogueText.gameObject.SetActive(false);
+        speakerText.gameObject.SetActive(true);
+        sentenceText.gameObject.SetActive(true);
+        speakerText.text = enemyManager.enemyInventory.preGameDialogue.name;
+        sentenceText.text = "";
+        yield return new WaitForSeconds(0.7f);
+        foreach (string sentence in enemyManager.enemyInventory.preGameDialogue.sentences)
+        {
+            sentenceText.text = "";
+            foreach (char letter in sentence.ToCharArray())
+            {
+                sentenceText.text += letter;
+                yield return new WaitForSeconds(0.1f);
+            }
+            yield return new WaitForSeconds(2f);
+        }
+
+        dialogueText.gameObject.SetActive(true);
+        speakerText.gameObject.SetActive(false);
+        sentenceText.gameObject.SetActive(false);
+        menu.SetActive(true);
+        dialogueFinished = true;
+    }
+
     public IEnumerator PlayerTurn()
     {
+        if (!enemyManager.wild)
+        {
+            yield return new WaitUntil(() => dialogueFinished);
+        }
+
         state = BattleState.PLAYERTURN;
         battlingUI.OnNewRound();
         dialogueText.text = "Choose an option...";
@@ -671,12 +713,30 @@ public class BattleSystem : MonoBehaviour
 
             yield return new WaitForSeconds(2f);
 
+            for (int i = 0; i < inventoryManager.partyLevelUps.Count; i++)
+            {
+                dialogueText.text = inventoryManager.partyLevelUps[i] + " leveled up!";
+                yield return new WaitForSeconds(2f);
+            }
+
+            if (!enemyManager.wild)
+            {
+                dialogueText.text = "You defeated " + enemyManager.enemyInventory.preGameDialogue.name;
+                yield return new WaitForSeconds(2f);
+            }
+
             gameManager.SetState(GameManager.GameState.Wandering);
         }
         else if (state == BattleState.LOST)
         {
             yield return new WaitForSeconds(2f);
-            
+
+            if (!enemyManager.wild)
+            {
+                dialogueText.text = "You lost to " + enemyManager.enemyInventory.preGameDialogue.name;
+                yield return new WaitForSeconds(2f);
+            }
+
             gameManager.SetState(GameManager.GameState.Wandering);
         }
     }

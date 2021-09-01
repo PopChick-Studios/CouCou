@@ -12,6 +12,7 @@ public class DisplayManager : MonoBehaviour
     private FindWildCouCou findWildCouCou;
     private SatchelAdventureManager satchelAdventureManager;
     private PlayerInteraction playerInteraction;
+    private IntoFight intoFight;
 
     [Header("Blur Camera")]
     public GameObject blurCamera;
@@ -34,6 +35,7 @@ public class DisplayManager : MonoBehaviour
     [SerializeField] private GameObject coucouUI;
     [SerializeField] private TextMeshProUGUI coucouUIText;
 
+
     [Header("Buttons")]
     [SerializeField] private Button coucouUIYes;
     [SerializeField] private Button continueButton;
@@ -46,14 +48,17 @@ public class DisplayManager : MonoBehaviour
         Collect,
         Letter,
         Save,
-        CouCou
+        CouCou,
+        CouCorp
     }
 
     // Inputs
     PlayerInputActions playerInputActions;
 
+
     private void Awake()
     {
+        intoFight = GetComponent<IntoFight>();
         findWildCouCou = GetComponent<FindWildCouCou>();
         gameManager = GetComponent<GameManager>();
         satchelAdventureManager = GameObject.FindGameObjectWithTag("AdventureUI").GetComponent<SatchelAdventureManager>();
@@ -88,7 +93,6 @@ public class DisplayManager : MonoBehaviour
             coucouCamera.SetActive(false);
             confirmation.SetActive(false);
             blurCamera.SetActive(true);
-            Debug.Log("Blur ON");
 
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
@@ -111,7 +115,6 @@ public class DisplayManager : MonoBehaviour
         gameManager.SetState(GameManager.GameState.Wandering);
         Time.timeScale = 1;
         blurCamera.SetActive(false);
-        Debug.Log("Blur OFF");
         options.SetActive(false);
         HUD.SetActive(true);
         interaction.SetActive(false);
@@ -193,9 +196,15 @@ public class DisplayManager : MonoBehaviour
                 letterUI.SetActive(false);
                 collectUI.SetActive(false);
                 coucouUI.SetActive(true);
-
                 coucouUIText.text = "Do you want to choose " + interactingWith.itemName + "?";
                 coucouUIYes.Select();
+                break;
+
+            case InteractionTypes.CouCorp:
+                saveUI.SetActive(false);
+                letterUI.SetActive(false);
+                collectUI.SetActive(false);
+                coucouUI.SetActive(false);
                 break;
 
             default:
@@ -207,7 +216,13 @@ public class DisplayManager : MonoBehaviour
     public void OnChooseCouCou()
     {
         Time.timeScale = 1;
-        findWildCouCou.ChooseWildCouCouStarter(coucouInteractingName, 15);
+        findWildCouCou.ChooseWildCouCou(coucouInteractingName, 15);
+    }
+
+    public void OnFightingCouCorp(InteractableUI coucorp)
+    {
+        Time.timeScale = 1;
+        intoFight.GoIntoFight(coucorp.itemName, coucorp.itemAmount);
     }
 
     #region - Enable/Disable -

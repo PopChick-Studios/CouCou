@@ -149,8 +149,25 @@ public class BattleManager : MonoBehaviour
             case ItemsDatabase.ItemAttribute.Capsule:
                 if (enemyManager.wild)
                 {
-                    dialogueText.text = inventory.inventoryOwner + " throws out a " + itemBeingUsed.itemName;
-                    usedCapsule = true;
+                    bool ownsWildCouCou = false;
+                    for (int i = 0; i < inventory.couCouInventory.Count; i++)
+                    {
+                        if (battleSystem.enemy.coucouName == inventory.couCouInventory[i].coucouName)
+                        {
+                            ownsWildCouCou = true;
+                            break;
+                        }
+                    }
+                    if (ownsWildCouCou)
+                    {
+                        dialogueText.text = "You already own this CouCou";
+                        incorrectItemUse = true;
+                    }
+                    else
+                    {
+                        dialogueText.text = inventory.preGameDialogue.name + " throws out a " + itemBeingUsed.itemName;
+                        usedCapsule = true;
+                    }
                 }
                 else
                 {
@@ -299,11 +316,17 @@ public class BattleManager : MonoBehaviour
             yield return new WaitForSeconds(1f);
             gameManager.SetState(GameManager.GameState.Wandering);
         }
-        else
+        else if (enemyManager.wild)
         {
             dialogueText.text = "The " + battleSystem.enemy.coucouName + " won't let you escape so easily";
             yield return new WaitForSeconds(2f);
             battleSystem.EnemyTurn();
+        }
+        else
+        {
+            dialogueText.text = "You cannot run away against " + enemyManager.enemyInventory.preGameDialogue.name;
+            yield return new WaitForSeconds(2f);
+            StartCoroutine(battleSystem.PlayerTurn());
         }
     }
 }

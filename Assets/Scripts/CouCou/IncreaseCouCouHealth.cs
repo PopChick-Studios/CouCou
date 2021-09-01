@@ -11,13 +11,13 @@ public class IncreaseCouCouHealth : MonoBehaviour
     private void Awake()
     {
         gameManager = gameObject.GetComponent<GameManager>();
+        StartCoroutine(IncreaseHealth());
     }
 
     public IEnumerator IncreaseHealth()
     {
         while (gameManager.State == GameManager.GameState.Wandering)
         {
-            Debug.Log("Increasing Health");
             foreach (InventoryList.CouCouInventory coucou in playerInventory.couCouInventory)
             {
                 coucou.currentHealth = Mathf.Min(coucou.currentHealth + (3 * coucou.maxHealth / 100), coucou.maxHealth);
