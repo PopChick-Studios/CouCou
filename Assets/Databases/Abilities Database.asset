@@ -157,9 +157,9 @@ MonoBehaviour:
   utilityAbilities:
   - abilityName: Strengthen
     uniqueIdentifier: 100
-    description: Increases your resistance by 15%
+    description: Increases your resistance by 50%
     coucouElement: 0
-    resistanceMultiplier: 1.15
+    resistanceMultiplier: 1.5
     selfMindset: 0
     enemyMindset: 0
     selfDetermination: 0
@@ -168,10 +168,10 @@ MonoBehaviour:
     canStun: 0
   - abilityName: Meditate
     uniqueIdentifier: 101
-    description: Clear your mind of distactions and increase your Mindset by 15
+    description: Clear your mind of distactions and increase your Mindset by 20
     coucouElement: 0
     resistanceMultiplier: 1
-    selfMindset: 15
+    selfMindset: 20
     enemyMindset: 0
     selfDetermination: 0
     enemyDetermination: 0

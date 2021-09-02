@@ -49,7 +49,7 @@ public class PlayerInteraction : MonoBehaviour
             {
                 interacting = true;
 
-                displayManager.OnInteraction(interactableUI.interactionType, interactableUI);
+                displayManager.OnInteraction(interactableUI.interactionType, interactableUI.itemName, interactableUI.itemAmount);
                 // animator.SetTrigger("interactPickUp");
 
                 // Pause the game

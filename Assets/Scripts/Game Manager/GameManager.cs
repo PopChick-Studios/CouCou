@@ -17,6 +17,7 @@ public class GameManager : MonoBehaviour
         TitleScreen,
         Wandering,
         Paused,
+        Fishing,
         Interacting,
         Dialogue,
         Battling
@@ -34,6 +35,15 @@ public class GameManager : MonoBehaviour
     {
         increaseCouCouHealth = gameObject.GetComponent<IncreaseCouCouHealth>();
         displayManager = gameObject.GetComponent<DisplayManager>();
+
+        if (!PlayerPrefs.HasKey("currentCapsules"))
+        {
+            PlayerPrefs.SetInt("currentCapsules", 0);
+        }
+        if (!PlayerPrefs.HasKey("maxCapsules"))
+        {
+            PlayerPrefs.SetInt("maxCapsules", 0);
+        }
     }
 
     // Update is called once per frame

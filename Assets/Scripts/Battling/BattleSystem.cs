@@ -82,7 +82,8 @@ public class BattleSystem : MonoBehaviour
             dialogueFinished = false;
             StartCoroutine(StartingDialogue());
         }
-
+        speakerText.gameObject.SetActive(false);
+        sentenceText.gameObject.SetActive(false);
         StartCoroutine(PlayerTurn());
     }
 
@@ -340,8 +341,16 @@ public class BattleSystem : MonoBehaviour
             }
             if (button.utilityAbility.canStun)
             {
-                dialogueText.text = player.coucouName + " has stunned " + enemy.coucouName;
-                enemy.isStunned = true;
+                int rnd = Random.Range(0, 101 - enemy.currentMindset);
+                if (rnd < 30)
+                {
+                    dialogueText.text = player.coucouName + " has stunned " + enemy.coucouName;
+                    enemy.isStunned = true;
+                }
+                else
+                {
+                    dialogueText.text = enemy.coucouName + "'s mental is too strong to be stunned";
+                }
                 yield return new WaitForSeconds(waitAfterAbility);
             }
             if (button.utilityAbility.resistanceMultiplier != 1)

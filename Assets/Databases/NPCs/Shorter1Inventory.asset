@@ -32,10 +32,10 @@ MonoBehaviour:
     isStunned: 0
     hasCollapsed: 0
   couCouInventory:
-  - coucouName: Bonzie
+  - coucouName: Parelly
     coucouLevel: 15
     coucouEXP: 0
-    coucouVariant: 1
+    coucouVariant: 2
     element: 2
     lineupOrder: 2
     maxHealth: 0

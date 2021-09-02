@@ -82,7 +82,7 @@ public class DisplayManager : MonoBehaviour
         {
             satchelAdventureManager.GoBack();
         }
-        else if (!playerInteraction.interacting)
+        else if (!playerInteraction.interacting && gameManager.State != GameManager.GameState.Fishing)
         {
             Time.timeScale = 0;
             options.SetActive(false);
@@ -96,7 +96,6 @@ public class DisplayManager : MonoBehaviour
 
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
-
             gameManager.SetState(GameManager.GameState.Paused);
 
             continueButton.Select();
@@ -151,11 +150,11 @@ public class DisplayManager : MonoBehaviour
         pause.SetActive(false);
     }
 
-    public void OnInteraction(InteractionTypes type, InteractableUI interactingWith)
+    public void OnInteraction(InteractionTypes type, string name, int amount)
     {
-        if (interactingWith.itemName != "")
+        if (string.IsNullOrEmpty(name))
         {
-            coucouInteractingName = interactingWith.itemName;
+            coucouInteractingName = name;
         }
 
         HUD.SetActive(false);
@@ -174,7 +173,7 @@ public class DisplayManager : MonoBehaviour
                 saveUI.SetActive(false);
                 coucouUI.SetActive(false);
 
-                collectText.text = interactingWith.itemName + " x" + interactingWith.itemAmount;
+                collectText.text = name + " x" + amount;
                 break;
 
             case InteractionTypes.Letter:
@@ -196,7 +195,7 @@ public class DisplayManager : MonoBehaviour
                 letterUI.SetActive(false);
                 collectUI.SetActive(false);
                 coucouUI.SetActive(true);
-                coucouUIText.text = "Do you want to choose " + interactingWith.itemName + "?";
+                coucouUIText.text = "Do you want to choose " + name + "?";
                 coucouUIYes.Select();
                 break;
 

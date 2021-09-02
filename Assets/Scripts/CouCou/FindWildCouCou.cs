@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class FindWildCouCou : MonoBehaviour
@@ -17,6 +18,18 @@ public class FindWildCouCou : MonoBehaviour
         inventoryManager = GetComponent<InventoryManager>();
         coucouFinder = GetComponent<CouCouFinder>();
         gameManager = GetComponent<GameManager>();
+    }
+
+    public int FindAverageLevel()
+    {
+        List<int> levels = new List<int>();
+        foreach (InventoryList.CouCouInventory coucou in playerInventory.couCouInventory)
+        {
+            levels.Add(coucou.coucouLevel);
+        }
+
+        int average = Mathf.RoundToInt((float)Queryable.Average(levels.AsQueryable()));
+        return average;
     }
 
     public void ChooseWildCouCou(string coucouName, int level)
@@ -46,6 +59,29 @@ public class FindWildCouCou : MonoBehaviour
             lineupOrder = 0,
             coucouVariant = possibleEnemies[randomCouCou].coucouVariant,
             element = elementList[randomElement]
+        };
+        enemyInventory.couCouInventory.Add(newEnemyCouCou);
+
+        WildCouCouFound();
+    }
+
+    public void WildCouCouAttack(CouCouDatabase.Element element)
+    {
+        enemyInventory.preGameDialogue = new Dialogue();
+        enemyInventory.couCouInventory.Clear();
+        enemyInventory.itemInventory.Clear();
+
+        List<CouCouDatabase.CouCouData> possibleEnemies = coucouFinder.GetElementalCouCou(element);
+        int randomCouCou = Random.Range(0, possibleEnemies.Count);
+        int randomLevelIncrease = Random.Range(-3, 3);
+
+        InventoryList.CouCouInventory newEnemyCouCou = new InventoryList.CouCouInventory()
+        {
+            coucouName = possibleEnemies[randomCouCou].coucouName,
+            coucouLevel = FindAverageLevel() + randomLevelIncrease,
+            lineupOrder = 0,
+            coucouVariant = possibleEnemies[randomCouCou].coucouVariant,
+            element = element
         };
         enemyInventory.couCouInventory.Add(newEnemyCouCou);
 

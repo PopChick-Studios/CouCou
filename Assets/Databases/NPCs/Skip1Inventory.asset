@@ -14,6 +14,36 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   preGameDialogue:
     name: Skip
-    sentences: []
-  couCouInventory: []
+    sentences:
+    - You might've beat Shorter, but you won't beat me!
+  starterCouCou:
+    coucouName: 
+    coucouLevel: 0
+    coucouEXP: 0
+    coucouVariant: 0
+    element: 0
+    lineupOrder: -1
+    maxHealth: 0
+    currentAttack: 0
+    currentResistance: 0
+    currentHealth: 0
+    currentMindset: 0
+    currentDetermination: 0
+    isStunned: 0
+    hasCollapsed: 0
+  couCouInventory:
+  - coucouName: Flamem
+    coucouLevel: 0
+    coucouEXP: 0
+    coucouVariant: 5
+    element: 1
+    lineupOrder: 2
+    maxHealth: 0
+    currentAttack: 0
+    currentResistance: 0
+    currentHealth: 0
+    currentMindset: 0
+    currentDetermination: 0
+    isStunned: 0
+    hasCollapsed: 0
   itemInventory: []

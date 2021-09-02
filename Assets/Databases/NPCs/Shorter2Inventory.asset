@@ -14,6 +14,62 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   preGameDialogue:
     name: Shorter
-    sentences: []
-  couCouInventory: []
-  itemInventory: []
+    sentences:
+    - 
+  starterCouCou:
+    coucouName: 
+    coucouLevel: 0
+    coucouEXP: 0
+    coucouVariant: 0
+    element: 0
+    lineupOrder: -1
+    maxHealth: 0
+    currentAttack: 0
+    currentResistance: 0
+    currentHealth: 0
+    currentMindset: 0
+    currentDetermination: 0
+    isStunned: 0
+    hasCollapsed: 0
+  couCouInventory:
+  - coucouName: Parelly
+    coucouLevel: 15
+    coucouEXP: 0
+    coucouVariant: 2
+    element: 2
+    lineupOrder: 2
+    maxHealth: 0
+    currentAttack: 0
+    currentResistance: 0
+    currentHealth: 0
+    currentMindset: 0
+    currentDetermination: 0
+    isStunned: 0
+    hasCollapsed: 0
+  - coucouName: Grimmly
+    coucouLevel: 25
+    coucouEXP: 0
+    coucouVariant: 4
+    element: 5
+    lineupOrder: 0
+    maxHealth: 0
+    currentAttack: 0
+    currentResistance: 0
+    currentHealth: 0
+    currentMindset: 0
+    currentDetermination: 0
+    isStunned: 0
+    hasCollapsed: 0
+  itemInventory:
+  - itemName: Ripe Berry
+    itemAmount: 3
+    itemAttribute: 0
+    element: 0
+  - itemName: Dark Berry
+    itemAmount: 3
+    itemAttribute: 3
+    element: 5
+  - itemName: Fruitful Berry
+    itemAmount: 3
+    itemAttribute: 3
+    element: 2

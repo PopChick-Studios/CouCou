@@ -14,6 +14,62 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   preGameDialogue:
     name: Skip
-    sentences: []
-  couCouInventory: []
-  itemInventory: []
+    sentences:
+    - 
+  starterCouCou:
+    coucouName: 
+    coucouLevel: 0
+    coucouEXP: 0
+    coucouVariant: 0
+    element: 0
+    lineupOrder: -1
+    maxHealth: 0
+    currentAttack: 0
+    currentResistance: 0
+    currentHealth: 0
+    currentMindset: 0
+    currentDetermination: 0
+    isStunned: 0
+    hasCollapsed: 0
+  couCouInventory:
+  - coucouName: Flamem
+    coucouLevel: 0
+    coucouEXP: 0
+    coucouVariant: 5
+    element: 1
+    lineupOrder: 2
+    maxHealth: 0
+    currentAttack: 0
+    currentResistance: 0
+    currentHealth: 0
+    currentMindset: 0
+    currentDetermination: 0
+    isStunned: 0
+    hasCollapsed: 0
+  - coucouName: Slighte
+    coucouLevel: 0
+    coucouEXP: 0
+    coucouVariant: 1
+    element: 4
+    lineupOrder: 3
+    maxHealth: 0
+    currentAttack: 0
+    currentResistance: 0
+    currentHealth: 0
+    currentMindset: 0
+    currentDetermination: 0
+    isStunned: 0
+    hasCollapsed: 0
+  itemInventory:
+  - itemName: Ripe Berry
+    itemAmount: 3
+    itemAttribute: 0
+    element: 0
+  - itemName: Burnt Berry
+    itemAmount: 3
+    itemAttribute: 3
+    element: 1
+  - itemName: Bright Berry
+    itemAmount: 3
+    itemAttribute: 3
+    element: 4
