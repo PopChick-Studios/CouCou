@@ -73,6 +73,14 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""QuestBook"",
+                    ""type"": ""Button"",
+                    ""id"": ""d9f8b781-9c99-4800-958c-18b77023bedf"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -227,6 +235,28 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                     ""processors"": """",
                     ""groups"": ""KeyboardAndMouse"",
                     ""action"": ""CrouchFinish"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""104770df-6376-480d-b5d1-e88d857f3871"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardAndMouse"",
+                    ""action"": ""QuestBook"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""15ff3abf-938c-4f4f-849a-5739ba80fe5e"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Controller"",
+                    ""action"": ""QuestBook"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -918,6 +948,7 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
         m_Wandering_CameraMouse = m_Wandering.FindAction("CameraMouse", throwIfNotFound: true);
         m_Wandering_CameraJoystick = m_Wandering.FindAction("CameraJoystick", throwIfNotFound: true);
         m_Wandering_Pause = m_Wandering.FindAction("Pause", throwIfNotFound: true);
+        m_Wandering_QuestBook = m_Wandering.FindAction("QuestBook", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -987,6 +1018,7 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
     private readonly InputAction m_Wandering_CameraMouse;
     private readonly InputAction m_Wandering_CameraJoystick;
     private readonly InputAction m_Wandering_Pause;
+    private readonly InputAction m_Wandering_QuestBook;
     public struct WanderingActions
     {
         private @PlayerInputActions m_Wrapper;
@@ -998,6 +1030,7 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
         public InputAction @CameraMouse => m_Wrapper.m_Wandering_CameraMouse;
         public InputAction @CameraJoystick => m_Wrapper.m_Wandering_CameraJoystick;
         public InputAction @Pause => m_Wrapper.m_Wandering_Pause;
+        public InputAction @QuestBook => m_Wrapper.m_Wandering_QuestBook;
         public InputActionMap Get() { return m_Wrapper.m_Wandering; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1028,6 +1061,9 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                 @Pause.started -= m_Wrapper.m_WanderingActionsCallbackInterface.OnPause;
                 @Pause.performed -= m_Wrapper.m_WanderingActionsCallbackInterface.OnPause;
                 @Pause.canceled -= m_Wrapper.m_WanderingActionsCallbackInterface.OnPause;
+                @QuestBook.started -= m_Wrapper.m_WanderingActionsCallbackInterface.OnQuestBook;
+                @QuestBook.performed -= m_Wrapper.m_WanderingActionsCallbackInterface.OnQuestBook;
+                @QuestBook.canceled -= m_Wrapper.m_WanderingActionsCallbackInterface.OnQuestBook;
             }
             m_Wrapper.m_WanderingActionsCallbackInterface = instance;
             if (instance != null)
@@ -1053,6 +1089,9 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                 @Pause.started += instance.OnPause;
                 @Pause.performed += instance.OnPause;
                 @Pause.canceled += instance.OnPause;
+                @QuestBook.started += instance.OnQuestBook;
+                @QuestBook.performed += instance.OnQuestBook;
+                @QuestBook.canceled += instance.OnQuestBook;
             }
         }
     }
@@ -1197,6 +1236,7 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
         void OnCameraMouse(InputAction.CallbackContext context);
         void OnCameraJoystick(InputAction.CallbackContext context);
         void OnPause(InputAction.CallbackContext context);
+        void OnQuestBook(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

@@ -60,6 +60,14 @@
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
+                },
+                {
+                    "name": "QuestBook",
+                    "type": "Button",
+                    "id": "d9f8b781-9c99-4800-958c-18b77023bedf",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -214,6 +222,28 @@
                     "processors": "",
                     "groups": "KeyboardAndMouse",
                     "action": "CrouchFinish",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "104770df-6376-480d-b5d1-e88d857f3871",
+                    "path": "<Keyboard>/q",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardAndMouse",
+                    "action": "QuestBook",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "15ff3abf-938c-4f4f-849a-5739ba80fe5e",
+                    "path": "<Gamepad>/buttonNorth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Controller",
+                    "action": "QuestBook",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
