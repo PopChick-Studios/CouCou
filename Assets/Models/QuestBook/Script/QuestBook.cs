@@ -30,6 +30,20 @@ public class QuestBook : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        /*
+        if(input.getbuttondown("q"))
+        {
+            if(gameObject.enabled == true)
+            {
+            gameObject.SetActive(false);
+            }
+            else
+            {
+            gameObject.SetActive(true);
+            }
+        }
+        */
+
         // Makes sure the page number won't go below 0.
         if(PageOpen <= -1)
         {
