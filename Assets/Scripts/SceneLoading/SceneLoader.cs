@@ -46,10 +46,6 @@ public class SceneLoader : MonoBehaviour
         {
             StartCoroutine(LoadScene("BattleScene"));
         }
-        else
-        {
-
-        }
     }
 
     public void LoadAdventureScene()

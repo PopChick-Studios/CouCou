@@ -157,6 +157,7 @@ public class BattleSystem : MonoBehaviour
         float waitAfterAbility = 2.5f;
 
         Debug.Log("Ability UID: " + abilityUID);
+        Debug.Log("Damage: " + damage);
 
         if (abilityUID > 99)
         {
@@ -198,10 +199,10 @@ public class BattleSystem : MonoBehaviour
             }
             if (utilityAbility.resistanceMultiplier != 1)
             {
-                float resistance = enemy.currentResistance * utilityAbility.resistanceMultiplier * enemyManager.resistanceDiminishingReturns;
+                float resistance = Mathf.Max(enemy.currentResistance, enemy.currentResistance * utilityAbility.resistanceMultiplier * enemyManager.resistanceDiminishingReturns);
                 dialogueText.text = enemy.coucouName + " gained " + ((Mathf.Round(resistance * 100f) / 100f) - enemy.currentResistance) + " resistance";
                 enemy.currentResistance = resistance;
-                enemyManager.resistanceDiminishingReturns *= 0.91f;
+                enemyManager.resistanceDiminishingReturns *= 0.9f;
                 yield return new WaitForSeconds(waitAfterAbility);
             }
             if (utilityAbility.selfMindset > 0)
@@ -265,7 +266,7 @@ public class BattleSystem : MonoBehaviour
             }
             if (rnd <= enemy.currentMindset)
             {
-                damageModifier += enemy.currentDetermination / 100f;
+                damageModifier *= 1 + (enemy.currentDetermination / 100f);
                 crit = true;
             }
 
@@ -355,10 +356,10 @@ public class BattleSystem : MonoBehaviour
             }
             if (button.utilityAbility.resistanceMultiplier != 1)
             {
-                float resistance = player.currentResistance * button.utilityAbility.resistanceMultiplier * battleManager.resistanceDiminishingReturns;
+                float resistance = Mathf.Max(player.currentResistance, player.currentResistance * button.utilityAbility.resistanceMultiplier * battleManager.resistanceDiminishingReturns);
                 dialogueText.text = player.coucouName + " gained " + (Mathf.Round((resistance - player.currentResistance) * 100f) / 100f) + " resistance";
                 player.currentResistance = resistance;
-                battleManager.resistanceDiminishingReturns *= 0.91f;
+                battleManager.resistanceDiminishingReturns *= 0.9f;
                 yield return new WaitForSeconds(waitAfterAbility);
             }
             if (button.utilityAbility.selfMindset > 0)
@@ -422,7 +423,7 @@ public class BattleSystem : MonoBehaviour
             }
             if (rnd <= player.currentMindset)
             {
-                damageModifier += player.currentDetermination / 100f;
+                damageModifier *= 1 + (player.currentDetermination / 100f);
                 crit = true;
             }
             isDead = TakeDamage(player.currentAttack * button.attackAbility.damageMultiplier * damageModifier / enemy.currentResistance);

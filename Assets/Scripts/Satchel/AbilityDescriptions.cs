@@ -114,7 +114,5 @@ public class AbilityDescriptions : MonoBehaviour
                 Debug.LogError("Couldn't get requested ability with uid of " + abilityUID);
             }
         }
-
-        Debug.Log("Finished Displaying Abilities");
     }
 }

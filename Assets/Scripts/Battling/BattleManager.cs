@@ -192,17 +192,17 @@ public class BattleManager : MonoBehaviour
                 break;
 
             case ItemsDatabase.ItemAttribute.Resistance:
-                float resistance = activeCouCou.currentResistance * 1.15f * resistanceDiminishingReturns;
+                float resistance = Mathf.Max(activeCouCou.currentResistance, activeCouCou.currentResistance * 1.15f * resistanceDiminishingReturns);
                 dialogueText.text = activeCouCou.coucouName + " gained " + (Mathf.Round(resistance - activeCouCou.currentResistance * 100) / 100) + " resistance";
-                activeCouCou.currentResistance = (int)resistance;
-                resistanceDiminishingReturns *= 0.87f;
+                activeCouCou.currentResistance = resistance;
+                resistanceDiminishingReturns *= 0.9f;
                 break;
 
             case ItemsDatabase.ItemAttribute.Attack:
-                float attack = activeCouCou.currentAttack * 1.15f * attackDiminishingReturns;
-                dialogueText.text = activeCouCou.coucouName + " gained " + (Mathf.Round(attack - activeCouCou.currentAttack * 100) / 100) + " attack";
-                activeCouCou.currentAttack = (int)attack;
-                attackDiminishingReturns *= 0.87f;
+                int attack = Mathf.Max(activeCouCou.currentAttack, Mathf.RoundToInt(activeCouCou.currentAttack * 1.15f * attackDiminishingReturns));
+                dialogueText.text = activeCouCou.coucouName + " gained " + (attack - activeCouCou.currentAttack) + " attack";
+                activeCouCou.currentAttack = attack;
+                attackDiminishingReturns *= 0.9f;
                 break;
 
             case ItemsDatabase.ItemAttribute.ElementalMindset:

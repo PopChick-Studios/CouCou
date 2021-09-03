@@ -30,5 +30,19 @@ MonoBehaviour:
     currentDetermination: 0
     isStunned: 0
     hasCollapsed: 0
-  couCouInventory: []
+  couCouInventory:
+  - coucouName: Bonzie
+    coucouLevel: 15
+    coucouEXP: 0
+    coucouVariant: 1
+    element: 2
+    lineupOrder: 1
+    maxHealth: 272
+    currentAttack: 198
+    currentResistance: 5.342271
+    currentHealth: 272
+    currentMindset: 30
+    currentDetermination: 50
+    isStunned: 0
+    hasCollapsed: 0
   itemInventory: []

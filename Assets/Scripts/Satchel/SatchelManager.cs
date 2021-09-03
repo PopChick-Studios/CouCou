@@ -250,7 +250,7 @@ public class SatchelManager : MonoBehaviour
             descriptionText.text = coucouSlotList[0].itemDescription;
             healthPointsText.text = "HP: " + inventoryList.couCouInventory[coucouSlotList[0].uniqueIdentifier].currentHealth + "/" + inventoryList.couCouInventory[coucouSlotList[0].uniqueIdentifier].maxHealth;
             attackText.text = "Atk: " + inventoryList.couCouInventory[coucouSlotList[0].uniqueIdentifier].currentAttack;
-            resistanceText.text = "Res: " + Mathf.Round(inventoryList.couCouInventory[coucouSlotList[0].uniqueIdentifier].currentResistance * 10000) / 10000;
+            resistanceText.text = "Res: " + Mathf.Round(inventoryList.couCouInventory[coucouSlotList[0].uniqueIdentifier].currentResistance * 1000) / 1000;
             determinationText.text = "Det: " + inventoryList.couCouInventory[coucouSlotList[0].uniqueIdentifier].currentDetermination;
             mindsetText.text = "Mind: " + inventoryList.couCouInventory[coucouSlotList[0].uniqueIdentifier].currentMindset;
             itemSprite.sprite = coucouFinder.GetElementSprite(inventoryList.couCouInventory[coucouSlotList[0].uniqueIdentifier].element);
@@ -311,7 +311,7 @@ public class SatchelManager : MonoBehaviour
         submitButton.Select();
         if (selectedSection == 2)
         {
-            abilityDescriptions.DisplayAbilityDescriptions(coucouFinder.FindCouCou(descriptionName.text));
+            abilityDescriptions.DisplayAbilityDescriptions(coucouFinder.FindCouCou(button.GetComponent<SatchelSlotController>().itemNameText.text));
             abilitiesDescriptionUI.SetActive(true);
         }
     }
@@ -380,7 +380,7 @@ public class SatchelManager : MonoBehaviour
             descriptionText.text = satchelSlot.itemDescription;
             healthPointsText.text = "HP: " + inventoryList.couCouInventory[satchelSlot.uniqueIdentifier].currentHealth + "/" + inventoryList.couCouInventory[satchelSlot.uniqueIdentifier].maxHealth;
             attackText.text = "Atk: " + inventoryList.couCouInventory[satchelSlot.uniqueIdentifier].currentAttack;
-            resistanceText.text = "Res: " + Mathf.Round(inventoryList.couCouInventory[satchelSlot.uniqueIdentifier].currentResistance * 10000) / 10000;
+            resistanceText.text = "Res: " + Mathf.Round(inventoryList.couCouInventory[satchelSlot.uniqueIdentifier].currentResistance * 1000) / 1000;
             determinationText.text = "Det: " + inventoryList.couCouInventory[satchelSlot.uniqueIdentifier].currentDetermination;
             mindsetText.text = "Mind: " + inventoryList.couCouInventory[satchelSlot.uniqueIdentifier].currentMindset;
             scrollRectEnsureVisible.CenterOnItem(currentSelectedButton.GetComponent<RectTransform>());

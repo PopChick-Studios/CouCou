@@ -1814,7 +1814,6 @@ Transform:
   - {fileID: 1537553916}
   - {fileID: 95267189}
   - {fileID: 1369739117}
-  - {fileID: 1942993251}
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3707,6 +3706,8 @@ MonoBehaviour:
   inSubmit: 0
   inPrompt: 0
   changingCouCou: 0
+  isStuck: 0
+  itemChosen: 
   currentSelectedButton: {fileID: 0}
   itemsSection: {fileID: 1472170263}
   coucouSection: {fileID: 949808461}
@@ -8883,8 +8884,8 @@ MonoBehaviour:
     name: 
     sentences:
     - You don't have any available CouCou to fight with
-  OnSaveButton: 0
-  OnCancelSaveButton: 0
+  onSaveButton: 0
+  onCancelSaveButton: 0
   interacting: 0
 --- !u!114 &780636616
 MonoBehaviour:
@@ -8901,6 +8902,7 @@ MonoBehaviour:
   playerCanFish: 0
   playerHasRod: 1
   playerInventory: {fileID: 11400000, guid: 44ee79a05ad81ff4d8652799fc7d7f56, type: 2}
+  collisionPoint: {x: 0, y: 0, z: 0}
   collisionNormal: {x: 0, y: 0, z: 0}
 --- !u!1 &790233988
 GameObject:
@@ -13240,6 +13242,7 @@ MonoBehaviour:
   player: {fileID: 780636610}
   displayPromptPrefab: {fileID: 9139513021848114330, guid: 7fbd568044f9f8f43aa5f8f177649b98, type: 3}
   isFishing: 0
+  caughtSomething: 0
   pullUp: 0
   countdownFinished: 0
   timer: 0
@@ -19698,50 +19701,6 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!1 &1942993250
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1942993251}
-  - component: {fileID: 1942993252}
-  m_Layer: 0
-  m_Name: Cube (4)
-  m_TagString: Boundary
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1942993251
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1942993250}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.53, y: 0.4, z: 4.74}
-  m_LocalScale: {x: 20, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 90008979}
-  m_RootOrder: 6
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &1942993252
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1942993250}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1945002585
 GameObject:
   m_ObjectHideFlags: 0
@@ -21662,18 +21621,6 @@ MonoBehaviour:
       - m_Target: {fileID: 1153232379}
         m_TargetAssemblyTypeName: DisplayManager, Assembly-CSharp
         m_MethodName: OpenSatchel
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 339469832}
-        m_TargetAssemblyTypeName: SatchelAdventureManager, Assembly-CSharp
-        m_MethodName: OnItemSection
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

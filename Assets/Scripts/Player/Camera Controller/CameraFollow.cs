@@ -73,7 +73,7 @@ public class CameraFollow : MonoBehaviour
 
     void LateUpdate()
     {
-        if (gameManager.State == GameManager.GameState.Wandering)
+        if (gameManager.State == GameManager.GameState.Wandering || gameManager.State == GameManager.GameState.Fishing)
         {
             CameraUpdater();
         }

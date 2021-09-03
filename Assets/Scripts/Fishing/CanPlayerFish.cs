@@ -57,7 +57,7 @@ public class CanPlayerFish : MonoBehaviour
             boundary = hit.gameObject;
             collisionPoint = hit.point;
             collisionNormal = hit.normal;
-            fishing.InstantiateUI(hit.point);
+            fishing.InstantiateUI();
         }
     }
 }

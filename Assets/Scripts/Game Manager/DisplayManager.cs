@@ -78,7 +78,7 @@ public class DisplayManager : MonoBehaviour
 
     public void PauseMenu()
     {
-        if (satchelAdventureManager.inSubmit || satchelAdventureManager.changingCouCou)
+        if (satchelAdventureManager.inSubmit || satchelAdventureManager.changingCouCou || satchelAdventureManager.isStuck)
         {
             satchelAdventureManager.GoBack();
         }
@@ -118,6 +118,8 @@ public class DisplayManager : MonoBehaviour
         HUD.SetActive(true);
         interaction.SetActive(false);
         satchel.SetActive(false);
+        satchelAdventureManager.ClearItems();
+        satchelAdventureManager.ClearCouCou();
         pause.SetActive(false);
         coucouCamera.SetActive(false);
 
@@ -129,7 +131,7 @@ public class DisplayManager : MonoBehaviour
     {
         satchel.SetActive(true);
         satchelAdventureManager.ClearCouCou();
-        satchelAdventureManager.DisplayItems();
+        satchelAdventureManager.OnItemSection();
         interaction.SetActive(false);
         pause.SetActive(false);
         coucouCamera.SetActive(true);
@@ -152,7 +154,7 @@ public class DisplayManager : MonoBehaviour
 
     public void OnInteraction(InteractionTypes type, string name, int amount)
     {
-        if (string.IsNullOrEmpty(name))
+        if (!string.IsNullOrEmpty(name))
         {
             coucouInteractingName = name;
         }

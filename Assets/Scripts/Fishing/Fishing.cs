@@ -5,6 +5,7 @@ using UnityEngine;
 public class Fishing : MonoBehaviour
 {
     private CanPlayerFish canPlayerFish;
+    private PlayerInteraction playerInteraction;
     private FindWildCouCou findWildCouCou;
     private DisplayManager displayManager;
     private InventoryManager inventoryManager;
@@ -17,6 +18,7 @@ public class Fishing : MonoBehaviour
     private LookAtPlayer displayPrompt;
 
     public bool isFishing;
+    public bool caughtSomething;
     public bool pullUp;
     public bool countdownFinished;
     public float timer = 0;
@@ -30,6 +32,7 @@ public class Fishing : MonoBehaviour
         displayManager = GetComponent<DisplayManager>();
         inventoryManager = GetComponent<InventoryManager>();
         canPlayerFish = GameObject.FindGameObjectWithTag("Player").GetComponent<CanPlayerFish>();
+        playerInteraction = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerInteraction>();
         cameraPosition = GameObject.FindGameObjectWithTag("MainCamera").transform;
 
         playerInputActions = new PlayerInputActions();
@@ -40,7 +43,6 @@ public class Fishing : MonoBehaviour
 
     public void ValidateFishRequest()
     {
-        Debug.Log("validating");
         if (canPlayerFish.playerCanFish && !isFishing && gameManager.State == GameManager.GameState.Wandering)
         {
             playerInputActions.Wandering.Disable();
@@ -84,19 +86,17 @@ public class Fishing : MonoBehaviour
 
         player.transform.SetPositionAndRotation(new Vector3(displayPrompt.transform.position.x + xNormalValue, player.transform.position.y, displayPrompt.transform.position.z + zNormalValue), Quaternion.LookRotation(new Vector3(-xNormalValue, 0, -zNormalValue)));
 
-        Debug.Log("Vector3: " + new Vector3(xNormalValue, player.transform.position.y, zNormalValue));
-
         DestroyUI();
 
         // animate fishing
 
         yield return new WaitForSeconds(2f);
 
-        bool caughtSomething = false;
+        caughtSomething = false;
 
         while (!caughtSomething)
         {
-            float rnd = Random.Range(5, 61);
+            float rnd = Random.Range(3, 26);
             Debug.Log("waiting: " + rnd);
             yield return new WaitForSeconds(rnd);
 
@@ -118,7 +118,7 @@ public class Fishing : MonoBehaviour
 
         Debug.Log("Successful Catch!");
 
-        if (randomCatch < 2)
+        if (randomCatch < 2 && inventoryManager.HasPlayableCouCou())
         {
             CouCouCatch();
         }
@@ -126,6 +126,9 @@ public class Fishing : MonoBehaviour
         {
             ItemCatch();
         }
+
+        playerInputActions.Fishing.Disable();
+        playerInputActions.Wandering.Enable();
 
         isFishing = false;
     }
@@ -156,6 +159,7 @@ public class Fishing : MonoBehaviour
             StopAllCoroutines();
             isFishing = false;
             gameManager.SetState(GameManager.GameState.Wandering);
+            InstantiateUI();
         }
     }
 
@@ -163,28 +167,35 @@ public class Fishing : MonoBehaviour
     {
         Debug.Log("Catching CouCou");
         findWildCouCou.WildCouCouAttack(CouCouDatabase.Element.Aqua);
+        caughtSomething = false;
     }
 
     public void ItemCatch()
     {
         int randomItem = Random.Range(0, 4);
+        string item = "";
+        int amount = 0;
         if (randomItem < 3 || PlayerPrefs.GetInt("currentCapsules") == PlayerPrefs.GetInt("maxCapsules"))
         {
-            displayManager.OnInteraction(DisplayManager.InteractionTypes.Collect, "Frozen Berry", 1);
-            inventoryManager.FoundItem("Frozen Berry", 1);
-            Debug.Log("Frozen Berry obtain");
+            item = "Frozen Berry";
+            amount = 1;
         }
         else if (randomItem > 3 && PlayerPrefs.GetInt("currentCapsules") != PlayerPrefs.GetInt("maxCapsules"))
         {
-            displayManager.OnInteraction(DisplayManager.InteractionTypes.Collect, "CouCou Capsule", 1);
-            inventoryManager.FoundItem("CouCou Capsule", 1);
-            Debug.Log("CouCou Capsule obtain");
+            item = "CouCou Capsule";
+            amount = 1;
         }
+
+        //gameManager.SetState(GameManager.GameState.Wandering);
+        displayManager.OnInteraction(DisplayManager.InteractionTypes.Collect, item, amount);
+        inventoryManager.FoundItem(item, amount);
+        Debug.Log(item + " obtain");
+        playerInteraction.ChangeToFishingInput();
     }
 
-    public void InstantiateUI(Vector3 collisionPoint)
+    public void InstantiateUI()
     {
-        Vector3 spawnPosition = new Vector3(collisionPoint.x, collisionPoint.y + 3, collisionPoint.z);
+        Vector3 spawnPosition = new Vector3(canPlayerFish.collisionPoint.x, canPlayerFish.collisionPoint.y + 3, canPlayerFish.collisionPoint.z);
         displayPrompt = Instantiate(displayPromptPrefab, spawnPosition, Quaternion.identity);
         StartCoroutine(displayPrompt.StartLooking(cameraPosition));
     }

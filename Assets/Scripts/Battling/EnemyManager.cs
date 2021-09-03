@@ -424,7 +424,7 @@ public class EnemyManager : MonoBehaviour
 
     public int PerformEnemyAbility(float[] probability)
     {
-        float rnd = Random.Range(1, 101); // Get a random number between 0 and 100
+        float rnd = Random.Range(0, 101); // Get a random number between 0 and 100
 
         if (!MakeCumulativeProbability(probability))
             return -1;
@@ -478,7 +478,15 @@ public class EnemyManager : MonoBehaviour
         {
             dialogueText.text = enemyActiveCouCou.coucouName + " surprised " + battleSystem.player.coucouName + " with " + attackAbilities[previousAbilityIndex].abilityName;
             battleSystem.state = BattleState.ENEMYTURN;
-            StartCoroutine(battleSystem.EnemyAbility(enemyActiveCouCou.currentAttack * attackAbilities[0].damageMultiplier, attackAbilities[0].uniqueIdentifier, true));
+
+            for (int i = 0; i < attackAbilities.Count; i++)
+            {
+                if (attackAbilities[i] != null)
+                {
+                    StartCoroutine(battleSystem.EnemyAbility(enemyActiveCouCou.currentAttack * attackAbilities[previousAbilityIndex].damageMultiplier, attackAbilities[previousAbilityIndex].uniqueIdentifier, false));
+                    break;
+                }
+            }
             return true;
         }
         else

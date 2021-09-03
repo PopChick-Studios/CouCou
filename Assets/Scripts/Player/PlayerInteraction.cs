@@ -1,8 +1,6 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class PlayerInteraction : MonoBehaviour
 {
@@ -12,12 +10,13 @@ public class PlayerInteraction : MonoBehaviour
     private InventoryManager inventoryManager;
     private DialogueTrigger dialogueTrigger;
     private DialogueManager dialogueManager;
+    private Fishing fishing;
 
     public Dialogue dialogue;
 
     // Saving game
-    public bool OnSaveButton;
-    public bool OnCancelSaveButton;
+    public bool onSaveButton;
+    public bool onCancelSaveButton;
     public bool interacting;
 
     // Animator
@@ -32,13 +31,16 @@ public class PlayerInteraction : MonoBehaviour
         gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
         displayManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<DisplayManager>();
         dialogueManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<DialogueManager>();
+        fishing = GameObject.FindGameObjectWithTag("GameManager").GetComponent<Fishing>();
 
         playerInputActions = new PlayerInputActions();
 
         playerInputActions.Wandering.Interact.started += x => Interact();
         playerInputActions.UI.Cancel.started += x => OnCouCouCancelButton();
         playerInputActions.UI.Submit.started += x => FinishInteraction(interactableUI.interactionType);
+        playerInputActions.Fishing.Interact.started += x => FinishFishingInteraction();
         playerInputActions.UI.Cancel.started += x => FinishInteraction(interactableUI.interactionType);
+        playerInputActions.Fishing.Cancel.started += x => FinishFishingInteraction();
     }
 
     private void Interact()
@@ -87,25 +89,47 @@ public class PlayerInteraction : MonoBehaviour
             playerInputActions.UI.Disable();
             playerInputActions.Wandering.Enable();
 
-            interactableUI.gameObject.SetActive(false);
+            if (interactableUI.gameObject != null)
+            {
+                interactableUI.gameObject.SetActive(false);
+            }
         }
-        else if (OnSaveButton == true)
+        else if (onSaveButton)
         {
             interactableUI.gameObject.SetActive(false);
             playerInputActions.UI.Disable();
             playerInputActions.Wandering.Enable();
 
-            OnSaveButton = false;
+            onSaveButton = false;
         }
-        else if (OnCancelSaveButton == true)
+        else if (onCancelSaveButton)
         {
             playerInputActions.UI.Disable();
             playerInputActions.Wandering.Enable();
 
-            OnCancelSaveButton = false;
+            onCancelSaveButton = false;
         }
 
         interacting = false;
+    }
+
+    public void ChangeToFishingInput()
+    {
+        playerInputActions.Wandering.Disable();
+        playerInputActions.UI.Disable();
+        playerInputActions.Fishing.Enable();
+    }
+
+    public void FinishFishingInteraction()
+    {
+        if (fishing.caughtSomething)
+        {
+            displayManager.HeadsUpDisplay();
+            gameManager.SetState(GameManager.GameState.Wandering);
+            playerInputActions.Wandering.Enable();
+            fishing.caughtSomething = false;
+            fishing.InstantiateUI();
+        }
     }
 
     public void OnSaveGame()
@@ -113,16 +137,17 @@ public class PlayerInteraction : MonoBehaviour
         displayManager.HeadsUpDisplay();
         gameManager.SetState(GameManager.GameState.Wandering);
 
-        OnSaveButton = true;
+        onSaveButton = true;
 
         FinishInteraction(interactableUI.interactionType);
     }
+
     public void OnCancelSave()
     {
         displayManager.HeadsUpDisplay();
         gameManager.SetState(GameManager.GameState.Wandering);
 
-        OnCancelSaveButton = true;
+        onCancelSaveButton = true;
 
         FinishInteraction(interactableUI.interactionType);
     }
@@ -139,7 +164,9 @@ public class PlayerInteraction : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Interactable"))
+        {
             interactableUI = other.GetComponent<InteractableUI>();
+        }
     }
 
     #region - Enable/Disable -
@@ -151,7 +178,7 @@ public class PlayerInteraction : MonoBehaviour
 
     private void OnDisable()
     {
-        playerInputActions.Wandering.Disable();
+        playerInputActions.Disable();
     }
 
     #endregion
