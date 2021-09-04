@@ -33,6 +33,7 @@ public class BattleSystem : MonoBehaviour
     public int playerPsychicAbilitiesUsed = 0;
     public bool finishedHealthIncrement;
     public bool dialogueFinished;
+    public bool grantingExperience = false;
 
     private BattleManager battleManager;
     private EnemyManager enemyManager;
@@ -454,6 +455,8 @@ public class BattleSystem : MonoBehaviour
         {
             dialogueText.text = enemy.coucouName + " has collapsed";
             enemy.hasCollapsed = true;
+            StartCoroutine(GrantExperience(false));
+            yield return new WaitWhile(() => grantingExperience);
             StartCoroutine(enemyManager.NextCouCou());
         }
         else if (enemy.isStunned)
@@ -482,8 +485,8 @@ public class BattleSystem : MonoBehaviour
 
         if (state == BattleState.PLAYERTURN)
         {
-            StartCoroutine(IncrementallyRemoveHP(enemy.currentHealth - Mathf.RoundToInt(damage)));
             int afterDamageHealth = enemy.currentHealth - Mathf.RoundToInt(damage);
+            StartCoroutine(IncrementallyRemoveHP(afterDamageHealth));
             if (afterDamageHealth <= 0)
             {
                 return true;
@@ -525,7 +528,7 @@ public class BattleSystem : MonoBehaviour
                 increase = Mathf.MoveTowards(increase, desiredHP, Time.deltaTime * 250f);
                 enemyHealthBar.fillAmount = increase / enemy.maxHealth;
                 enemyHealthText.text = (int)Mathf.Max(increase, 0) + "/" + enemy.maxHealth;
-                enemy.currentHealth = (int)increase;
+                enemy.currentHealth = (int)Mathf.Max(increase, 0);
                 yield return new WaitForSeconds(0.04f);
             }
             takeDamageFinished = true;
@@ -544,7 +547,7 @@ public class BattleSystem : MonoBehaviour
                 increase = Mathf.MoveTowards(increase, desiredHP, Time.deltaTime * 250f);
                 allyHealthBar.fillAmount = increase / player.maxHealth;
                 allyHealthText.text = (int)Mathf.Max(increase, 0) + "/" + player.maxHealth;
-                player.currentHealth = (int)increase;
+                player.currentHealth = (int)Mathf.Max(increase, 0);
                 yield return new WaitForSeconds(0.04f);
             }
             takeDamageFinished = true;
@@ -709,25 +712,31 @@ public class BattleSystem : MonoBehaviour
         yield break;
     }
 
+    public IEnumerator GrantExperience(bool caught)
+    {
+        grantingExperience = true;
+        inventoryManager.AddExperience(player, player.coucouLevel, enemy.coucouLevel, caught);
+
+        yield return new WaitUntil(() => inventoryManager.experienceIncrement);
+
+        dialogueText.text = player.coucouName + " gained " + inventoryManager.experienceGained + " experience";
+
+        yield return new WaitForSeconds(2f);
+
+        for (int i = 0; i < inventoryManager.partyLevelUps.Count; i++)
+        {
+            dialogueText.text = inventoryManager.partyLevelUps[i] + " leveled up!";
+            // level up sound
+            yield return new WaitForSeconds(2f);
+        }
+        grantingExperience = false;
+    }
+
     public IEnumerator EndBattle()
     {
         if (state == BattleState.WON)
         {
             yield return new WaitForSeconds(2f);
-
-            inventoryManager.AddExperience(player, player.coucouLevel, enemy.coucouLevel);
-
-            yield return new WaitUntil(() => inventoryManager.experienceIncrement);
-
-            dialogueText.text = player.coucouName + " gained " + inventoryManager.experienceGained + " experience";
-
-            yield return new WaitForSeconds(2f);
-
-            for (int i = 0; i < inventoryManager.partyLevelUps.Count; i++)
-            {
-                dialogueText.text = inventoryManager.partyLevelUps[i] + " leveled up!";
-                yield return new WaitForSeconds(2f);
-            }
 
             if (!enemyManager.wild)
             {

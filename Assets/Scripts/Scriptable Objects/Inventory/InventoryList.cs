@@ -10,7 +10,7 @@ public class InventoryList : ScriptableObject
     {
         public string coucouName;
         public int coucouLevel;
-        public float coucouEXP;
+        public float currentEXP;
         public int coucouVariant;
         public CouCouDatabase.Element element;
 

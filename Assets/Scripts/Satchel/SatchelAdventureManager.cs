@@ -15,35 +15,43 @@ public class SatchelAdventureManager : MonoBehaviour
     private AbilityDescriptions abilityDescriptions;
     private DisplayManager displayManager;
 
-    public InventoryList playerInventory;
+    [Header("Experience")]
+    public Animator levelUpAnimator;
+    public Image experienceBar;
+    public Image experienceBarCover;
+    public TextMeshProUGUI experienceLeft;
 
+    [Header("Inventory")]
+    public InventoryList playerInventory;
     public CouCouDatabase coucouDatabase;
     private List<CouCouDatabase.CouCouData> coucouDataList;
+    public SatchelSlotControllerAdventure satchelSlotPrefab;
 
+    [Header("Interactable UI")]
     public GameObject satchelList;
     public GameObject abilitiesDescriptionUI;
     public GameObject abilitiesElementChart;
     public GameObject elementChart;
 
+    [Header("Set Up")]
     public ScrollRect scrollRect;
     public Camera blurCamera;
     public GameObject satchel;
-    public GameObject dialogueBox;
-    public GameObject dialogueText;
     public GameObject changeCouCouOrder;
     public GameObject inputCouCouChange;
+    public int previousSelectedButtonUID = 0;
     private int inputNumber;
-
-    public InventoryList inventoryList;
-    public SatchelSlotControllerAdventure satchelSlotPrefab;
 
     private PlayerInputActions playerInputActions;
 
+    [Header("Satchel State")]
     public bool inSubmit;
     public bool inPrompt;
     public bool changingCouCou = false;
     public bool isStuck;
-    public string itemChosen;
+    private bool experienceIncrement;
+    private bool finishedHealthIncrement;
+    public ItemsDatabase.ItemData itemChosen;
     private Button buttonClicked;
     public GameObject currentSelectedButton;
 
@@ -122,12 +130,12 @@ public class SatchelAdventureManager : MonoBehaviour
 
         //scrollRect.enabled = false;
 
-        for (int i = 0; i < inventoryList.itemInventory.Count; i++)
+        for (int i = 0; i < playerInventory.itemInventory.Count; i++)
         {
             SatchelSlotControllerAdventure newSatchelSlot = Instantiate(satchelSlotPrefab, satchelList.transform);
-            ItemsDatabase.ItemData item = itemFinder.FindItem(inventoryList.itemInventory[i].itemName);
+            ItemsDatabase.ItemData item = itemFinder.FindItem(playerInventory.itemInventory[i].itemName);
             newSatchelSlot.itemNameText.text = item.itemName;
-            newSatchelSlot.itemAmountText.text = inventoryList.itemInventory[i].itemAmount.ToString();
+            newSatchelSlot.itemAmountText.text = playerInventory.itemInventory[i].itemAmount.ToString();
             newSatchelSlot.itemDescription = item.itemDescription;
             newSatchelSlot.uniqueIdentifier = i;
             newSatchelSlot.GetComponent<Button>().onClick.AddListener(delegate { GoToSubmit(newSatchelSlot.GetComponent<Button>()); });
@@ -159,7 +167,7 @@ public class SatchelAdventureManager : MonoBehaviour
             itemSlotList[0].GetComponent<Button>().Select();
             descriptionName.text = itemSlotList[0].itemNameText.text;
             descriptionText.text = itemSlotList[0].itemDescription;
-            itemSprite.sprite = coucouFinder.GetElementSprite(inventoryList.itemInventory[itemSlotList[0].uniqueIdentifier].element);
+            itemSprite.sprite = coucouFinder.GetElementSprite(playerInventory.itemInventory[itemSlotList[0].uniqueIdentifier].element);
             if (itemSprite.sprite == null)
             {
                 itemSprite.enabled = false;
@@ -186,21 +194,21 @@ public class SatchelAdventureManager : MonoBehaviour
         inventoryManager.SortCouCouInventory();
         scrollRect.enabled = true;
 
-        for (int i = 0; i < inventoryList.couCouInventory.Count; i++)
+        for (int i = 0; i < playerInventory.couCouInventory.Count; i++)
         {
             SatchelSlotControllerAdventure newSatchelSlot = Instantiate(satchelSlotPrefab, satchelList.transform);
-            CouCouDatabase.CouCouData newCouCou = coucouFinder.FindCouCou(inventoryList.couCouInventory[i].coucouName);
-            newSatchelSlot.itemNameText.text = inventoryList.couCouInventory[i].coucouName;
-            newSatchelSlot.itemAmountText.text = "Lv: " + inventoryList.couCouInventory[i].coucouLevel.ToString();
+            CouCouDatabase.CouCouData newCouCou = coucouFinder.FindCouCou(playerInventory.couCouInventory[i].coucouName);
+            newSatchelSlot.itemNameText.text = playerInventory.couCouInventory[i].coucouName;
+            newSatchelSlot.itemAmountText.text = "Lv: " + playerInventory.couCouInventory[i].coucouLevel.ToString();
             newSatchelSlot.uniqueIdentifier = i;
-            if (inventoryList.couCouInventory[i].hasCollapsed)
+            if (playerInventory.couCouInventory[i].hasCollapsed)
             {
                 newSatchelSlot.coucouOrder.text = "Collapsed";
                 newSatchelSlot.coucouOrder.color = Color.gray;
             }
             else
             {
-                newSatchelSlot.coucouOrder.text = "Position " + inventoryList.couCouInventory[i].lineupOrder;
+                newSatchelSlot.coucouOrder.text = "Position " + playerInventory.couCouInventory[i].lineupOrder;
             }
             newSatchelSlot.GetComponent<Button>().onClick.AddListener(delegate { GoToSubmit(newSatchelSlot.GetComponent<Button>()); });
             newSatchelSlot.itemDescription = newCouCou.coucouDescription;
@@ -228,22 +236,10 @@ public class SatchelAdventureManager : MonoBehaviour
 
         if (coucouSlotList.Count != 0)
         {
-            currentSelectedButton = coucouSlotList[0].gameObject;
-            coucouSlotList[0].GetComponent<Button>().Select();
-            descriptionName.text = coucouSlotList[0].itemNameText.text;
-            descriptionText.text = coucouSlotList[0].itemDescription;
-            healthPointsText.text = "HP: " + inventoryList.couCouInventory[coucouSlotList[0].uniqueIdentifier].currentHealth + "/" + inventoryList.couCouInventory[coucouSlotList[0].uniqueIdentifier].maxHealth;
-            attackText.text = "Atk: " + inventoryList.couCouInventory[coucouSlotList[0].uniqueIdentifier].currentAttack;
-            resistanceText.text = "Res: " + Mathf.Round(inventoryList.couCouInventory[coucouSlotList[0].uniqueIdentifier].currentResistance * 1000) / 1000;
-            determinationText.text = "Det: " + inventoryList.couCouInventory[coucouSlotList[0].uniqueIdentifier].currentDetermination;
-            mindsetText.text = "Mind: " + inventoryList.couCouInventory[coucouSlotList[0].uniqueIdentifier].currentMindset;
-            itemSprite.sprite = coucouFinder.GetElementSprite(inventoryList.couCouInventory[coucouSlotList[0].uniqueIdentifier].element);
-
-            if (isStuck)
-            {
-                Debug.Log("Text changed");
-                submitButton.GetComponentInChildren<TextMeshProUGUI>().text = "Give " + itemChosen;
-            }
+            currentSelectedButton = coucouSlotList[previousSelectedButtonUID].gameObject;
+            coucouSlotList[previousSelectedButtonUID].GetComponent<Button>().Select();
+            UpdateDescription();
+            previousSelectedButtonUID = 0;
         }
         else
         {
@@ -351,15 +347,25 @@ public class SatchelAdventureManager : MonoBehaviour
         SatchelSlotControllerAdventure satchelSlot = currentSelectedButton.GetComponent<SatchelSlotControllerAdventure>();
         if (selectedSection == 1)
         {
+            experienceBarCover.gameObject.SetActive(true);
+            experienceLeft.text = "";
+
             descriptionName.text = satchelSlot.itemNameText.text;
             descriptionText.text = satchelSlot.itemDescription;
-            itemSprite.sprite = coucouFinder.GetElementSprite(inventoryList.itemInventory[satchelSlot.uniqueIdentifier].element);
+            itemSprite.sprite = coucouFinder.GetElementSprite(playerInventory.itemInventory[satchelSlot.uniqueIdentifier].element);
             submitButton.transform.position = defaultPosition;
-
             ItemsDatabase.ItemData item = itemFinder.FindItem(satchelSlot.itemNameText.text);
             if (item.itemAttribute != ItemsDatabase.ItemAttribute.ElementalMindset && item.itemAttribute != ItemsDatabase.ItemAttribute.Experience && item.itemAttribute != ItemsDatabase.ItemAttribute.Health)
             {
                 submitButton.GetComponentInChildren<TextMeshProUGUI>().text = "This item can't be used right now";
+                submitButton.transform.position = new Vector2(defaultPosition.x, defaultPosition.y + 50);
+                submitButton.interactable = false;
+            }
+            else
+            {
+                submitButton.GetComponentInChildren<TextMeshProUGUI>().text = "Use Item";
+                submitButton.transform.position = defaultPosition;
+                submitButton.interactable = true;
             }
 
             if (itemSprite.sprite == null)
@@ -373,17 +379,25 @@ public class SatchelAdventureManager : MonoBehaviour
         }
         else if (selectedSection == 2)
         {
+            InventoryList.CouCouInventory coucou = playerInventory.couCouInventory[satchelSlot.uniqueIdentifier];
+
+            float maxEXP = Mathf.Pow(10 * coucou.coucouLevel, 2) / 4;
+
+            experienceBarCover.gameObject.SetActive(false);
+            experienceLeft.text = "Exp until level up: " + Mathf.RoundToInt(maxEXP - coucou.currentEXP);
+            experienceBar.fillAmount = coucou.currentEXP / maxEXP;
+
             descriptionName.text = satchelSlot.itemNameText.text;
             descriptionText.text = satchelSlot.itemDescription;
-            healthPointsText.text = "HP: " + inventoryList.couCouInventory[satchelSlot.uniqueIdentifier].currentHealth + "/" + inventoryList.couCouInventory[satchelSlot.uniqueIdentifier].maxHealth;
-            attackText.text = "Atk: " + inventoryList.couCouInventory[satchelSlot.uniqueIdentifier].currentAttack;
-            resistanceText.text = "Res: " + Mathf.Round(inventoryList.couCouInventory[satchelSlot.uniqueIdentifier].currentResistance * 1000) / 1000;
-            determinationText.text = "Det: " + inventoryList.couCouInventory[satchelSlot.uniqueIdentifier].currentDetermination;
-            mindsetText.text = "Mind: " + inventoryList.couCouInventory[satchelSlot.uniqueIdentifier].currentMindset;
+            healthPointsText.text = "HP: " + coucou.currentHealth + "/" + coucou.maxHealth;
+            attackText.text = "Atk: " + coucou.currentAttack;
+            resistanceText.text = "Res: " + Mathf.Round(coucou.currentResistance * 1000) / 1000;
+            determinationText.text = "Det: " + coucou.currentDetermination;
+            mindsetText.text = "Mind: " + coucou.currentMindset;
             scrollRectEnsureVisible.CenterOnItem(currentSelectedButton.GetComponent<RectTransform>());
-            itemSprite.sprite = coucouFinder.GetElementSprite(inventoryList.couCouInventory[satchelSlot.uniqueIdentifier].element);
+            itemSprite.sprite = coucouFinder.GetElementSprite(coucou.element);
 
-            if (inventoryList.couCouInventory[satchelSlot.uniqueIdentifier].hasCollapsed && !isStuck)
+            if (playerInventory.couCouInventory[satchelSlot.uniqueIdentifier].hasCollapsed && !isStuck)
             {
                 submitButton.GetComponentInChildren<TextMeshProUGUI>().text = "You can't change the position of a collasped CouCou";
                 submitButton.transform.position = new Vector2(defaultPosition.x, defaultPosition.y + 50);
@@ -391,8 +405,35 @@ public class SatchelAdventureManager : MonoBehaviour
             }
             else if (isStuck)
             {
-                submitButton.GetComponentInChildren<TextMeshProUGUI>().text = "Give " + itemChosen;
+                submitButton.GetComponentInChildren<TextMeshProUGUI>().text = "Give " + itemChosen.itemName;
                 submitButton.transform.position = defaultPosition;
+                switch (itemChosen.itemAttribute)
+                {
+                    case ItemsDatabase.ItemAttribute.Health:
+                        if (coucou.currentHealth == coucou.maxHealth)
+                        {
+                            submitButton.GetComponentInChildren<TextMeshProUGUI>().text = coucou.coucouName + " is already full HP";
+                            submitButton.interactable = false;
+                        }
+                        else
+                        {
+                            healthPointsText.text = "HP: " + coucou.currentHealth + " + " + Mathf.Min(coucou.maxHealth - coucou.currentHealth, Mathf.CeilToInt(coucou.maxHealth * 0.3f)) + "/" + coucou.maxHealth;
+                        }
+                        break;
+                    case ItemsDatabase.ItemAttribute.ElementalMindset:
+                        if (itemChosen.element == coucou.element)
+                        {
+                            experienceLeft.text += " - 3000";
+                        }
+                        else
+                        {
+                            experienceLeft.text += " - 900";
+                        }
+                        break;
+                    case ItemsDatabase.ItemAttribute.Experience:
+                        experienceLeft.text += " - 15000";
+                        break;
+                }
             }
             else
             {
@@ -412,9 +453,9 @@ public class SatchelAdventureManager : MonoBehaviour
         }
         inputNumber = int.Parse(inputCouCouChange.GetComponent<TMP_InputField>().text);
 
-        if (inputNumber > inventoryList.couCouInventory.Count)
+        if (inputNumber > playerInventory.couCouInventory.Count)
         {
-            inputNumber = inventoryList.couCouInventory.Count;
+            inputNumber = playerInventory.couCouInventory.Count;
         }
         else if (inputNumber < 1)
         {
@@ -422,11 +463,11 @@ public class SatchelAdventureManager : MonoBehaviour
         }
 
         inputCouCouChange.GetComponent<TMP_InputField>().text = "";
-        for (int i = 0; i < inventoryList.couCouInventory.Count; i++)
+        for (int i = 0; i < playerInventory.couCouInventory.Count; i++)
         {
-            if (descriptionName.text == inventoryList.couCouInventory[i].coucouName)
+            if (descriptionName.text == playerInventory.couCouInventory[i].coucouName)
             {
-                inventoryManager.MoveCouCou(inventoryList.couCouInventory[i], inputNumber - 1);
+                inventoryManager.MoveCouCou(playerInventory.couCouInventory[i], inputNumber - 1);
                 break;
             }
         }
@@ -441,7 +482,7 @@ public class SatchelAdventureManager : MonoBehaviour
     {
         if (selectedSection == 1)
         {
-            itemChosen = descriptionName.text;
+            itemChosen = itemFinder.FindItem(descriptionName.text);
             OpenCouCouSelect();
         }
         else if (selectedSection == 2 && !isStuck)
@@ -451,13 +492,13 @@ public class SatchelAdventureManager : MonoBehaviour
         }
         else if (isStuck)
         {
-            UseItem(descriptionName.text, itemChosen);
+            StartCoroutine(UseItem(descriptionName.text));
         }
     }
 
-    public void UseItem(string coucouName, string itemName)
+    public IEnumerator UseItem(string coucouName)
     {
-        ItemsDatabase.ItemData item = itemFinder.FindItem(itemName);
+        playerInputActions.Disable();
 
         InventoryList.CouCouInventory coucou = null;
         foreach (InventoryList.CouCouInventory c in playerInventory.couCouInventory)
@@ -473,35 +514,132 @@ public class SatchelAdventureManager : MonoBehaviour
             Debug.LogError("CouCou Not Found");
         }
 
-        switch (item.itemAttribute)
+        switch (itemChosen.itemAttribute)
         {
             case ItemsDatabase.ItemAttribute.Health:
-                coucou.currentHealth += Mathf.RoundToInt(coucou.maxHealth * 0.3f);
+                if (coucou.hasCollapsed)
+                {
+                    inventoryManager.SortCouCouInventory();
+                    coucou.hasCollapsed = false;
+                    coucouSlotList[currentSelectedButton.GetComponent<SatchelSlotControllerAdventure>().uniqueIdentifier].coucouOrder.text = "";
+                }
+                finishedHealthIncrement = false;
+                StartCoroutine(IncrementallyIncreaseHealth(coucou.currentHealth + (coucou.maxHealth * 0.3f), coucou));
+                yield return new WaitUntil(() => finishedHealthIncrement);
                 break;
             case ItemsDatabase.ItemAttribute.ElementalMindset:
-                if (item.element == coucou.element)
+                if (itemChosen.element == coucou.element)
                 {
-                    coucou.coucouEXP += 300;
+                    experienceIncrement = false;
+                    StartCoroutine(IncrementallyIncreaseEXP(coucou.currentEXP + 3000, coucou, 10f));
+                    yield return new WaitUntil(() => experienceIncrement);
                 }
                 else
                 {
-                    coucou.coucouEXP += 50;
+                    experienceIncrement = false;
+                    StartCoroutine(IncrementallyIncreaseEXP(coucou.currentEXP + 900, coucou, 5f));
+                    yield return new WaitUntil(() => experienceIncrement);
                 }
                 break;
             case ItemsDatabase.ItemAttribute.Experience:
-                coucou.coucouEXP += 3000;
+                experienceIncrement = false;
+                StartCoroutine(IncrementallyIncreaseEXP(coucou.currentEXP + 15000, coucou, 20f));
+                yield return new WaitUntil(() => experienceIncrement);
                 break;
         }
-
-        
+        playerInputActions.Enable();
         isStuck = false;
+        inSubmit = false;
         itemsSection.enabled = true;
-        OnItemSection();
-        Debug.Log("Used " + itemName + " on " + coucouName);
-
-
+        abilitiesDescriptionUI.SetActive(false);
+        ClearCouCou();
+        selectedSection = 1000;
+        previousSelectedButtonUID = currentSelectedButton.GetComponent<SatchelSlotControllerAdventure>().uniqueIdentifier;
+        OnCouCouSection();
     }
 
+    public IEnumerator IncrementallyIncreaseEXP(float desiredEXP, InventoryList.CouCouInventory coucou, float speed)
+    {
+        float increase = coucou.currentEXP;
+        float maxEXP = Mathf.Pow(10 * coucou.coucouLevel, 2) / 4;
+        Debug.Log(desiredEXP);
+        while (increase != desiredEXP && coucou.currentEXP < maxEXP)
+        {
+            increase = Mathf.MoveTowards(increase, desiredEXP, Time.unscaledDeltaTime * 400f * speed);
+            experienceLeft.text = "Exp until level up: " + Mathf.Max(0, Mathf.RoundToInt(maxEXP - increase));
+            experienceBar.fillAmount = increase / maxEXP;
+            coucou.currentEXP = increase;
+            yield return new WaitForSecondsRealtime(0.005f);
+        }
+
+        levelUpAnimator.SetBool("hasLeveledUp", false);
+
+        if (coucou.currentEXP >= maxEXP)
+        {
+            Debug.Log("level up");
+            coucou.coucouLevel++;
+            experienceBar.fillAmount = 0;
+            coucou.currentEXP = 0;
+            levelUpAnimator.SetBool("hasLeveledUp", true);
+            yield return new WaitForSecondsRealtime(1.5f);
+            coucouSlotList[currentSelectedButton.GetComponent<SatchelSlotControllerAdventure>().uniqueIdentifier].itemAmountText.text = coucou.coucouLevel.ToString();
+            UpdateCouCouStats(coucou);
+
+            if (coucou.currentEXP < desiredEXP)
+            {
+                StartCoroutine(IncrementallyIncreaseEXP(desiredEXP - increase, coucou, speed));
+            }
+        }
+        else
+        {
+            experienceIncrement = true;
+        }
+        yield break;
+    }
+
+    public IEnumerator IncrementallyIncreaseHealth(float desiredHealth, InventoryList.CouCouInventory coucou)
+    {
+        float increase = coucou.currentHealth;
+
+        while (increase != desiredHealth && coucou.currentHealth < coucou.maxHealth)
+        {
+            increase = Mathf.MoveTowards(increase, desiredHealth, Time.unscaledDeltaTime * 400f);
+            healthPointsText.text = "HP: " + (int)increase + "/" + coucou.maxHealth;
+            coucou.currentHealth = (int)increase;
+            yield return new WaitForSecondsRealtime(0.05f);
+        }
+        finishedHealthIncrement = true;
+        if (coucou.currentHealth >= coucou.maxHealth)
+        {
+            coucou.currentHealth = coucou.maxHealth;
+        }
+        yield break;
+    }
+
+    public void UpdateCouCouStats(InventoryList.CouCouInventory coucou)
+    {
+        int level;
+        int bonusStatsPer5;
+        int bonusStatsPer1;
+
+        for (int i = 0; i < coucouDatabase.coucouVariant.Count; i++)
+        {
+            level = coucou.coucouLevel;
+            bonusStatsPer5 = Mathf.FloorToInt(level / 5);
+            bonusStatsPer1 = level - bonusStatsPer5 - 1;
+
+            if (coucou.coucouVariant == coucouDatabase.coucouVariant[i].variant)
+            {
+                int previousMaxHealth = coucou.maxHealth;
+                coucou.maxHealth = coucouDatabase.coucouVariant[i].hp + (coucouDatabase.coucouVariant[i].bonusHP * bonusStatsPer1) + (coucouDatabase.coucouVariant[i].bonusHPPer5 * bonusStatsPer5);
+                coucou.currentAttack = coucouDatabase.coucouVariant[i].attack + (coucouDatabase.coucouVariant[i].bonusAttack * bonusStatsPer1) + (coucouDatabase.coucouVariant[i].bonusAttackPer5 * bonusStatsPer5);
+                coucou.currentResistance = coucouDatabase.coucouVariant[i].resistance + (coucouDatabase.coucouVariant[i].bonusResistance * bonusStatsPer1) + (coucouDatabase.coucouVariant[i].bonusResistancePer5 * bonusStatsPer5);
+                coucou.currentMindset = coucouDatabase.coucouVariant[i].mindset;
+                coucou.currentDetermination = coucouDatabase.coucouVariant[i].determination;
+                coucou.currentHealth = Mathf.Min(coucou.maxHealth, coucou.currentHealth + (coucou.maxHealth - previousMaxHealth));
+            }
+        }
+    }
 
     #region - Section Changes -
 
@@ -536,6 +674,7 @@ public class SatchelAdventureManager : MonoBehaviour
             coucouSlotList[0].GetComponent<Button>().Select();
             return;
         }
+        experienceBarCover.gameObject.SetActive(true);
         abilitiesDescriptionUI.SetActive(false);
         submitButton.GetComponentInChildren<TextMeshProUGUI>().text = "Use Item";
         blurCamera.gameObject.SetActive(true);
@@ -555,6 +694,7 @@ public class SatchelAdventureManager : MonoBehaviour
             coucouSlotList[0].GetComponent<Button>().Select();
             return;
         }
+        experienceBarCover.gameObject.SetActive(false);
         submitButton.GetComponentInChildren<TextMeshProUGUI>().text = "Change CouCou Position";
         blurCamera.gameObject.SetActive(true);
         satchel.SetActive(true);

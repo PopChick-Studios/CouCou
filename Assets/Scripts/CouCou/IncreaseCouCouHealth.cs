@@ -16,14 +16,16 @@ public class IncreaseCouCouHealth : MonoBehaviour
 
     public IEnumerator IncreaseHealth()
     {
-        while (gameManager.State == GameManager.GameState.Wandering)
+        while (gameManager.State == GameManager.GameState.Wandering || gameManager.State == GameManager.GameState.Fishing)
         {
             foreach (InventoryList.CouCouInventory coucou in playerInventory.couCouInventory)
             {
-                coucou.currentHealth = Mathf.Min(coucou.currentHealth + (3 * coucou.maxHealth / 100), coucou.maxHealth);
+                if (!coucou.hasCollapsed && coucou.currentHealth != coucou.maxHealth)
+                {
+                    coucou.currentHealth = Mathf.Min(coucou.currentHealth + (3 * coucou.maxHealth / 100), coucou.maxHealth);
+                }
             }
-
-            yield return new WaitForSeconds(10f);
+            yield return new WaitForSeconds(20f);
         }
     }
 }

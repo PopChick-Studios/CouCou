@@ -231,39 +231,43 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
-    public void AddExperience(InventoryList.CouCouInventory playerCouCou, int playerLevel, int enemyLevel)
+    public void AddExperience(InventoryList.CouCouInventory playerCouCou, int playerLevel, int enemyLevel, bool caught)
     {
         float expToAdd = Mathf.Max(enemyLevel - playerLevel, 1) * 100 * playerLevel;
+        if (caught)
+        {
+            expToAdd *= 1.5f;
+        }
         Debug.Log("exp to add " + expToAdd);
         experienceIncrement = false;
         StartCoroutine(IncrementallyIncreaseEXP(expToAdd, playerCouCou, enemyLevel, playerLevel));
-        
     }
 
     public IEnumerator IncrementallyIncreaseEXP(float desiredEXP, InventoryList.CouCouInventory coucou, int enemyLevel, int playerLevel)
     {
-        float increase = coucou.coucouEXP;
-        float maxEXP = Mathf.Pow(4 * coucou.coucouLevel, 2) / 5;
+        float increase = coucou.currentEXP;
+        float maxEXP = Mathf.Pow(10 * coucou.coucouLevel, 2) / 4;
 
-        while (increase != desiredEXP && coucou.coucouEXP < maxEXP)
+        while (increase != desiredEXP && coucou.currentEXP < maxEXP)
         {
             increase = Mathf.MoveTowards(increase, desiredEXP, Time.deltaTime * 1000f);
             battleSystem.experienceBar.fillAmount = increase / maxEXP;
-            coucou.coucouEXP = increase;
+            coucou.currentEXP = increase;
             yield return new WaitForSeconds(0.02f);
         }
-        if (coucou.coucouEXP >= maxEXP)
+        if (coucou.currentEXP >= maxEXP)
         {
             Debug.Log("level up");
             coucou.coucouLevel++;
             battleSystem.experienceBar.fillAmount = 0;
-            coucou.coucouEXP = 0;
+            coucou.currentEXP = 0;
 
             battleSystem.dialogueText.text = coucou.coucouName + " leveled up!";
             battleManager.allyLevelText.text = coucou.coucouLevel.ToString();
+            battleManager.UpdateCouCouStats();
             yield return new WaitForSeconds(2f);
 
-            if (coucou.coucouEXP < desiredEXP)
+            if (coucou.currentEXP < desiredEXP)
             {
                 StartCoroutine(IncrementallyIncreaseEXP(desiredEXP - increase, coucou, enemyLevel, playerLevel));
             }
@@ -271,7 +275,6 @@ public class InventoryManager : MonoBehaviour
         else
         {
             experienceGained = Mathf.RoundToInt((enemyLevel - playerLevel + 100) * playerLevel - increase);
-            experienceIncrement = true;
 
             restOfPartyGains = experienceGained / 3;
 
@@ -279,20 +282,21 @@ public class InventoryManager : MonoBehaviour
             {
                 if (playerInventory.couCouInventory[i].lineupOrder != 1 && playerInventory.couCouInventory[i].lineupOrder < 5)
                 {
-                    float maxEXPForI = Mathf.Pow(4 * playerInventory.couCouInventory[i].coucouLevel, 2) / 5;
-                    playerInventory.couCouInventory[i].coucouEXP += restOfPartyGains;
+                    float maxEXPForI = Mathf.Pow(10 * playerInventory.couCouInventory[i].coucouLevel, 2) / 4;
+                    playerInventory.couCouInventory[i].currentEXP += restOfPartyGains;
 
-                    if (playerInventory.couCouInventory[i].coucouEXP > maxEXPForI)
+                    if (playerInventory.couCouInventory[i].currentEXP > maxEXPForI)
                     {
                         playerInventory.couCouInventory[i].coucouLevel++;
                         partyLevelUps.Add(playerInventory.couCouInventory[i].coucouName);
-                        playerInventory.couCouInventory[i].coucouEXP -= maxEXPForI;
+                        playerInventory.couCouInventory[i].currentEXP -= maxEXPForI;
                     }
                 }
             }
 
             partyExperienceAdd = true;
         }
+        experienceIncrement = true;
         yield break;
     }
 }

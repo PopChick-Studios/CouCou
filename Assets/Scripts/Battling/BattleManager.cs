@@ -112,11 +112,11 @@ public class BattleManager : MonoBehaviour
 
     public void InitializeHealthBarAlly()
     {
-        float maxEXP = Mathf.Pow(4 * activeCouCou.coucouLevel, 2) / 5;
+        float maxEXP = Mathf.Pow(10 * activeCouCou.coucouLevel, 2) / 4;
 
         allyNameText.text = activeCouCou.coucouName;
         allyHealthBar.GetComponent<Image>().fillAmount = activeCouCou.currentHealth / (float)activeCouCou.maxHealth;
-        battleSystem.experienceBar.fillAmount = activeCouCou.coucouEXP / maxEXP;
+        battleSystem.experienceBar.fillAmount = activeCouCou.currentEXP / maxEXP;
         allyHealthText.text = activeCouCou.currentHealth + "/" + activeCouCou.maxHealth;
         allyLevelText.text = activeCouCou.coucouLevel.ToString();
         allyElementSprite.sprite = coucouFinder.GetElementSprite(activeCouCou.element);
@@ -183,12 +183,12 @@ public class BattleManager : MonoBehaviour
                     incorrectItemUse = true;
                     break;
                 }
-                float healthToIncrease = activeCouCou.currentHealth + activeCouCou.maxHealth * 0.3f;
+                int healthToIncrease = Mathf.CeilToInt(activeCouCou.currentHealth + activeCouCou.maxHealth * 0.3f);
                 int previousCurrentHealth = activeCouCou.currentHealth;
-                StartCoroutine(battleSystem.IncrementallyIncreaseHP((int)healthToIncrease, activeCouCou));
+                StartCoroutine(battleSystem.IncrementallyIncreaseHP(healthToIncrease, activeCouCou));
                 yield return new WaitUntil(() => battleSystem.finishedHealthIncrement);
                 battleSystem.finishedHealthIncrement = false;
-                dialogueText.text = activeCouCou.coucouName + " gained " + (int)Mathf.Min(healthToIncrease - previousCurrentHealth, activeCouCou.maxHealth - previousCurrentHealth) + " health";
+                dialogueText.text = activeCouCou.coucouName + " gained " + Mathf.Min(healthToIncrease - previousCurrentHealth, activeCouCou.maxHealth - previousCurrentHealth) + " health";
                 break;
 
             case ItemsDatabase.ItemAttribute.Resistance:
@@ -328,5 +328,38 @@ public class BattleManager : MonoBehaviour
             yield return new WaitForSeconds(2f);
             StartCoroutine(battleSystem.PlayerTurn());
         }
+    }
+
+    public void UpdateCouCouStats()
+    {
+        for (int a = 0; a < coucouParty.Count; a++)
+        {
+            int level;
+            int bonusStatsPer5;
+            int bonusStatsPer1;
+
+            for (int i = 0; i < coucouDatabase.coucouVariant.Count; i++)
+            {
+                level = coucouParty[a].coucouLevel;
+                bonusStatsPer5 = Mathf.FloorToInt(level / 5);
+                bonusStatsPer1 = level - bonusStatsPer5 - 1;
+
+                if (coucouParty[a].coucouVariant == coucouDatabase.coucouVariant[i].variant)
+                {
+                    int previousMaxHealth = coucouParty[a].maxHealth;
+                    coucouParty[a].maxHealth = coucouDatabase.coucouVariant[i].hp + (coucouDatabase.coucouVariant[i].bonusHP * bonusStatsPer1) + (coucouDatabase.coucouVariant[i].bonusHPPer5 * bonusStatsPer5);
+                    coucouParty[a].currentAttack = coucouDatabase.coucouVariant[i].attack + (coucouDatabase.coucouVariant[i].bonusAttack * bonusStatsPer1) + (coucouDatabase.coucouVariant[i].bonusAttackPer5 * bonusStatsPer5);
+                    coucouParty[a].currentResistance = coucouDatabase.coucouVariant[i].resistance + (coucouDatabase.coucouVariant[i].bonusResistance * bonusStatsPer1) + (coucouDatabase.coucouVariant[i].bonusResistancePer5 * bonusStatsPer5);
+                    coucouParty[a].currentMindset = coucouDatabase.coucouVariant[i].mindset;
+                    coucouParty[a].currentDetermination = coucouDatabase.coucouVariant[i].determination;
+                    coucouParty[a].currentHealth = Mathf.Min(coucouParty[a].maxHealth, coucouParty[a].currentHealth + (coucouParty[a].maxHealth - previousMaxHealth));
+                }
+            }
+        }
+    }
+
+    private void OnDisable()
+    {
+        UpdateCouCouStats();
     }
 }

@@ -355,7 +355,7 @@ MonoBehaviour:
     hp: 50
     bonusHP: 12
     bonusHPPer5: 32
-    determination: 10
+    determination: 50
     mindset: 30
   - variant: 5
     attack: 25
