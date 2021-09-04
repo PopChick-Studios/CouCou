@@ -547,6 +547,7 @@ public class SatchelAdventureManager : MonoBehaviour
                 yield return new WaitUntil(() => experienceIncrement);
                 break;
         }
+        inventoryManager.UsedItem(itemChosen.itemName);
         playerInputActions.Enable();
         isStuck = false;
         inSubmit = false;
