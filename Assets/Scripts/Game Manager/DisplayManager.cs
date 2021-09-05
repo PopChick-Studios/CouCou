@@ -63,7 +63,6 @@ public class DisplayManager : MonoBehaviour
         gameManager = GetComponent<GameManager>();
         satchelAdventureManager = GameObject.FindGameObjectWithTag("AdventureUI").GetComponent<SatchelAdventureManager>();
         playerInteraction = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerInteraction>();
-
         playerInputActions = new PlayerInputActions();
 
         playerInputActions.Wandering.Pause.performed += x => PauseMenu();

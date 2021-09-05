@@ -186,7 +186,7 @@ public class Fishing : MonoBehaviour
             amount = 1;
         }
 
-        //gameManager.SetState(GameManager.GameState.Wandering);
+        
         displayManager.OnInteraction(DisplayManager.InteractionTypes.Collect, item, amount);
         inventoryManager.FoundItem(item, amount);
         Debug.Log(item + " obtain");

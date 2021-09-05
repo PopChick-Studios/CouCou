@@ -9,6 +9,7 @@ public class PlayerMovement : MonoBehaviour
     private GameManager gameManager;
 
     private CharacterController controller;
+    public Animator playerAnimator;
     public Transform cam;
 
     private float turnSmoothVelocity;
@@ -24,6 +25,7 @@ public class PlayerMovement : MonoBehaviour
     private float gravityValue = -9.81f;
     private bool isGrounded;
     private bool isCrouching;
+    public bool canMove;
 
     // Inputs
     PlayerInputActions playerInputActions;
@@ -60,7 +62,7 @@ public class PlayerMovement : MonoBehaviour
     private void Update()
     {
         // Only move during wandering phase
-        if (gameManager.State == GameManager.GameState.Wandering)
+        if (gameManager.State == GameManager.GameState.Wandering && canMove)
         {
             // Check whether or not to use gravity
             isGrounded = controller.isGrounded;
@@ -71,22 +73,31 @@ public class PlayerMovement : MonoBehaviour
 
             if (inputMovement.magnitude >= 0.1f)
             {
+                playerAnimator.SetBool("isWalking", true);
                 // Choose the right movement speed
                 if (isCrouching)
                 {
+                    playerAnimator.speed = 1;
+                    playerAnimator.SetBool("isCrouching", true);
                     moveSpeed = walkSpeed;
                 }
                 else if (inputMovement.magnitude != 1)
                 {
+                    playerAnimator.SetBool("isCrouching", false);
                     moveSpeed = runSpeed * inputMovement.magnitude;
                     runTimer = 2;
                 }
                 else if (runTimer < 0)
                 {
-                    moveSpeed = sprintSpeed;
+                    playerAnimator.SetBool("isRunning", true);
+                    moveSpeed = sprintSpeed * Mathf.Clamp(Mathf.Abs(runTimer) / 2, 1, 3.5f);
+                    playerAnimator.speed = Mathf.Clamp(Mathf.Abs(runTimer) / 5, 1, 1.75f);
+                    runTimer -= Time.deltaTime;
                 }
                 else
                 {
+                    playerAnimator.speed = 1;
+                    playerAnimator.SetBool("isRunning", false);
                     moveSpeed = runSpeed;
                     runTimer -= Time.deltaTime;
                 }
@@ -104,6 +115,9 @@ public class PlayerMovement : MonoBehaviour
             }
             else
             {
+                playerAnimator.SetBool("isCrouching", false);
+                playerAnimator.SetBool("isRunning", false);
+                playerAnimator.SetBool("isWalking", false);
                 runTimer = 2;
             }
 

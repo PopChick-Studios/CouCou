@@ -11,6 +11,7 @@ public class PlayerInteraction : MonoBehaviour
     private DialogueTrigger dialogueTrigger;
     private DialogueManager dialogueManager;
     private Fishing fishing;
+    private PlayerMovement playerMovement;
 
     public Dialogue dialogue;
 
@@ -18,15 +19,17 @@ public class PlayerInteraction : MonoBehaviour
     public bool onSaveButton;
     public bool onCancelSaveButton;
     public bool interacting;
+    public bool canFinishInteracting;
 
     // Animator
-    // public Animator animator;
+    public Animator animator;
 
     // Inputs
     PlayerInputActions playerInputActions;
 
     private void Awake()
     {
+        playerMovement = GetComponent<PlayerMovement>();
         inventoryManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<InventoryManager>();
         gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
         displayManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<DisplayManager>();
@@ -35,56 +38,68 @@ public class PlayerInteraction : MonoBehaviour
 
         playerInputActions = new PlayerInputActions();
 
-        playerInputActions.Wandering.Interact.started += x => Interact();
+        playerInputActions.Wandering.Interact.started += x => StartCoroutine(Interact());
         playerInputActions.UI.Cancel.started += x => OnCouCouCancelButton();
-        playerInputActions.UI.Submit.started += x => FinishInteraction(interactableUI.interactionType);
+        playerInputActions.UI.Submit.started += x => StartCoroutine(FinishInteraction(interactableUI.interactionType));
         playerInputActions.Fishing.Interact.started += x => FinishFishingInteraction();
-        playerInputActions.UI.Cancel.started += x => FinishInteraction(interactableUI.interactionType);
+        playerInputActions.UI.Cancel.started += x => StartCoroutine(FinishInteraction(interactableUI.interactionType));
         playerInputActions.Fishing.Cancel.started += x => FinishFishingInteraction();
     }
 
-    private void Interact()
+    private IEnumerator Interact()
     {
-        if (interactableUI != null && gameManager.State == GameManager.GameState.Wandering)
+        if (interactableUI != null && !interacting && gameManager.State == GameManager.GameState.Wandering)
         {
             if (interactableUI.canInteract && interactableUI.interactionType != DisplayManager.InteractionTypes.CouCorp)
             {
                 interacting = true;
-
-                displayManager.OnInteraction(interactableUI.interactionType, interactableUI.itemName, interactableUI.itemAmount);
-                // animator.SetTrigger("interactPickUp");
-
-                // Pause the game
-                Time.timeScale = 0;
 
                 playerInputActions.UI.Enable();
                 playerInputActions.Wandering.Disable();
 
                 if (interactableUI.interactionType == DisplayManager.InteractionTypes.Collect)
                 {
+                    playerMovement.canMove = false;
+                    animator.SetTrigger("grabbingItem");
+                    yield return new WaitForSeconds(1.3f);
+                    displayManager.OnInteraction(interactableUI.interactionType, interactableUI.itemName, interactableUI.itemAmount);
                     inventoryManager.FoundItem(interactableUI.itemName, interactableUI.itemAmount);
                 }
+                else
+                {
+                    displayManager.OnInteraction(interactableUI.interactionType, interactableUI.itemName, interactableUI.itemAmount);
+                }
+
+                // Pause the game
+                Time.timeScale = 0;
+                canFinishInteracting = true;
             }
             else if (interactableUI.interactionType == DisplayManager.InteractionTypes.CouCorp && dialogueManager.dialogueFinished)
             {
                 if (!inventoryManager.HasPlayableCouCou())
                 {
                     FindObjectOfType<DialogueManager>().StartDialogue(dialogue);
-                    return;
                 }
-                dialogueTrigger = interactableUI.gameObject.GetComponent<DialogueTrigger>();
-                dialogueTrigger.InteractDialogue();
+                else
+                {
+                    dialogueTrigger = interactableUI.gameObject.GetComponent<DialogueTrigger>();
+                    dialogueTrigger.InteractDialogue();
+                }
+                canFinishInteracting = true;
             }
         }
     }
 
-    public void FinishInteraction(DisplayManager.InteractionTypes interactionType)
+    public IEnumerator FinishInteraction(DisplayManager.InteractionTypes interactionType)
     {
+        if (!canFinishInteracting)
+        {
+            yield break;
+        }
         if (interactionType == DisplayManager.InteractionTypes.Collect || interactionType == DisplayManager.InteractionTypes.Letter)
         {
             displayManager.HeadsUpDisplay();
             gameManager.SetState(GameManager.GameState.Wandering);
-
             // Swap inputs
             playerInputActions.UI.Disable();
             playerInputActions.Wandering.Enable();
@@ -93,6 +108,8 @@ public class PlayerInteraction : MonoBehaviour
             {
                 interactableUI.gameObject.SetActive(false);
             }
+            yield return new WaitForSeconds(1.7f);
+            playerMovement.canMove = true;
         }
         else if (onSaveButton)
         {
@@ -111,6 +128,7 @@ public class PlayerInteraction : MonoBehaviour
         }
 
         interacting = false;
+        canFinishInteracting = false;
     }
 
     public void ChangeToFishingInput()
@@ -139,7 +157,7 @@ public class PlayerInteraction : MonoBehaviour
 
         onSaveButton = true;
 
-        FinishInteraction(interactableUI.interactionType);
+        StartCoroutine(FinishInteraction(interactableUI.interactionType));
     }
 
     public void OnCancelSave()
@@ -149,7 +167,7 @@ public class PlayerInteraction : MonoBehaviour
 
         onCancelSaveButton = true;
 
-        FinishInteraction(interactableUI.interactionType);
+        StartCoroutine(FinishInteraction(interactableUI.interactionType));
     }
 
     public void OnCouCouCancelButton()
