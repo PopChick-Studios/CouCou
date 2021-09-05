@@ -2,17 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class InteractableUI : MonoBehaviour
 {
     private DisplayManager displayManager;
+    public InventoryList playerInventory;
 
     [Header("Interaction Type")]
     public DisplayManager.InteractionTypes interactionType;
 
+    public TextMeshProUGUI nameText;
+    public string itemName;
+    public int itemAmount;
+
     [Header("Arrow")]
     [SerializeField] private Sprite arrowSprite;
-    [SerializeField] private Sprite arrowGlowSprite;
 
     [SerializeField] private Image arrowPlaceholder;
 
@@ -29,6 +34,23 @@ public class InteractableUI : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        if (interactionType == DisplayManager.InteractionTypes.CouCou)
+        {
+            itemName = gameObject.name;
+            nameText.text = itemName;
+
+            foreach (InventoryList.CouCouInventory coucou in playerInventory.couCouInventory)
+            {
+                if (coucou.coucouName == itemName)
+                {
+                    gameObject.SetActive(false);
+                }
+            }
+        }
+        else
+        {
+            nameText.text = "";
+        }
         displayManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<DisplayManager>();
 
         arrowPlaceholder.sprite = arrowSprite;
@@ -39,21 +61,23 @@ public class InteractableUI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        nameText.rectTransform.transform.rotation = Quaternion.LookRotation(nameText.rectTransform.transform.position - cameraTransform.position);
         if (isInRange && player != null)
         {
             float y = Mathf.PingPong(Time.time * bounceTime, 1);
             arrowPlaceholder.rectTransform.position = new Vector3(originTransform.position.x, originTransform.position.y + 1.5f + y, originTransform.position.z);
-            arrowPlaceholder.rectTransform.transform.LookAt(cameraTransform);
+            arrowPlaceholder.rectTransform.transform.rotation = Quaternion.LookRotation(arrowPlaceholder.rectTransform.transform.position - cameraTransform.position);
 
             // Check the distance from the player
-            if (Mathf.Abs(player.transform.position.magnitude - gameObject.transform.position.magnitude) < 2)
+            if (Vector3.Distance(player.transform.position, gameObject.transform.position) < 2.5)
             {
-                arrowPlaceholder.sprite = arrowGlowSprite;
+                arrowPlaceholder.color = new Color32(255, 212, 73, 255);
                 canInteract = true;
             }
-            else if (!canInteract)
+            else
             {
-                arrowPlaceholder.sprite = arrowSprite;
+                arrowPlaceholder.color = Color.white;
+                canInteract = false;
             }
         }
     }
@@ -79,8 +103,6 @@ public class InteractableUI : MonoBehaviour
         {
             arrowPlaceholder.gameObject.SetActive(false);
             isInRange = false;
-            arrowPlaceholder.rectTransform.position = new Vector3(originTransform.position.x, originTransform.position.y + 2.5f, originTransform.position.z);
-            canInteract = false;
         }
     }
 

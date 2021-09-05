@@ -27,6 +27,7 @@ public class ItemsDatabase : ScriptableObject
     public class ItemData
     {
         public string itemName;
+        public int positionIndex;
         public string itemDescription;
         public GameObject itemModel;
 

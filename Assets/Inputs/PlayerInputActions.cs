@@ -109,7 +109,7 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""17973f5f-e47a-4c7b-99a5-d25928f2e0b2"",
-                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Controller"",
@@ -275,6 +275,14 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                     ""interactions"": """"
                 },
                 {
+                    ""name"": ""NavigateSections"",
+                    ""type"": ""Button"",
+                    ""id"": ""10c7ab77-88a5-4e02-bc7e-adac7298f5cf"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
                     ""name"": ""Submit"",
                     ""type"": ""Button"",
                     ""id"": ""fc6be2a2-5036-4f68-a396-8cfac8ab02cc"",
@@ -347,9 +355,9 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                     ""interactions"": """"
                 },
                 {
-                    ""name"": ""NavigateSections"",
+                    ""name"": ""OpenElementChart"",
                     ""type"": ""Button"",
-                    ""id"": ""10c7ab77-88a5-4e02-bc7e-adac7298f5cf"",
+                    ""id"": ""ac8c060e-30fe-4bed-9fc7-695979085ad2"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
@@ -905,6 +913,107 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                     ""action"": ""NavigateSections"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e6304a56-059d-4ac0-b1d0-5fdded8d2bf3"",
+                    ""path"": ""<Keyboard>/tab"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""OpenElementChart"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""83f75335-8cf3-4770-8db3-b0c5452a84a6"",
+                    ""path"": ""<Gamepad>/select"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""OpenElementChart"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
+            ""name"": ""Fishing"",
+            ""id"": ""c0ec35f3-669c-4910-81cb-6f52f8db1464"",
+            ""actions"": [
+                {
+                    ""name"": ""Interact"",
+                    ""type"": ""Button"",
+                    ""id"": ""fdb1b449-01f3-4941-bddc-71bad4795304"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Cancel"",
+                    ""type"": ""Button"",
+                    ""id"": ""ce69fcb4-31e9-42ea-b4a3-1d1b76d0ac6f"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""9f6e6214-b909-4fba-8b18-daac85126510"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardAndMouse"",
+                    ""action"": ""Interact"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1b547835-d678-44b4-b848-ccc0eaeb5b09"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Controller"",
+                    ""action"": ""Interact"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""bce3920c-261d-4c75-b8fe-6ec7407c594c"",
+                    ""path"": ""*/{Cancel}"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Cancel"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""bb09c269-a5e7-421a-900f-22f6912f295d"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Cancel"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0fa25258-c803-42eb-af8d-af98ad5fd99c"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Cancel"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -952,6 +1061,7 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
+        m_UI_NavigateSections = m_UI.FindAction("NavigateSections", throwIfNotFound: true);
         m_UI_Submit = m_UI.FindAction("Submit", throwIfNotFound: true);
         m_UI_Cancel = m_UI.FindAction("Cancel", throwIfNotFound: true);
         m_UI_Point = m_UI.FindAction("Point", throwIfNotFound: true);
@@ -961,7 +1071,11 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
         m_UI_RightClick = m_UI.FindAction("RightClick", throwIfNotFound: true);
         m_UI_TrackedDevicePosition = m_UI.FindAction("TrackedDevicePosition", throwIfNotFound: true);
         m_UI_TrackedDeviceOrientation = m_UI.FindAction("TrackedDeviceOrientation", throwIfNotFound: true);
-        m_UI_NavigateSections = m_UI.FindAction("NavigateSections", throwIfNotFound: true);
+        m_UI_OpenElementChart = m_UI.FindAction("OpenElementChart", throwIfNotFound: true);
+        // Fishing
+        m_Fishing = asset.FindActionMap("Fishing", throwIfNotFound: true);
+        m_Fishing_Interact = m_Fishing.FindAction("Interact", throwIfNotFound: true);
+        m_Fishing_Cancel = m_Fishing.FindAction("Cancel", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -1101,6 +1215,7 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
     private readonly InputActionMap m_UI;
     private IUIActions m_UIActionsCallbackInterface;
     private readonly InputAction m_UI_Navigate;
+    private readonly InputAction m_UI_NavigateSections;
     private readonly InputAction m_UI_Submit;
     private readonly InputAction m_UI_Cancel;
     private readonly InputAction m_UI_Point;
@@ -1110,12 +1225,13 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
     private readonly InputAction m_UI_RightClick;
     private readonly InputAction m_UI_TrackedDevicePosition;
     private readonly InputAction m_UI_TrackedDeviceOrientation;
-    private readonly InputAction m_UI_NavigateSections;
+    private readonly InputAction m_UI_OpenElementChart;
     public struct UIActions
     {
         private @PlayerInputActions m_Wrapper;
         public UIActions(@PlayerInputActions wrapper) { m_Wrapper = wrapper; }
         public InputAction @Navigate => m_Wrapper.m_UI_Navigate;
+        public InputAction @NavigateSections => m_Wrapper.m_UI_NavigateSections;
         public InputAction @Submit => m_Wrapper.m_UI_Submit;
         public InputAction @Cancel => m_Wrapper.m_UI_Cancel;
         public InputAction @Point => m_Wrapper.m_UI_Point;
@@ -1125,7 +1241,7 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
         public InputAction @RightClick => m_Wrapper.m_UI_RightClick;
         public InputAction @TrackedDevicePosition => m_Wrapper.m_UI_TrackedDevicePosition;
         public InputAction @TrackedDeviceOrientation => m_Wrapper.m_UI_TrackedDeviceOrientation;
-        public InputAction @NavigateSections => m_Wrapper.m_UI_NavigateSections;
+        public InputAction @OpenElementChart => m_Wrapper.m_UI_OpenElementChart;
         public InputActionMap Get() { return m_Wrapper.m_UI; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1138,6 +1254,9 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                 @Navigate.started -= m_Wrapper.m_UIActionsCallbackInterface.OnNavigate;
                 @Navigate.performed -= m_Wrapper.m_UIActionsCallbackInterface.OnNavigate;
                 @Navigate.canceled -= m_Wrapper.m_UIActionsCallbackInterface.OnNavigate;
+                @NavigateSections.started -= m_Wrapper.m_UIActionsCallbackInterface.OnNavigateSections;
+                @NavigateSections.performed -= m_Wrapper.m_UIActionsCallbackInterface.OnNavigateSections;
+                @NavigateSections.canceled -= m_Wrapper.m_UIActionsCallbackInterface.OnNavigateSections;
                 @Submit.started -= m_Wrapper.m_UIActionsCallbackInterface.OnSubmit;
                 @Submit.performed -= m_Wrapper.m_UIActionsCallbackInterface.OnSubmit;
                 @Submit.canceled -= m_Wrapper.m_UIActionsCallbackInterface.OnSubmit;
@@ -1165,9 +1284,9 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                 @TrackedDeviceOrientation.started -= m_Wrapper.m_UIActionsCallbackInterface.OnTrackedDeviceOrientation;
                 @TrackedDeviceOrientation.performed -= m_Wrapper.m_UIActionsCallbackInterface.OnTrackedDeviceOrientation;
                 @TrackedDeviceOrientation.canceled -= m_Wrapper.m_UIActionsCallbackInterface.OnTrackedDeviceOrientation;
-                @NavigateSections.started -= m_Wrapper.m_UIActionsCallbackInterface.OnNavigateSections;
-                @NavigateSections.performed -= m_Wrapper.m_UIActionsCallbackInterface.OnNavigateSections;
-                @NavigateSections.canceled -= m_Wrapper.m_UIActionsCallbackInterface.OnNavigateSections;
+                @OpenElementChart.started -= m_Wrapper.m_UIActionsCallbackInterface.OnOpenElementChart;
+                @OpenElementChart.performed -= m_Wrapper.m_UIActionsCallbackInterface.OnOpenElementChart;
+                @OpenElementChart.canceled -= m_Wrapper.m_UIActionsCallbackInterface.OnOpenElementChart;
             }
             m_Wrapper.m_UIActionsCallbackInterface = instance;
             if (instance != null)
@@ -1175,6 +1294,9 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                 @Navigate.started += instance.OnNavigate;
                 @Navigate.performed += instance.OnNavigate;
                 @Navigate.canceled += instance.OnNavigate;
+                @NavigateSections.started += instance.OnNavigateSections;
+                @NavigateSections.performed += instance.OnNavigateSections;
+                @NavigateSections.canceled += instance.OnNavigateSections;
                 @Submit.started += instance.OnSubmit;
                 @Submit.performed += instance.OnSubmit;
                 @Submit.canceled += instance.OnSubmit;
@@ -1202,13 +1324,54 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                 @TrackedDeviceOrientation.started += instance.OnTrackedDeviceOrientation;
                 @TrackedDeviceOrientation.performed += instance.OnTrackedDeviceOrientation;
                 @TrackedDeviceOrientation.canceled += instance.OnTrackedDeviceOrientation;
-                @NavigateSections.started += instance.OnNavigateSections;
-                @NavigateSections.performed += instance.OnNavigateSections;
-                @NavigateSections.canceled += instance.OnNavigateSections;
+                @OpenElementChart.started += instance.OnOpenElementChart;
+                @OpenElementChart.performed += instance.OnOpenElementChart;
+                @OpenElementChart.canceled += instance.OnOpenElementChart;
             }
         }
     }
     public UIActions @UI => new UIActions(this);
+
+    // Fishing
+    private readonly InputActionMap m_Fishing;
+    private IFishingActions m_FishingActionsCallbackInterface;
+    private readonly InputAction m_Fishing_Interact;
+    private readonly InputAction m_Fishing_Cancel;
+    public struct FishingActions
+    {
+        private @PlayerInputActions m_Wrapper;
+        public FishingActions(@PlayerInputActions wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Interact => m_Wrapper.m_Fishing_Interact;
+        public InputAction @Cancel => m_Wrapper.m_Fishing_Cancel;
+        public InputActionMap Get() { return m_Wrapper.m_Fishing; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(FishingActions set) { return set.Get(); }
+        public void SetCallbacks(IFishingActions instance)
+        {
+            if (m_Wrapper.m_FishingActionsCallbackInterface != null)
+            {
+                @Interact.started -= m_Wrapper.m_FishingActionsCallbackInterface.OnInteract;
+                @Interact.performed -= m_Wrapper.m_FishingActionsCallbackInterface.OnInteract;
+                @Interact.canceled -= m_Wrapper.m_FishingActionsCallbackInterface.OnInteract;
+                @Cancel.started -= m_Wrapper.m_FishingActionsCallbackInterface.OnCancel;
+                @Cancel.performed -= m_Wrapper.m_FishingActionsCallbackInterface.OnCancel;
+                @Cancel.canceled -= m_Wrapper.m_FishingActionsCallbackInterface.OnCancel;
+            }
+            m_Wrapper.m_FishingActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @Interact.started += instance.OnInteract;
+                @Interact.performed += instance.OnInteract;
+                @Interact.canceled += instance.OnInteract;
+                @Cancel.started += instance.OnCancel;
+                @Cancel.performed += instance.OnCancel;
+                @Cancel.canceled += instance.OnCancel;
+            }
+        }
+    }
+    public FishingActions @Fishing => new FishingActions(this);
     private int m_KeyboardAndMouseSchemeIndex = -1;
     public InputControlScheme KeyboardAndMouseScheme
     {
@@ -1241,6 +1404,7 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
     public interface IUIActions
     {
         void OnNavigate(InputAction.CallbackContext context);
+        void OnNavigateSections(InputAction.CallbackContext context);
         void OnSubmit(InputAction.CallbackContext context);
         void OnCancel(InputAction.CallbackContext context);
         void OnPoint(InputAction.CallbackContext context);
@@ -1250,6 +1414,11 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
         void OnRightClick(InputAction.CallbackContext context);
         void OnTrackedDevicePosition(InputAction.CallbackContext context);
         void OnTrackedDeviceOrientation(InputAction.CallbackContext context);
-        void OnNavigateSections(InputAction.CallbackContext context);
+        void OnOpenElementChart(InputAction.CallbackContext context);
+    }
+    public interface IFishingActions
+    {
+        void OnInteract(InputAction.CallbackContext context);
+        void OnCancel(InputAction.CallbackContext context);
     }
 }

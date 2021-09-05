@@ -96,7 +96,7 @@
                 {
                     "name": "",
                     "id": "17973f5f-e47a-4c7b-99a5-d25928f2e0b2",
-                    "path": "<Gamepad>/buttonEast",
+                    "path": "<Gamepad>/buttonSouth",
                     "interactions": "",
                     "processors": "",
                     "groups": "Controller",
@@ -262,6 +262,14 @@
                     "interactions": ""
                 },
                 {
+                    "name": "NavigateSections",
+                    "type": "Button",
+                    "id": "10c7ab77-88a5-4e02-bc7e-adac7298f5cf",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
                     "name": "Submit",
                     "type": "Button",
                     "id": "fc6be2a2-5036-4f68-a396-8cfac8ab02cc",
@@ -334,9 +342,9 @@
                     "interactions": ""
                 },
                 {
-                    "name": "NavigateSections",
+                    "name": "OpenElementChart",
                     "type": "Button",
-                    "id": "10c7ab77-88a5-4e02-bc7e-adac7298f5cf",
+                    "id": "ac8c060e-30fe-4bed-9fc7-695979085ad2",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
@@ -892,6 +900,107 @@
                     "action": "NavigateSections",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "e6304a56-059d-4ac0-b1d0-5fdded8d2bf3",
+                    "path": "<Keyboard>/tab",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "OpenElementChart",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "83f75335-8cf3-4770-8db3-b0c5452a84a6",
+                    "path": "<Gamepad>/select",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "OpenElementChart",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "Fishing",
+            "id": "c0ec35f3-669c-4910-81cb-6f52f8db1464",
+            "actions": [
+                {
+                    "name": "Interact",
+                    "type": "Button",
+                    "id": "fdb1b449-01f3-4941-bddc-71bad4795304",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Cancel",
+                    "type": "Button",
+                    "id": "ce69fcb4-31e9-42ea-b4a3-1d1b76d0ac6f",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "9f6e6214-b909-4fba-8b18-daac85126510",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardAndMouse",
+                    "action": "Interact",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1b547835-d678-44b4-b848-ccc0eaeb5b09",
+                    "path": "<Gamepad>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Controller",
+                    "action": "Interact",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "bce3920c-261d-4c75-b8fe-6ec7407c594c",
+                    "path": "*/{Cancel}",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Cancel",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "bb09c269-a5e7-421a-900f-22f6912f295d",
+                    "path": "<Gamepad>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Cancel",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "0fa25258-c803-42eb-af8d-af98ad5fd99c",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Cancel",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         }

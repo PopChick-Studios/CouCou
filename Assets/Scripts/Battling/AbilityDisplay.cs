@@ -20,12 +20,17 @@ public class AbilityDisplay : MonoBehaviour
     [SerializeField] private Button ability4;
     private List<int> currentAbilites;
 
+    private bool startDone = false;
+
     private void Awake()
     {
         attackAbilitiesList = new List<AbilitiesDatabase.AttackAbilityData>();
         utilityAbilitiesList = new List<AbilitiesDatabase.UtilityAbilityData>();
         currentAbilites = new List<int>();
+    }
 
+    private void Start()
+    {
         // Add the list data from the scriptable object to the lists
         foreach (AbilitiesDatabase.AttackAbilityData a in abilitiesDatabase.attackAbilities)
         {
@@ -35,10 +40,13 @@ public class AbilityDisplay : MonoBehaviour
         {
             utilityAbilitiesList.Add(a);
         }
+        startDone = true;
+
     }
 
-    public void DisplayAbilities(int ability1ID, int ability2ID, int ability3ID, int ability4ID)
+    public IEnumerator DisplayAbilities(int ability1ID, int ability2ID, int ability3ID, int ability4ID)
     {
+        yield return new WaitUntil(() => startDone);
         int checkAbilityID = -1;
         Button updateButton = null;
 
@@ -66,11 +74,11 @@ public class AbilityDisplay : MonoBehaviour
                     updateButton = ability4;
                     break;
             }
-                        
+
             // Attack IDs are only up to 99
             if (checkAbilityID <= 99 && checkAbilityID != -1)
             {
-                for (int i = 0; i < attackAbilitiesList.Count - 1; i++)
+                for (int i = 0; i < attackAbilitiesList.Count; i++)
                 {
                     if (checkAbilityID == attackAbilitiesList[i].uniqueIdentifier)
                     {
@@ -86,7 +94,7 @@ public class AbilityDisplay : MonoBehaviour
             // Utility IDs are 100 and above
             else if (checkAbilityID > 99)
             {
-                for (int i = 0; i < utilityAbilitiesList.Count - 1; i++)
+                for (int i = 0; i < utilityAbilitiesList.Count; i++)
                 {
                     if (checkAbilityID == utilityAbilitiesList[i].uniqueIdentifier)
                     {
