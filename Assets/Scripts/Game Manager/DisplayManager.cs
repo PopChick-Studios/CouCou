@@ -77,7 +77,7 @@ public class DisplayManager : MonoBehaviour
 
     public void PauseMenu()
     {
-        if (satchelAdventureManager.inSubmit || satchelAdventureManager.changingCouCou || satchelAdventureManager.isStuck)
+        if (satchel.activeInHierarchy)
         {
             satchelAdventureManager.GoBack();
         }

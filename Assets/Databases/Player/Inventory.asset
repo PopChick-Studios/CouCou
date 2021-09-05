@@ -30,75 +30,49 @@ MonoBehaviour:
     currentDetermination: 0
     isStunned: 0
     hasCollapsed: 0
-  couCouInventory:
-  - coucouName: Flizzard
-    coucouLevel: 19
-    currentEXP: 206.08301
-    coucouVariant: 4
-    element: 1
-    lineupOrder: 1
-    maxHealth: 326
-    currentAttack: 236
-    currentResistance: 2.25
-    currentHealth: 326
-    currentMindset: 30
-    currentDetermination: 50
-    isStunned: 0
-    hasCollapsed: 0
-  - coucouName: Plappy
-    coucouLevel: 15
-    currentEXP: 0
-    coucouVariant: 4
-    element: 3
-    lineupOrder: 2
-    maxHealth: 278
-    currentAttack: 192
-    currentResistance: 2.01
-    currentHealth: 278
-    currentMindset: 30
-    currentDetermination: 10
-    isStunned: 0
-    hasCollapsed: 0
-  - coucouName: Bonzie
-    coucouLevel: 9
-    currentEXP: 862.1293
-    coucouVariant: 1
-    element: 2
-    lineupOrder: 3
-    maxHealth: 164
-    currentAttack: 116
-    currentResistance: 1.51
-    currentHealth: 164
-    currentMindset: 30
-    currentDetermination: 50
-    isStunned: 0
-    hasCollapsed: 0
+  couCouInventory: []
   itemInventory:
   - itemName: CouCou Capsule
-    itemAmount: 3
+    itemAmount: 39
     itemAttribute: 5
     element: 0
+  - itemName: Fishing Rod
+    itemAmount: 39
+    itemAttribute: 6
+    element: 0
   - itemName: Ripe Berry
-    itemAmount: 3
+    itemAmount: 39
     itemAttribute: 0
     element: 0
+  - itemName: Strong Berry
+    itemAmount: 39
+    itemAttribute: 1
+    element: 0
+  - itemName: Bulwark Berry
+    itemAmount: 39
+    itemAttribute: 2
+    element: 0
   - itemName: Burnt Berry
-    itemAmount: 3
+    itemAmount: 39
     itemAttribute: 3
     element: 1
   - itemName: Frozen Berry
-    itemAmount: 3
+    itemAmount: 39
     itemAttribute: 3
     element: 3
   - itemName: Fruitful Berry
-    itemAmount: 3
+    itemAmount: 39
     itemAttribute: 3
     element: 2
   - itemName: Dark Berry
-    itemAmount: 3
+    itemAmount: 39
     itemAttribute: 3
     element: 5
   - itemName: Bright Berry
-    itemAmount: 3
+    itemAmount: 39
     itemAttribute: 3
     element: 4
+  - itemName: Mystic Berry
+    itemAmount: 39
+    itemAttribute: 4
+    element: 6

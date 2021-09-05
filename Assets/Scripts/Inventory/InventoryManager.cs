@@ -48,6 +48,18 @@ public class InventoryManager : MonoBehaviour
         {
             coucouVariantList.Add(variant);
         }
+        
+        /* - GIVES PLAYER EVERY ITEM AND COUCOU - 
+        foreach (ItemsDatabase.ItemData item in itemDatabase.itemData)
+        {
+            FoundItem(item.itemName, 3);
+        }
+        foreach (CouCouDatabase.CouCouData coucou in couCouDatabase.coucouData)
+        {
+            AddCouCou(coucou.coucouName, 1);
+        }
+        */
+
         SortItemInventory();
     }
 

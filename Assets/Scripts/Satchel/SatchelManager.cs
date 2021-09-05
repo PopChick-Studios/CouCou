@@ -500,10 +500,10 @@ public class SatchelManager : MonoBehaviour
         satchel.SetActive(true);
         submitButton.interactable = true;
         selectedSection = 1;
+        scrollRect.normalizedPosition = new Vector2(0, 1);
         ClearCouCou();
         DisplayItems();
-        scrollRect.normalizedPosition = new Vector2(0, 1);
-        scrollRect.enabled = false;
+
     }
 
     public void OnCouCouSection()
@@ -518,10 +518,9 @@ public class SatchelManager : MonoBehaviour
         satchel.SetActive(true);
         submitButton.interactable = true;
         selectedSection = 2;
+        scrollRect.normalizedPosition = new Vector2(0, 1);
         ClearItems();
         DisplayCouCou();
-        scrollRect.enabled = true;
-        scrollRect.normalizedPosition = new Vector2(0, 1);
     }
 
     public void OpenCouCouSelect()

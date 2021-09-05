@@ -97,6 +97,7 @@ public class PlayerMovement : MonoBehaviour
                 else
                 {
                     playerAnimator.speed = 1;
+                    playerAnimator.SetBool("isCrouching", false);
                     playerAnimator.SetBool("isRunning", false);
                     moveSpeed = runSpeed;
                     runTimer -= Time.deltaTime;
