@@ -84,14 +84,15 @@ public class PlayerMovement : MonoBehaviour
                 else if (inputMovement.magnitude != 1)
                 {
                     playerAnimator.SetBool("isCrouching", false);
-                    moveSpeed = runSpeed * inputMovement.magnitude;
+                    playerAnimator.SetBool("isRunning", false);
                     runTimer = 2;
+                    moveSpeed = runSpeed * inputMovement.magnitude;
                 }
                 else if (runTimer < 0)
                 {
                     playerAnimator.SetBool("isRunning", true);
-                    moveSpeed = sprintSpeed * Mathf.Clamp(Mathf.Abs(runTimer) / 2, 1, 3.5f);
-                    playerAnimator.speed = Mathf.Clamp(Mathf.Abs(runTimer) / 5, 1, 1.75f);
+                    moveSpeed = sprintSpeed * Mathf.Clamp(Mathf.Abs(runTimer) / 2 + 1, 1, 2.5f);
+                    playerAnimator.speed = Mathf.Clamp(Mathf.Abs(runTimer) / 5 + 1, 1, 1.25f);
                     runTimer -= Time.deltaTime;
                 }
                 else
@@ -99,7 +100,8 @@ public class PlayerMovement : MonoBehaviour
                     playerAnimator.speed = 1;
                     playerAnimator.SetBool("isCrouching", false);
                     playerAnimator.SetBool("isRunning", false);
-                    moveSpeed = runSpeed;
+                    moveSpeed = runSpeed * Mathf.Clamp(Mathf.Abs(2 - runTimer) + 1, 1, 2.5f);
+                    playerAnimator.speed = Mathf.Clamp(Mathf.Abs(runTimer) / 2, 1, 1.25f);
                     runTimer -= Time.deltaTime;
                 }
 

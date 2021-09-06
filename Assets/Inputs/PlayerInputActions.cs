@@ -81,6 +81,14 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Satchel"",
+                    ""type"": ""Button"",
+                    ""id"": ""58140fa0-029f-4bab-a35f-3c00d07fc778"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -241,7 +249,7 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""104770df-6376-480d-b5d1-e88d857f3871"",
-                    ""path"": ""<Keyboard>/q"",
+                    ""path"": ""<Keyboard>/z"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""KeyboardAndMouse"",
@@ -257,6 +265,28 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                     ""processors"": """",
                     ""groups"": ""Controller"",
                     ""action"": ""QuestBook"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b4bbfe86-27c3-480b-9bce-ea60afeca25f"",
+                    ""path"": ""<Keyboard>/c"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Satchel"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d62d17c7-6cb2-4e6d-a684-8b245bb7628a"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Satchel"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1058,6 +1088,7 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
         m_Wandering_CameraJoystick = m_Wandering.FindAction("CameraJoystick", throwIfNotFound: true);
         m_Wandering_Pause = m_Wandering.FindAction("Pause", throwIfNotFound: true);
         m_Wandering_QuestBook = m_Wandering.FindAction("QuestBook", throwIfNotFound: true);
+        m_Wandering_Satchel = m_Wandering.FindAction("Satchel", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1133,6 +1164,7 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
     private readonly InputAction m_Wandering_CameraJoystick;
     private readonly InputAction m_Wandering_Pause;
     private readonly InputAction m_Wandering_QuestBook;
+    private readonly InputAction m_Wandering_Satchel;
     public struct WanderingActions
     {
         private @PlayerInputActions m_Wrapper;
@@ -1145,6 +1177,7 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
         public InputAction @CameraJoystick => m_Wrapper.m_Wandering_CameraJoystick;
         public InputAction @Pause => m_Wrapper.m_Wandering_Pause;
         public InputAction @QuestBook => m_Wrapper.m_Wandering_QuestBook;
+        public InputAction @Satchel => m_Wrapper.m_Wandering_Satchel;
         public InputActionMap Get() { return m_Wrapper.m_Wandering; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1178,6 +1211,9 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                 @QuestBook.started -= m_Wrapper.m_WanderingActionsCallbackInterface.OnQuestBook;
                 @QuestBook.performed -= m_Wrapper.m_WanderingActionsCallbackInterface.OnQuestBook;
                 @QuestBook.canceled -= m_Wrapper.m_WanderingActionsCallbackInterface.OnQuestBook;
+                @Satchel.started -= m_Wrapper.m_WanderingActionsCallbackInterface.OnSatchel;
+                @Satchel.performed -= m_Wrapper.m_WanderingActionsCallbackInterface.OnSatchel;
+                @Satchel.canceled -= m_Wrapper.m_WanderingActionsCallbackInterface.OnSatchel;
             }
             m_Wrapper.m_WanderingActionsCallbackInterface = instance;
             if (instance != null)
@@ -1206,6 +1242,9 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                 @QuestBook.started += instance.OnQuestBook;
                 @QuestBook.performed += instance.OnQuestBook;
                 @QuestBook.canceled += instance.OnQuestBook;
+                @Satchel.started += instance.OnSatchel;
+                @Satchel.performed += instance.OnSatchel;
+                @Satchel.canceled += instance.OnSatchel;
             }
         }
     }
@@ -1400,6 +1439,7 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
         void OnCameraJoystick(InputAction.CallbackContext context);
         void OnPause(InputAction.CallbackContext context);
         void OnQuestBook(InputAction.CallbackContext context);
+        void OnSatchel(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

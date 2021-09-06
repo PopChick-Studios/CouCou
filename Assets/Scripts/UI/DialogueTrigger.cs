@@ -14,7 +14,7 @@ public class DialogueTrigger : MonoBehaviour
     }
 
     public DialogueTriggerType dialogueTriggerType;
-    public Dialogue dialogue;
+    public List<Dialogue> dialogue;
 
     private void Awake()
     {
@@ -24,13 +24,12 @@ public class DialogueTrigger : MonoBehaviour
 
     public void TriggerDialogue()
     {
-        dialogueManager.StartDialogue(dialogue);
+        StartCoroutine(dialogueManager.StartDialogue(dialogue));
     }
 
     public void InteractDialogue()
     {
-        dialogueManager.StartDialogue(dialogue);
-
+        StartCoroutine(dialogueManager.StartDialogue(dialogue));
         StartCoroutine(StartFight());
     }
 

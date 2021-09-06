@@ -13,7 +13,7 @@ public class PlayerInteraction : MonoBehaviour
     private Fishing fishing;
     private PlayerMovement playerMovement;
 
-    public Dialogue dialogue;
+    public List<Dialogue> dialogue;
 
     // Saving game
     public bool onSaveButton;
@@ -78,7 +78,7 @@ public class PlayerInteraction : MonoBehaviour
             {
                 if (!inventoryManager.HasPlayableCouCou())
                 {
-                    FindObjectOfType<DialogueManager>().StartDialogue(dialogue);
+                    StartCoroutine(FindObjectOfType<DialogueManager>().StartDialogue(dialogue));
                 }
                 else
                 {

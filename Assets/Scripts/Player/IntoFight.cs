@@ -15,8 +15,6 @@ public class IntoFight : MonoBehaviour
     public InventoryList skip2Inventory;
     public InventoryList crimsonDukeInventory;
 
-    public Dialogue dialogue;
-
     private void Awake()
     {
         gameManager = GetComponent<GameManager>();
@@ -109,7 +107,6 @@ public class IntoFight : MonoBehaviour
 
         gameManager.SetState(GameManager.GameState.Battling);
     }
-
 
     public InventoryList.CouCouInventory ChoosePunkStarter(InventoryList inventory)
     {

@@ -15,6 +15,7 @@ TagManager:
   - AdventureUI
   - CannotDieOnLoad
   - Boundary
+  - QuestBook
   layers:
   - Default
   - TransparentFX
@@ -27,7 +28,7 @@ TagManager:
   - PostProcessing
   - Focused
   - SecondCam
-  - 
+  - QuestBook
   - 
   - 
   - 

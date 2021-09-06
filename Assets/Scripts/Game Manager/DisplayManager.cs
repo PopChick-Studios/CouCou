@@ -3,8 +3,6 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.Users;
 
 public class DisplayManager : MonoBehaviour
 {
@@ -13,6 +11,7 @@ public class DisplayManager : MonoBehaviour
     private SatchelAdventureManager satchelAdventureManager;
     private PlayerInteraction playerInteraction;
     private IntoFight intoFight;
+    private QuestBook questBook;
 
     [Header("Blur Camera")]
     public GameObject blurCamera;
@@ -26,6 +25,7 @@ public class DisplayManager : MonoBehaviour
     [SerializeField] private GameObject options;
     [SerializeField] private GameObject crossfade;
     [SerializeField] private GameObject coucouCamera;
+    [SerializeField] private GameObject questBookDisplay;
 
     [Header("Interactables")]
     [SerializeField] private GameObject collectUI;
@@ -63,9 +63,12 @@ public class DisplayManager : MonoBehaviour
         gameManager = GetComponent<GameManager>();
         satchelAdventureManager = GameObject.FindGameObjectWithTag("AdventureUI").GetComponent<SatchelAdventureManager>();
         playerInteraction = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerInteraction>();
+        questBook = GameObject.FindGameObjectWithTag("QuestBook").GetComponent<QuestBook>();
         playerInputActions = new PlayerInputActions();
 
         playerInputActions.Wandering.Pause.performed += x => PauseMenu();
+        playerInputActions.Wandering.QuestBook.started += x => OnQuestBook();
+        playerInputActions.Wandering.Satchel.started += x => OpenSatchel();
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
@@ -73,6 +76,7 @@ public class DisplayManager : MonoBehaviour
         HeadsUpDisplay();
 
         confirmation.SetActive(false);
+        questBookDisplay.SetActive(false);
     }
 
     public void PauseMenu()
@@ -80,6 +84,10 @@ public class DisplayManager : MonoBehaviour
         if (satchel.activeInHierarchy)
         {
             satchelAdventureManager.GoBack();
+        }
+        else if (questBookDisplay.activeInHierarchy)
+        {
+            OnQuestBook();
         }
         else if (!playerInteraction.interacting && gameManager.State != GameManager.GameState.Fishing)
         {
@@ -128,12 +136,32 @@ public class DisplayManager : MonoBehaviour
 
     public void OpenSatchel()
     {
-        satchel.SetActive(true);
-        satchelAdventureManager.ClearCouCou();
-        satchelAdventureManager.OnItemSection();
-        interaction.SetActive(false);
-        pause.SetActive(false);
-        coucouCamera.SetActive(true);
+        if (!satchel.activeInHierarchy && gameManager.State == GameManager.GameState.Wandering)
+        {
+            Time.timeScale = 0;
+            satchel.SetActive(true);
+            satchelAdventureManager.ClearCouCou();
+            satchelAdventureManager.OnItemSection();
+            interaction.SetActive(false);
+            pause.SetActive(false);
+            coucouCamera.SetActive(true);
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+            gameManager.SetState(GameManager.GameState.Paused);
+        }
+        else if (satchel.activeInHierarchy && gameManager.State == GameManager.GameState.Paused)
+        {
+            Time.timeScale = 1;
+            satchel.SetActive(false);
+            blurCamera.gameObject.SetActive(false);
+            satchelAdventureManager.ClearCouCou();
+            satchelAdventureManager.ClearItems();
+            satchelAdventureManager.selectedSection = 0;
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+            coucouCamera.SetActive(false);
+            gameManager.SetState(GameManager.GameState.Wandering);
+        }
     }
 
     public void OnApplicationPause(bool pause)
@@ -149,6 +177,28 @@ public class DisplayManager : MonoBehaviour
     {
         options.SetActive(true);
         pause.SetActive(false);
+    }
+
+    public void OnQuestBook()
+    {
+        if (questBookDisplay.activeInHierarchy && gameManager.State == GameManager.GameState.Paused)
+        {
+            Time.timeScale = 1;
+            questBookDisplay.SetActive(false);
+            questBook.CloseBook();
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+            gameManager.SetState(GameManager.GameState.Wandering);
+        }
+        else if (!questBookDisplay.activeInHierarchy && gameManager.State == GameManager.GameState.Wandering)
+        {
+            Time.timeScale = 0;
+            questBookDisplay.SetActive(true);
+            questBook.OpenBook();
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+            gameManager.SetState(GameManager.GameState.Paused);
+        }
     }
 
     public void OnInteraction(InteractionTypes type, string name, int amount)

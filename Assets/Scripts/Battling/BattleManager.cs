@@ -251,6 +251,8 @@ public class BattleManager : MonoBehaviour
 
     public IEnumerator ChangeCouCou(string name)
     {
+        Destroy(battleSystem.playerInScene);
+
         satchelManager.isStuck = false;
         battleSystem.state = BattleState.ENEMYTURN;
 
@@ -272,6 +274,9 @@ public class BattleManager : MonoBehaviour
                 InitializeAbilities();
             }
         }
+
+        battleSystem.InstantiateModels(true, activeCouCou.coucouName);
+
         enemyManager.InitializeElementalAdvantage();
         yield return new WaitForSeconds(2f);
         bool surpirseSuccess = enemyManager.SurpriseAttack();

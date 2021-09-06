@@ -19,6 +19,7 @@ MonoBehaviour:
       it\u2019s watery wings into the plants."
     isStarter: 0
     coucouModel: {fileID: 2788669774214822680, guid: 5905ca86767f0e149a4ef4224e03f641, type: 3}
+    coucouBattleModel: {fileID: 2788669774214822680, guid: 32f94fd7ce8e04644803e35864ae23b0, type: 3}
     coucouElement: 3
     coucouVariant: 2
     ability1: 0
@@ -30,6 +31,7 @@ MonoBehaviour:
       the Bonzies love the attention they get.
     isStarter: 1
     coucouModel: {fileID: 2268780756995058653, guid: 4d5b2a2266b184e4e8499364b5997bdb, type: 3}
+    coucouBattleModel: {fileID: 2268780756995058653, guid: b2053d0708d30344e9d5cc9518a8e042, type: 3}
     coucouElement: 2
     coucouVariant: 1
     ability1: 0
@@ -42,6 +44,7 @@ MonoBehaviour:
       strength.
     isStarter: 0
     coucouModel: {fileID: 8653746302918967878, guid: 83ac34b6d94c23248ba82cbd57365929, type: 3}
+    coucouBattleModel: {fileID: 8653746302918967878, guid: 84ded4e7ac9fe2449947c9e75ba2e2dd, type: 3}
     coucouElement: 3
     coucouVariant: 6
     ability1: 1
@@ -53,6 +56,7 @@ MonoBehaviour:
       at the chandeliers, as it\u2019s their favourite place to hide!"
     isStarter: 0
     coucouModel: {fileID: 3367057933623687398, guid: 0fe269830f6cc404b8ba2fa4e00f1fc2, type: 3}
+    coucouBattleModel: {fileID: 3367057933623687398, guid: e43623e708a5d024c9c61cb0ca3f5d6a, type: 3}
     coucouElement: 1
     coucouVariant: 3
     ability1: 0
@@ -65,6 +69,7 @@ MonoBehaviour:
       hands!"
     isStarter: 0
     coucouModel: {fileID: 9148807535897838057, guid: 0c35d8a5331567d4aa55271dbb919180, type: 3}
+    coucouBattleModel: {fileID: 9148807535897838057, guid: fcc6403088a7a634abde2ebb605cbf63, type: 3}
     coucouElement: 2
     coucouVariant: 2
     ability1: 0
@@ -78,6 +83,7 @@ MonoBehaviour:
       flame scares the insects.
     isStarter: 0
     coucouModel: {fileID: 2596316870467471901, guid: bff1970df769d364a8257ed2cca4560e, type: 3}
+    coucouBattleModel: {fileID: 2596316870467471901, guid: 7dd7071e01a56ea408ae89d71e1e357e, type: 3}
     coucouElement: 1
     coucouVariant: 1
     ability1: 100
@@ -89,6 +95,7 @@ MonoBehaviour:
       more everything around them gets dizzy, but they never seen to get dizzy themselves."
     isStarter: 0
     coucouModel: {fileID: 3880081241310032020, guid: 90d0b4bc4b1b40d419a17b6ed806a5a6, type: 3}
+    coucouBattleModel: {fileID: 3880081241310032020, guid: a249f69afda8a7845ac6ed9fb388266e, type: 3}
     coucouElement: 1
     coucouVariant: 5
     ability1: 0
@@ -100,6 +107,7 @@ MonoBehaviour:
       size allows it to squeeze into unexpected places."
     isStarter: 1
     coucouModel: {fileID: 8610175352056052903, guid: 27efa394cfc6af14d85e8fcebb9fa9c7, type: 3}
+    coucouBattleModel: {fileID: 8610175352056052903, guid: 87205b9936a92ab40be55c1244a45078, type: 3}
     coucouElement: 1
     coucouVariant: 4
     ability1: 0
@@ -112,6 +120,7 @@ MonoBehaviour:
       valuable in front of it.
     isStarter: 1
     coucouModel: {fileID: 6528331894254293333, guid: b731f8897d93cc34981e184759a10c81, type: 3}
+    coucouBattleModel: {fileID: 6528331894254293333, guid: 92d6e212eaf0faf4f920bde3c2de51b4, type: 3}
     coucouElement: 4
     coucouVariant: 2
     ability1: 0
@@ -123,6 +132,7 @@ MonoBehaviour:
       evil things they can find.
     isStarter: 0
     coucouModel: {fileID: 9040302429127520086, guid: 94a5389bb3a99744baa37ae78546245c, type: 3}
+    coucouBattleModel: {fileID: 9040302429127520086, guid: 4e04c726a97196a43a3bab61cb0a1ea0, type: 3}
     coucouElement: 5
     coucouVariant: 4
     ability1: 100
@@ -134,6 +144,7 @@ MonoBehaviour:
       Just the touch could make a CouCou Catcher incredibly sick!
     isStarter: 0
     coucouModel: {fileID: 492914170537352543, guid: a03f9a6c76ade5948a6145fdd2590eea, type: 3}
+    coucouBattleModel: {fileID: 492914170537352543, guid: c7edca340ada52948b74840fdd3621cf, type: 3}
     coucouElement: 5
     coucouVariant: 4
     ability1: 101
@@ -145,6 +156,7 @@ MonoBehaviour:
       and can cause chaos!"
     isStarter: 0
     coucouModel: {fileID: 7821868990417443051, guid: 2849f6db232c7674f84b89d589de1958, type: 3}
+    coucouBattleModel: {fileID: 7821868990417443051, guid: 4f83f96786a9f9847abaebb1c9e33104, type: 3}
     coucouElement: 1
     coucouVariant: 1
     ability1: 0
@@ -156,6 +168,7 @@ MonoBehaviour:
       at high speeds to see who has the stronger head claws.
     isStarter: 0
     coucouModel: {fileID: 234061779093934455, guid: 7f7244253ecf8604fb71942fe82a4d48, type: 3}
+    coucouBattleModel: {fileID: 234061779093934455, guid: d5f116a9c2fb62f4e8f719766e8b6bee, type: 3}
     coucouElement: 4
     coucouVariant: 1
     ability1: 1
@@ -167,6 +180,7 @@ MonoBehaviour:
       its path, the story of Kontril is told to scare children away from evil.
     isStarter: 0
     coucouModel: {fileID: 2659050039442753375, guid: abf1f509f56abcb4b9e1e693aa586eb0, type: 3}
+    coucouBattleModel: {fileID: 2659050039442753375, guid: 59921ec183108024bbb03a420103038c, type: 3}
     coucouElement: 4
     coucouVariant: 6
     ability1: 101
@@ -178,6 +192,7 @@ MonoBehaviour:
       because it\u2019s body will begin to glow brightly."
     isStarter: 0
     coucouModel: {fileID: 717454040062448902, guid: 891a098ed4195444e89a15248604cd7a, type: 3}
+    coucouBattleModel: {fileID: 717454040062448902, guid: 07037e25f927a8d4592f945e331e1191, type: 3}
     coucouElement: 4
     coucouVariant: 1
     ability1: 1
@@ -189,6 +204,7 @@ MonoBehaviour:
       situations. The light burns brighter when evil is nearby.
     isStarter: 1
     coucouModel: {fileID: 6963053722860323109, guid: 6af905ced442ef742b8a60cd18976bfa, type: 3}
+    coucouBattleModel: {fileID: 6963053722860323109, guid: 58cf422329c270e4787e7ce2e67e66b8, type: 3}
     coucouElement: 5
     coucouVariant: 1
     ability1: 1
@@ -200,6 +216,7 @@ MonoBehaviour:
       thing it sleeps for 20 hours a day."
     isStarter: 0
     coucouModel: {fileID: 3195654725213980119, guid: 2c275b2602f9e7a4eaf7dde96f6cee4e, type: 3}
+    coucouBattleModel: {fileID: 3195654725213980119, guid: 3a796824b3dd0e244bb99639b21986d3, type: 3}
     coucouElement: 4
     coucouVariant: 5
     ability1: 0
@@ -212,6 +229,7 @@ MonoBehaviour:
       them they will jump around excitedly, making everything in the room very soggy.
     isStarter: 0
     coucouModel: {fileID: 5779116957747977963, guid: 27adfa6e1f0afd3489e1b9a642121802, type: 3}
+    coucouBattleModel: {fileID: 5779116957747977963, guid: fd68888e45aa2a24786b22b63cbc2536, type: 3}
     coucouElement: 3
     coucouVariant: 2
     ability1: 2
@@ -223,6 +241,7 @@ MonoBehaviour:
       you may be misled by the hulking size and strength of it.
     isStarter: 0
     coucouModel: {fileID: 5901667697016035504, guid: 537985cf166f7cf428e7098e1dcc9b8c, type: 3}
+    coucouBattleModel: {fileID: 5901667697016035504, guid: 4d8782668e589ab48bd07caf8d7afb27, type: 3}
     coucouElement: 2
     coucouVariant: 6
     ability1: 2
@@ -234,6 +253,7 @@ MonoBehaviour:
       unsuspecting CouCous or even Catchers!
     isStarter: 0
     coucouModel: {fileID: 5743029333618341606, guid: 53fb7f23e5f68e34883d143534e9d25c, type: 3}
+    coucouBattleModel: {fileID: 5743029333618341606, guid: 366bebfe72340cf4da662d4a3f5758d4, type: 3}
     coucouElement: 2
     coucouVariant: 2
     ability1: 0
@@ -245,6 +265,7 @@ MonoBehaviour:
       spikes aren\u2019t just for decoration!"
     isStarter: 1
     coucouModel: {fileID: 6211936365489289169, guid: 6bf6f1145b4204944b7bc51a4aab59a7, type: 3}
+    coucouBattleModel: {fileID: 6211936365489289169, guid: a5f8d3bd393178d498179daa27cfc519, type: 3}
     coucouElement: 3
     coucouVariant: 4
     ability1: 2
@@ -256,6 +277,7 @@ MonoBehaviour:
       home is probably full of it!
     isStarter: 0
     coucouModel: {fileID: 7163126689786096728, guid: b3d7682f2b6ed044c80b4e9ad2d72b0b, type: 3}
+    coucouBattleModel: {fileID: 7163126689786096728, guid: bb558aeb18a964f4d8e5ff8e649f8102, type: 3}
     coucouElement: 5
     coucouVariant: 1
     ability1: 0
@@ -267,6 +289,7 @@ MonoBehaviour:
       they sleep for 16 hours a day!
     isStarter: 0
     coucouModel: {fileID: 3416505481343002970, guid: 475f0ce3914df004395f4a861aa4a8b3, type: 3}
+    coucouBattleModel: {fileID: 3416505481343002970, guid: 60dfcaf0ad555704f81646648fcabc98, type: 3}
     coucouElement: 5
     coucouVariant: 4
     ability1: 100
@@ -279,6 +302,7 @@ MonoBehaviour:
       a slighte into disarray and panic."
     isStarter: 0
     coucouModel: {fileID: 9180434760536724311, guid: ec291f4910316ab4380baa1ac1bed3a3, type: 3}
+    coucouBattleModel: {fileID: 9180434760536724311, guid: cae3bb63ab03869488c37bc76e3f88a2, type: 3}
     coucouElement: 4
     coucouVariant: 1
     ability1: 100
@@ -290,6 +314,7 @@ MonoBehaviour:
       as it is one of the most common CouCou in the oceans and rivers.
     isStarter: 0
     coucouModel: {fileID: 8181286506658956992, guid: cceb4685efa1fac4d8e7c105402b7ce4, type: 3}
+    coucouBattleModel: {fileID: 8181286506658956992, guid: 90f0d2719f0121c4bbd3fe35b1afcb52, type: 3}
     coucouElement: 3
     coucouVariant: 2
     ability1: 101
@@ -302,6 +327,7 @@ MonoBehaviour:
       CouCou Catcher!"
     isStarter: 0
     coucouModel: {fileID: 1051284848201421901, guid: f45e2d0457424b94bbc35cf7016a0b6e, type: 3}
+    coucouBattleModel: {fileID: 1051284848201421901, guid: 5dc3eeeb6d783c7419310477f01c67a1, type: 3}
     coucouElement: 2
     coucouVariant: 5
     ability1: 0

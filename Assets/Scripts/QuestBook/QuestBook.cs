@@ -5,15 +5,18 @@ using UnityEngine;
 public class QuestBook : MonoBehaviour
 {
     private GameManager gameManager;
-    public GameObject questBook;
 
-    public Animator Page1;
-    public Animator Page2;
-    public Animator Page3;
-    public Animator Page4;
-    public Animator Page5;
-    public Animator Page6;
-    public Animator Page7;
+    [Header("Contents")]
+    public List<QuestPage> pages;
+
+    [Header("Animation")]
+    public Animator page1Animator;
+    public Animator page2Animator;
+    public Animator page3Animator;
+    public Animator page4Animator;
+    public Animator page5Animator;
+    public Animator page6Animator;
+    public Animator page7Animator;
 
     public int PageOpen = 0;
 
@@ -22,60 +25,56 @@ public class QuestBook : MonoBehaviour
     private void Awake()
     {
         gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
-
         playerInputActions = new PlayerInputActions();
 
-        playerInputActions.Wandering.QuestBook.started += x => OpenAndCloseBook();
-        playerInputActions.UI.Cancel.started += x => OpenAndCloseBook();
         playerInputActions.UI.Navigate.started += x => RequestToNavigate(x.ReadValue<Vector2>());
         playerInputActions.UI.Navigate.canceled += x => RequestToNavigate(new Vector2(0, 0));
-
-        questBook = gameObject.transform.GetChild(0).gameObject;
     }
 
     // Start is called before the first frame update
     void Start()
     {
-
-
-        // Set all the pages to closed at the start.
-        Page1.SetBool("TurnCount1", false);
-        Page2.SetBool("TurnCount2", false);
-        Page3.SetBool("TurnCount3", false);
-        Page4.SetBool("TurnCount4", false);
-        Page5.SetBool("TurnCount5", false);
-        Page6.SetBool("TurnCount6", false);
-        Page7.SetBool("TurnCount7", false);
+        ResetPages();
+        foreach (QuestPage page in pages)
+        {
+            page.titleText.text = page.questTitle;
+            page.contentText.text = page.contents;
+        }
     }
 
-    public void OpenAndCloseBook()
+    public void ResetPages()
     {
-        Debug.Log("Open and Close");
-        if (questBook.activeInHierarchy && gameManager.State == GameManager.GameState.Wandering)
-        {
-            Debug.Log("Deactivating");
-            questBook.SetActive(false);
-            playerInputActions.Wandering.Enable();
-            playerInputActions.UI.Disable();
-            StopAllCoroutines();
-        }
-        else if (!questBook.activeInHierarchy && gameManager.State == GameManager.GameState.Wandering)
-        {
-            Debug.Log("Activating");
-            questBook.SetActive(true);
-            playerInputActions.Wandering.Disable();
-            playerInputActions.UI.Enable();
-            StartCoroutine(PageChecker());
-        }
+        // Set all the pages to closed at the start.
+        page1Animator.SetBool("TurnCount1", false);
+        page2Animator.SetBool("TurnCount2", false);
+        page3Animator.SetBool("TurnCount3", false);
+        page4Animator.SetBool("TurnCount4", false);
+        page5Animator.SetBool("TurnCount5", false);
+        page6Animator.SetBool("TurnCount6", false);
+        page7Animator.SetBool("TurnCount7", false);
+        PageOpen = 0;
+    }
+
+    public void OpenBook()
+    {
+        playerInputActions.Wandering.Disable();
+        playerInputActions.UI.Enable();
+        StartCoroutine(PageChecker());
+    }
+
+    public void CloseBook()
+    {
+        ResetPages();
+        playerInputActions.Wandering.Enable();
+        playerInputActions.UI.Disable();
+        StopAllCoroutines();
     }
 
     // Update is called once per frame
     public IEnumerator PageChecker()
     {
-        Debug.Log("Coroutine started");
-        while (questBook.activeInHierarchy)
+        while (true)
         {
-            Debug.Log("While loop fun");
             // Makes sure the page number won't go below 0.
             if (PageOpen <= -1)
             {
@@ -91,36 +90,36 @@ public class QuestBook : MonoBehaviour
             switch (PageOpen)
             {
                 case 0:
-                    Page1.SetBool("TurnCount1", false);
+                    page1Animator.SetBool("TurnCount1", false);
                     break;
 
                 case 1:
-                    Page1.SetBool("TurnCount1", true);
-                    Page2.SetBool("TurnCount2", false);
+                    page1Animator.SetBool("TurnCount1", true);
+                    page2Animator.SetBool("TurnCount2", false);
                     break;
 
                 case 2:
-                    Page2.SetBool("TurnCount2", true);
-                    Page3.SetBool("TurnCount3", false);
+                    page2Animator.SetBool("TurnCount2", true);
+                    page3Animator.SetBool("TurnCount3", false);
                     break;
 
                 case 3:
-                    Page3.SetBool("TurnCount3", true);
-                    Page4.SetBool("TurnCount4", false);
+                    page3Animator.SetBool("TurnCount3", true);
+                    page4Animator.SetBool("TurnCount4", false);
                     break;
 
                 case 4:
-                    Page4.SetBool("TurnCount4", true);
-                    Page5.SetBool("TurnCount5", false);
+                    page4Animator.SetBool("TurnCount4", true);
+                    page5Animator.SetBool("TurnCount5", false);
                     break;
 
                 case 5:
-                    Page5.SetBool("TurnCount5", true);
-                    Page6.SetBool("TurnCount6", false);
+                    page5Animator.SetBool("TurnCount5", true);
+                    page6Animator.SetBool("TurnCount6", false);
                     break;
 
                 case 6:
-                    Page6.SetBool("TurnCount6", true);
+                    page6Animator.SetBool("TurnCount6", true);
                     break;
             }
 

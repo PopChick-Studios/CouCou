@@ -527,6 +527,8 @@ public class EnemyManager : MonoBehaviour
         }
         else
         {
+            battleSystem.InstantiateModels(false, enemyActiveCouCou.coucouName);
+            yield return new WaitForSeconds(1f);
             bool surpriseSuccess = battleManager.SurpriseAttack();
             if (surpriseSuccess)
             {

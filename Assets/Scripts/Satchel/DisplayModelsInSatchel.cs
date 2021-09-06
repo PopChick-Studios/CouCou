@@ -32,11 +32,6 @@ public class DisplayModelsInSatchel : MonoBehaviour
         }
     }
 
-    private void Start()
-    {
-
-    }
-
     public void DisplayCouCou(string coucouName)
     {
         CouCouDatabase.CouCouData coucou = new CouCouDatabase.CouCouData();
