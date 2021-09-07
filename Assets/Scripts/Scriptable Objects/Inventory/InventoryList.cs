@@ -10,11 +10,10 @@ public class InventoryList : ScriptableObject
     {
         public string coucouName;
         public int coucouLevel;
+        public float currentEXP;
         public int coucouVariant;
         public CouCouDatabase.Element element;
 
-        public bool isCurrentlyActive = false;
-        public bool onParty = false;
         public int lineupOrder = -1;
 
         public int maxHealth;
@@ -25,14 +24,8 @@ public class InventoryList : ScriptableObject
         public int currentHealth;
         public int currentMindset;
         public int currentDetermination;
-
-        [Header("Abilities")]
-        public int ability1;
-        public int ability2;
-        public int ability3;
-        public int ability4;
-
-        // will be getting other relevant information from applying the name into a for loop to find it's matching scriptable
+        public bool isStunned = false;
+        public bool hasCollapsed = false;
     }
 
     [System.Serializable]
@@ -40,14 +33,14 @@ public class InventoryList : ScriptableObject
     {
         public string itemName;
         public int itemAmount;
-        public string itemDescription;
 
         public ItemsDatabase.ItemAttribute itemAttribute;
         public CouCouDatabase.Element element;
-        // will be getting other relevant information from applying the name into a for loop to find it's matching scriptable
     }
 
     // Save these lists for save function
+    public Dialogue preGameDialogue;
+    public CouCouInventory starterCouCou;
     public List<CouCouInventory> couCouInventory = new List<CouCouInventory>();
     public List<ItemInventory> itemInventory = new List<ItemInventory>();
 }

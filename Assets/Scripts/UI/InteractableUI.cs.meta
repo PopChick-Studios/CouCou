@@ -3,7 +3,13 @@ guid: 85493f043ec5bfa4c9d37216170568c3
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - playerInventory: {fileID: 11400000, guid: 44ee79a05ad81ff4d8652799fc7d7f56, type: 2}
+  - nameText: {instanceID: 0}
+  - arrowSprite: {instanceID: 0}
+  - arrowPlaceholder: {instanceID: 0}
+  - originTransform: {instanceID: 0}
+  - cameraTransform: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

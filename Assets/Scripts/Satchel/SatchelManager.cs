@@ -1,58 +1,69 @@
-using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.UI;
+using UnityEngine.EventSystems;
 using TMPro;
-using System;
 
 public class SatchelManager : MonoBehaviour
 {
     private BattleManager battleManager;
+    private BattlingUI battlingUI;
     private ScrollRectEnsureVisible scrollRectEnsureVisible;
-
-    public enum SelectedObject
-    {
-        Header,
-        Slot,
-        Submit
-    }
+    private CouCouFinder coucouFinder;
+    private ItemFinder itemFinder;
+    private BattleSystem battleSystem;
+    private EnemyManager enemyManager;
+    private InventoryManager inventoryManager;
+    private AbilityDescriptions abilityDescriptions;
 
     public CouCouDatabase coucouDatabase;
     private List<CouCouDatabase.CouCouData> coucouDataList;
 
+    public GameObject satchelList;
+    public GameObject abilitiesDescriptionUI;
+    public GameObject abilitiesElementChart;
+    public GameObject elementChart;
+
+    public ScrollRect scrollRect;
+    public Camera blurCamera;
+    public GameObject satchel;
+    public GameObject dialogueBox;
+    public GameObject prompt;
+    public GameObject promptText;
+    public GameObject dialogueText;
+    public GameObject acceptButton;
+
     public InventoryList inventoryList;
     public SatchelSlotController satchelSlotPrefab;
 
-    private InputSystemUIInputModule inputSystemUIInputModule;
     private PlayerInputActions playerInputActions;
-    private SatchelOpenClose satchelOpenClose;
 
-    private bool isNavigatingUI;
-    public int currentFocusedItem;
-    public int currentFocusedCouCou;
-    private int navigateDirection;
-    public bool usingMouse = false;
+    public bool inSubmit;
+    public bool inPrompt;
+    public bool isStuck;
+    private Button buttonClicked;
+    public GameObject currentSelectedButton;
 
     [Header("Sections")]
-    public GameObject itemsSection;
-    public GameObject coucouSection;
+    public Button itemsSection;
+    public Button coucouSection;
     public int selectedSection;
-    public Color defaultButtonColour;
-    public int headerSelection = 1;
-    public bool possibleSubmitFocus = false;
-    public bool submitFocusedPrevious = false;
-    public SelectedObject selectedObject;
 
     [Header("Description")]
     public TextMeshProUGUI descriptionName;
     public TextMeshProUGUI descriptionText;
     public Image itemSprite;
-    public Image submitButton;
+    public Button submitButton;
+    public Button giveBerryButton;
 
-    [Header("Colour")]
-    public Color defaultColour;
+    [Header("Stats")]
+    public GameObject statDisplay;
+    public TextMeshProUGUI healthPointsText;
+    public TextMeshProUGUI attackText;
+    public TextMeshProUGUI resistanceText;
+    public TextMeshProUGUI determinationText;
+    public TextMeshProUGUI mindsetText;
 
     public List<SatchelSlotController> itemSlotList;
     public List<SatchelSlotController> coucouSlotList;
@@ -61,18 +72,23 @@ public class SatchelManager : MonoBehaviour
     {
         coucouDataList = new List<CouCouDatabase.CouCouData>();
 
-        scrollRectEnsureVisible = gameObject.GetComponentInParent<ScrollRectEnsureVisible>();
+        scrollRectEnsureVisible = satchelList.GetComponentInParent<ScrollRectEnsureVisible>();
+
+        inventoryManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<InventoryManager>();
+        enemyManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<EnemyManager>();
+        battleSystem = GameObject.FindGameObjectWithTag("GameManager").GetComponent<BattleSystem>();
+        coucouFinder = GameObject.FindGameObjectWithTag("GameManager").GetComponent<CouCouFinder>();
+        itemFinder = GameObject.FindGameObjectWithTag("GameManager").GetComponent<ItemFinder>();
         battleManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<BattleManager>();
-        satchelOpenClose = GameObject.FindGameObjectWithTag("Satchel").GetComponent<SatchelOpenClose>();
-        inputSystemUIInputModule = GameObject.Find("EventSystem").GetComponent<InputSystemUIInputModule>();
+        battlingUI = GameObject.FindGameObjectWithTag("BattlingUI").GetComponent<BattlingUI>();
+        abilityDescriptions = GameObject.FindGameObjectWithTag("BattlingUI").GetComponent<AbilityDescriptions>();
+
         playerInputActions = new PlayerInputActions();
+        playerInputActions.UI.NavigateSections.performed += x => NavigateSections(x.ReadValue<float>());
+        playerInputActions.UI.OpenElementChart.started += x => OnElementChartToggle();
 
-        playerInputActions.UI.Navigate.started += x => RequestToNavigate(x.ReadValue<Vector2>());
-        playerInputActions.UI.Navigate.canceled += x => RequestToNavigate(new Vector2(0, 0));
-        playerInputActions.UI.Navigate.started += x => ChangeSection();
-        playerInputActions.UI.NavigateSections.performed += x => ChangeSection();
-
-        playerInputActions.UI.Submit.performed += x => OnSelect();
+        satchel.SetActive(false);
+        abilitiesDescriptionUI.SetActive(false);
     }
 
     private void Start()
@@ -83,157 +99,178 @@ public class SatchelManager : MonoBehaviour
         }
     }
 
-    public void RequestToNavigate(Vector2 input)
+    public void OnElementChartToggle()
     {
-        usingMouse = false;
-
-        // Stops creating multiple coroutines
-        StopAllCoroutines();
-
-        if (Mathf.Abs(input.y) > 0.5)
+        if (satchel.activeInHierarchy && !abilitiesElementChart.activeInHierarchy && !elementChart.activeInHierarchy)
         {
-            if (input.y > 0) // Going Up
+            if (inSubmit)
             {
-                navigateDirection = -1;
-                possibleSubmitFocus = false;
+                abilitiesElementChart.SetActive(true);
             }
-            else if (input.y < 0) // Going Down
+            else
             {
-                navigateDirection = 1;
-                possibleSubmitFocus = false;
-            }
-            isNavigatingUI = true;
-
-            if (selectedSection == 1)
-            {
-                StartCoroutine(NavigateItemUI());
-            }
-            else if (selectedSection == 2)
-            {
-                StartCoroutine(NavigateCouCouUI());
-            }
-            
-        }
-        else if (Mathf.Abs(input.x) > 0.5)
-        {
-            isNavigatingUI = false;
-
-            if (input.x > 0) // Going Right
-            {
-                headerSelection++;
-                possibleSubmitFocus = true;
-            }
-            else if (input.x < 0) // Going Left
-            {
-                headerSelection--;
-                possibleSubmitFocus = false;
-            }
-
-            if (headerSelection > 2)
-            {
-                headerSelection = 2;
-            }
-            else if (headerSelection < 1)
-            {
-                headerSelection = 1;
+                elementChart.SetActive(true);
             }
         }
-        else
+        else if (satchel.activeInHierarchy && (abilitiesElementChart.activeInHierarchy || elementChart.activeInHierarchy))
         {
-            isNavigatingUI = false;
-            StopAllCoroutines();
+            elementChart.SetActive(false);
+            abilitiesElementChart.SetActive(false);
         }
-
-        if (submitFocusedPrevious != possibleSubmitFocus)
-        {
-            FocusSubmitButton();
-            submitFocusedPrevious = possibleSubmitFocus;
-        }
-    }
-
-    public void OnSelect()
-    {
-        switch (selectedObject)
-        {
-            case SelectedObject.Header:
-                if (headerSelection == 1)
-                {
-                    OnItemSection();
-                }
-                else if (headerSelection == 2)
-                {
-                    OnCouCouSection();
-                }
-                break;
-
-            case SelectedObject.Slot:
-                possibleSubmitFocus = true;
-                FocusSubmitButton();
-                break;
-
-            case SelectedObject.Submit:
-                if (selectedSection == 1)
-                {
-                    battleManager.UseItem(itemSlotList[currentFocusedItem].itemNameText.text);
-                }
-                else if (selectedSection == 2)
-                {
-                    battleManager.ChangeCouCou(coucouSlotList[currentFocusedCouCou].itemNameText.text);
-                }
-                break;
-        }
-
-        submitFocusedPrevious = possibleSubmitFocus;
     }
 
     public void DisplayItems()
     {
-        for(int i = 0; i < inventoryList.itemInventory.Count; i++)
+        statDisplay.SetActive(false);
+
+        for (int i = 0; i < inventoryList.itemInventory.Count; i++)
         {
-            SatchelSlotController newSatchelSlot = Instantiate(satchelSlotPrefab, transform);
-            newSatchelSlot.itemNameText.text = inventoryList.itemInventory[i].itemName;
+            SatchelSlotController newSatchelSlot = Instantiate(satchelSlotPrefab, satchelList.transform);
+            ItemsDatabase.ItemData item = itemFinder.FindItem(inventoryList.itemInventory[i].itemName);
+            newSatchelSlot.itemNameText.text = item.itemName;
             newSatchelSlot.itemAmountText.text = inventoryList.itemInventory[i].itemAmount.ToString();
+            newSatchelSlot.itemDescription = item.itemDescription;
             newSatchelSlot.uniqueIdentifier = i;
-            itemSlotList.Add(newSatchelSlot);
+            newSatchelSlot.GetComponent<Button>().onClick.AddListener(delegate { GoToSubmit(newSatchelSlot.GetComponent<Button>()); });
+            itemSlotList.Insert(Mathf.Min(item.positionIndex, itemSlotList.Count), newSatchelSlot);
+        }
+        
+        for (int i = 0; i < itemSlotList.Count; i++)
+        {
+            Navigation newNav = new Navigation();
+            newNav.mode = Navigation.Mode.Explicit;
+
+            if (i != 0)
+            {
+                newNav.selectOnUp = itemSlotList[i - 1].GetComponent<Button>();
+            }
+
+            if (i != itemSlotList.Count - 1)
+            {
+                newNav.selectOnDown = itemSlotList[i + 1].GetComponent<Button>();
+            }
+
+            itemSlotList[i].GetComponent<Button>().navigation = newNav;
         }
 
-        // Focus the first item
-        itemSlotList[0].GetComponent<Image>().color = new Color(defaultColour.r * 0.85f, defaultColour.g * 0.85f, defaultColour.b * 0.85f, 1);
-        descriptionName.text = itemSlotList[0].itemNameText.text;
-        currentFocusedItem = 0;
-        selectedObject = SelectedObject.Slot;
+        EventSystem.current.SetSelectedGameObject(null);
+        if (itemSlotList.Count != 0)
+        {
+            itemSlotList[0].GetComponent<Button>().Select();
+            descriptionName.text = itemSlotList[0].itemNameText.text;
+            descriptionText.text = itemSlotList[0].itemDescription;
+            itemSprite.sprite = coucouFinder.GetElementSprite(inventoryList.itemInventory[itemSlotList[0].uniqueIdentifier].element);
+            if (itemSprite.sprite == null)
+            {
+                itemSprite.enabled = false;
+            }
+            else
+            {
+                itemSprite.enabled = true;
+            }
+            if (inventoryList.itemInventory[itemSlotList[0].uniqueIdentifier].itemAttribute == ItemsDatabase.ItemAttribute.ElementalMindset && enemyManager.wild)
+            {
+                giveBerryButton.gameObject.SetActive(true);
+            }
+            else
+            {
+                giveBerryButton.gameObject.SetActive(false);
+            }
+        }
+        else
+        {
+            descriptionText.text = "You don't own any items right now";
+            submitButton.interactable = false;
+            itemSprite.enabled = false;
+            submitButton.GetComponentInChildren<TextMeshProUGUI>().text = "";
+        }
     }
 
     public void DisplayCouCou()
     {
+        statDisplay.SetActive(true);
+
+        scrollRect.enabled = false;
+        inventoryManager.SortCouCouInventory();
+        scrollRect.enabled = true;
+
+        int onPartyCount = 0;
         for (int i = 0; i < inventoryList.couCouInventory.Count; i++)
         {
-            SatchelSlotController newSatchelSlot = Instantiate(satchelSlotPrefab, transform);
-            newSatchelSlot.itemNameText.text = inventoryList.couCouInventory[i].coucouName;
-            newSatchelSlot.itemAmountText.text = "Lv: " + inventoryList.couCouInventory[i].coucouLevel.ToString();
-            newSatchelSlot.uniqueIdentifier = i;
-            coucouSlotList.Add(newSatchelSlot);
+            if (i < 6)
+            {
+                onPartyCount++;
+                SatchelSlotController newSatchelSlot = Instantiate(satchelSlotPrefab, satchelList.transform);
+                CouCouDatabase.CouCouData coucou = coucouFinder.FindCouCou(inventoryList.couCouInventory[i].coucouName);
+                newSatchelSlot.itemNameText.text = inventoryList.couCouInventory[i].coucouName;
+                newSatchelSlot.itemAmountText.text = "Lv: " + inventoryList.couCouInventory[i].coucouLevel.ToString();
+                newSatchelSlot.uniqueIdentifier = i;
+                if (inventoryList.couCouInventory[i].hasCollapsed)
+                {
+                    newSatchelSlot.coucouOrder.text = "Collapsed";
+                    newSatchelSlot.coucouOrder.color = Color.gray;
+                }
+                else
+                {
+                    newSatchelSlot.coucouOrder.text = "Position " + inventoryList.couCouInventory[i].lineupOrder;
+                }
+                newSatchelSlot.itemDescription = coucou.coucouDescription;
+                newSatchelSlot.GetComponent<Button>().onClick.AddListener(delegate { GoToSubmit(newSatchelSlot.GetComponent<Button>()); });
+                coucouSlotList.Add(newSatchelSlot);
+            }
+            if (onPartyCount >= 5)
+            {
+                break;
+            }
         }
 
-        // Focus the first item
-        coucouSlotList[0].GetComponent<Image>().color = new Color(defaultColour.r * 0.85f, defaultColour.g * 0.85f, defaultColour.b * 0.85f, 1);
-        descriptionName.text = coucouSlotList[0].itemNameText.text;
-        currentFocusedCouCou = 0;
-        selectedObject = SelectedObject.Slot;
-    }
+        for (int i = 0; i < coucouSlotList.Count; i++)
+        {
+            Navigation newNav = new Navigation();
+            newNav.mode = Navigation.Mode.Explicit;
 
-    // Change items in view with mouse
-    public void ChangeSlotFocusMouse(GameObject uiPressed)
-    {
-        if (selectedSection == 1)
-        {
-            ChangeFocusedItem(currentFocusedItem, uiPressed.GetComponent<SatchelSlotController>().uniqueIdentifier);
-            currentFocusedItem = uiPressed.GetComponent<SatchelSlotController>().uniqueIdentifier;
+            if (i != 0)
+            {
+                newNav.selectOnUp = coucouSlotList[i - 1].GetComponent<Button>();
+            }
+
+            if (i != coucouSlotList.Count - 1)
+            {
+                newNav.selectOnDown = coucouSlotList[i + 1].GetComponent<Button>();
+            }
+            coucouSlotList[i].GetComponent<Button>().navigation = newNav;
         }
-        else if (selectedSection == 2)
+
+        EventSystem.current.SetSelectedGameObject(null);
+
+        if (coucouSlotList.Count != 0)
         {
-            ChangeFocusedCouCou(currentFocusedCouCou, uiPressed.GetComponent<SatchelSlotController>().uniqueIdentifier);
-            currentFocusedCouCou = uiPressed.GetComponent<SatchelSlotController>().uniqueIdentifier;
+            coucouSlotList[0].GetComponent<Button>().Select();
+            descriptionName.text = coucouSlotList[0].itemNameText.text;
+            descriptionText.text = coucouSlotList[0].itemDescription;
+            healthPointsText.text = "HP: " + inventoryList.couCouInventory[coucouSlotList[0].uniqueIdentifier].currentHealth + "/" + inventoryList.couCouInventory[coucouSlotList[0].uniqueIdentifier].maxHealth;
+            attackText.text = "Atk: " + inventoryList.couCouInventory[coucouSlotList[0].uniqueIdentifier].currentAttack;
+            resistanceText.text = "Res: " + Mathf.Round(inventoryList.couCouInventory[coucouSlotList[0].uniqueIdentifier].currentResistance * 1000) / 1000;
+            determinationText.text = "Det: " + inventoryList.couCouInventory[coucouSlotList[0].uniqueIdentifier].currentDetermination;
+            mindsetText.text = "Mind: " + inventoryList.couCouInventory[coucouSlotList[0].uniqueIdentifier].currentMindset;
+            itemSprite.sprite = coucouFinder.GetElementSprite(inventoryList.couCouInventory[coucouSlotList[0].uniqueIdentifier].element);
+
+            if (descriptionName.text == battleSystem.player.coucouName)
+            {
+                submitButton.interactable = false;
+            }
+            else
+            {
+                submitButton.interactable = true;
+            }
+        }
+        else
+        {
+            descriptionText.text = "You don't own any CouCou right now";
+            statDisplay.SetActive(false);
+            submitButton.interactable = false;
+            itemSprite.enabled = false;
+            submitButton.GetComponentInChildren<TextMeshProUGUI>().text = "";
         }
     }
 
@@ -242,10 +279,9 @@ public class SatchelManager : MonoBehaviour
         descriptionName.text = "";
         descriptionText.text = "";
 
-        currentFocusedItem = 0;
         itemSlotList.Clear();
 
-        foreach (Transform child in gameObject.transform)
+        foreach (Transform child in satchelList.transform)
         {
             Destroy(child.gameObject);
         }
@@ -256,290 +292,251 @@ public class SatchelManager : MonoBehaviour
         descriptionName.text = "";
         descriptionText.text = "";
 
-        currentFocusedCouCou = 0;
         coucouSlotList.Clear();
 
-        foreach (Transform child in gameObject.transform)
+        foreach (Transform child in satchelList.transform)
         {
             Destroy(child.gameObject);
         }
     }
 
-    public void ChangeFocusedItem(int before, int after)
+    public void GoToSubmit(Button button)
     {
-        if (itemSlotList.Count - 1 < after || after < -1)
+        inPrompt = false;
+        prompt.SetActive(false);
+        dialogueText.SetActive(true);
+        dialogueBox.SetActive(false);
+        inSubmit = true;
+        buttonClicked = button;
+        submitButton.Select();
+        if (selectedSection == 2)
         {
-            isNavigatingUI = false;
-            return;
-        }
-        else if (before == -1 && after == -1)
-        {
-            currentFocusedItem = after;
-
-            descriptionName.text = "";
-            descriptionText.text = "";
-
-            // Check which button
-            if (headerSelection == 1)
-            {
-                coucouSection.GetComponent<Image>().color = new Color(defaultButtonColour.r, defaultButtonColour.g, defaultButtonColour.b, 1);
-                itemsSection.GetComponent<Image>().color = new Color(defaultButtonColour.r * 0.85f, defaultButtonColour.g * 0.85f, defaultButtonColour.b * 0.85f, 1);
-            }
-            else if (headerSelection == 2)
-            {
-                itemsSection.GetComponent<Image>().color = new Color(defaultButtonColour.r, defaultButtonColour.g, defaultButtonColour.b, 1);
-                coucouSection.GetComponent<Image>().color = new Color(defaultButtonColour.r * 0.85f, defaultButtonColour.g * 0.85f, defaultButtonColour.b * 0.85f, 1);
-            }
-            return;
-        }
-        else if (after == -1)
-        {
-            selectedObject = SelectedObject.Header;
-
-            // Reset the colours
-            itemSlotList[before].GetComponent<Image>().color = new Color(defaultColour.r, defaultColour.g, defaultColour.b, 1);
-            currentFocusedItem = after;
-
-            descriptionName.text = "";
-            descriptionText.text = "";
-
-            // Check which button
-            if (headerSelection == 1)
-            {
-                coucouSection.GetComponent<Image>().color = new Color(defaultButtonColour.r, defaultButtonColour.g, defaultButtonColour.b, 1);
-                itemsSection.GetComponent<Image>().color = new Color(defaultButtonColour.r * 0.85f, defaultButtonColour.g * 0.85f, defaultButtonColour.b * 0.85f, 1);
-            }
-            else if (headerSelection == 2)
-            {
-                itemsSection.GetComponent<Image>().color = new Color(defaultButtonColour.r, defaultButtonColour.g, defaultButtonColour.b, 1);
-                coucouSection.GetComponent<Image>().color = new Color(defaultButtonColour.r * 0.85f, defaultButtonColour.g * 0.85f, defaultButtonColour.b * 0.85f, 1);
-            }
-            return;
-        }
-        else if (before == -1)
-        {
-            selectedObject = SelectedObject.Slot;
-
-            currentFocusedItem = after;
-            itemsSection.GetComponent<Image>().color = new Color(defaultButtonColour.r, defaultButtonColour.g, defaultButtonColour.b, 1);
-            coucouSection.GetComponent<Image>().color = new Color(defaultButtonColour.r, defaultButtonColour.g, defaultButtonColour.b, 1);
-            itemSlotList[after].GetComponent<Image>().color = new Color(defaultColour.r * 0.85f, defaultColour.g * 0.85f, defaultColour.b * 0.85f, 1);
-        }
-        else
-        {
-            currentFocusedItem = after;
-            itemSlotList[before].GetComponent<Image>().color = new Color(defaultColour.r, defaultColour.g, defaultColour.b, 1);
-        }
-
-        itemSlotList[after].GetComponent<Image>().color = new Color(defaultColour.r * 0.85f, defaultColour.g * 0.85f, defaultColour.b * 0.85f, 1);
-
-        // Change text
-        descriptionName.text = itemSlotList[after].itemNameText.text;
-        descriptionText.text = inventoryList.itemInventory[after].itemDescription;
-    }
-
-    public void ChangeFocusedCouCou(int before, int after)
-    {
-        if (coucouSlotList.Count - 1 < after || after < -1)
-        {
-            isNavigatingUI = false;
-            return;
-        }
-        else if (before == -1 && after == -1)
-        {
-            currentFocusedCouCou = after;
-
-            descriptionName.text = "";
-            descriptionText.text = "";
-
-            // Check which button
-            if (headerSelection == 1)
-            {
-                coucouSection.GetComponent<Image>().color = new Color(defaultButtonColour.r, defaultButtonColour.g, defaultButtonColour.b, 1);
-                itemsSection.GetComponent<Image>().color = new Color(defaultButtonColour.r * 0.85f, defaultButtonColour.g * 0.85f, defaultButtonColour.b * 0.85f, 1);
-            }
-            else if (headerSelection == 2)
-            {
-                itemsSection.GetComponent<Image>().color = new Color(defaultButtonColour.r, defaultButtonColour.g, defaultButtonColour.b, 1);
-                coucouSection.GetComponent<Image>().color = new Color(defaultButtonColour.r * 0.85f, defaultButtonColour.g * 0.85f, defaultButtonColour.b * 0.85f, 1);
-            }
-            return;
-        }
-        else if (after == -1)
-        {
-            selectedObject = SelectedObject.Header;
-
-            // Reset the colours
-            coucouSlotList[before].GetComponent<Image>().color = new Color(defaultColour.r, defaultColour.g, defaultColour.b, 1);
-            currentFocusedCouCou = after;
-
-            descriptionName.text = "";
-            descriptionText.text = "";
-
-            // Check which button
-            if (headerSelection == 1)
-            {
-                coucouSection.GetComponent<Image>().color = new Color(defaultButtonColour.r, defaultButtonColour.g, defaultButtonColour.b, 1);
-                itemsSection.GetComponent<Image>().color = new Color(defaultButtonColour.r * 0.85f, defaultButtonColour.g * 0.85f, defaultButtonColour.b * 0.85f, 1);
-            }
-            else if (headerSelection == 2)
-            {
-                itemsSection.GetComponent<Image>().color = new Color(defaultButtonColour.r, defaultButtonColour.g, defaultButtonColour.b, 1);
-                coucouSection.GetComponent<Image>().color = new Color(defaultButtonColour.r * 0.85f, defaultButtonColour.g * 0.85f, defaultButtonColour.b * 0.85f, 1);
-            }
-            return;
-        }
-        else if (before == -1)
-        {
-            selectedObject = SelectedObject.Slot;
-
-            currentFocusedCouCou = after;
-            itemsSection.GetComponent<Image>().color = new Color(defaultButtonColour.r, defaultButtonColour.g, defaultButtonColour.b, 1);
-            coucouSection.GetComponent<Image>().color = new Color(defaultButtonColour.r, defaultButtonColour.g, defaultButtonColour.b, 1);
-            coucouSlotList[after].GetComponent<Image>().color = new Color(defaultColour.r * 0.85f, defaultColour.g * 0.85f, defaultColour.b * 0.85f, 1);
-        }
-        else
-        {
-            currentFocusedCouCou = after;
-            if (!usingMouse)
-            {
-                scrollRectEnsureVisible.CenterOnItem(coucouSlotList[after].gameObject.GetComponent<RectTransform>());
-            }
-            coucouSlotList[before].GetComponent<Image>().color = new Color(defaultColour.r, defaultColour.g, defaultColour.b, 1);
-        }
-
-        coucouSlotList[after].GetComponent<Image>().color = new Color(defaultColour.r * 0.85f, defaultColour.g * 0.85f, defaultColour.b * 0.85f, 1);
-
-        // Change text
-        descriptionName.text = coucouSlotList[after].itemNameText.text;
-
-        for (int i = 0; i < coucouDataList.Count - 1; i++)
-        {
-            if (inventoryList.couCouInventory[after].coucouName == coucouDataList[i].coucouName)
-            {
-                descriptionText.text = coucouDataList[i].coucouDescription;
-            }
+            abilityDescriptions.DisplayAbilityDescriptions(coucouFinder.FindCouCou(button.GetComponent<SatchelSlotController>().itemNameText.text));
+            abilitiesDescriptionUI.SetActive(true);
         }
     }
 
-    public void ChangeSection()
+    public void GoBack()
     {
-        if ((currentFocusedItem == -1 || currentFocusedCouCou == -1) && headerSelection == 1)
+        if ((isStuck && !inPrompt && !inSubmit) || battleSystem.state != BattleState.PLAYERTURN)
         {
-            coucouSection.GetComponent<Image>().color = defaultButtonColour;
-            itemsSection.GetComponent<Image>().color = new Color(defaultButtonColour.r * 0.85f, defaultButtonColour.g * 0.85f, defaultButtonColour.b * 0.85f, 1);
+            return;
         }
-        else if ((currentFocusedItem == -1 || currentFocusedCouCou == -1) && headerSelection == 2)
+        else if (inPrompt)
         {
-            itemsSection.GetComponent<Image>().color = defaultButtonColour;
-            coucouSection.GetComponent<Image>().color = new Color(defaultButtonColour.r * 0.85f, defaultButtonColour.g * 0.85f, defaultButtonColour.b * 0.85f, 1);
+            submitButton.Select();
+            OnSubmitCancelled();
+        }
+        else if (inSubmit)
+        {
+            if (buttonClicked != null)
+            {
+                buttonClicked.Select();
+            }
+            buttonClicked = null;
+            inSubmit = false;
+            abilitiesDescriptionUI.SetActive(false);
+        }
+        else if (battlingUI.inSatchel)
+        {
+            selectedSection = 0;
+            blurCamera.gameObject.SetActive(false);
+            ClearItems();
+            ClearCouCou();
+            satchel.SetActive(false);
+            battlingUI.OnCloseSatchel();
         }
     }
 
-    public void FocusSubmitButton()
+    public void UpdateDescription()
     {
-        if (possibleSubmitFocus && currentFocusedItem != -1 && selectedSection == 1)
+        SatchelSlotController satchelSlot = currentSelectedButton.GetComponent<SatchelSlotController>();
+        if (selectedSection == 1)
         {
-            selectedObject = SelectedObject.Submit;
-            submitButton.color = new Color(defaultButtonColour.r * 0.85f, defaultButtonColour.g * 0.85f, defaultButtonColour.b * 0.85f, 1);
-            itemSlotList[currentFocusedItem].GetComponent<Image>().color = new Color(defaultColour.r * 0.9f, defaultColour.g * 0.9f, defaultColour.b * 0.9f, 1);
-        }
-        else if (possibleSubmitFocus && currentFocusedCouCou != -1 && selectedSection == 2)
-        {
-            selectedObject = SelectedObject.Submit;
-            submitButton.color = new Color(defaultButtonColour.r * 0.85f, defaultButtonColour.g * 0.85f, defaultButtonColour.b * 0.85f, 1);
-            coucouSlotList[currentFocusedCouCou].GetComponent<Image>().color = new Color(defaultColour.r * 0.9f, defaultColour.g * 0.9f, defaultColour.b * 0.9f, 1);
-        }
-        else if (currentFocusedCouCou != -1 && currentFocusedItem != -1)
-        {
-            selectedObject = SelectedObject.Slot;
-            
-            submitButton.color = defaultButtonColour;
-            if (selectedSection == 1)
+            descriptionName.text = satchelSlot.itemNameText.text;
+            descriptionText.text = satchelSlot.itemDescription;
+            itemSprite.sprite = coucouFinder.GetElementSprite(inventoryList.itemInventory[satchelSlot.uniqueIdentifier].element);
+            if (itemSprite.sprite == null)
             {
-                itemSlotList[currentFocusedItem].GetComponent<Image>().color = new Color(defaultColour.r * 0.85f, defaultColour.g * 0.85f, defaultColour.b * 0.85f, 1);
+                itemSprite.enabled = false;
             }
             else
             {
-                coucouSlotList[currentFocusedCouCou].GetComponent<Image>().color = new Color(defaultColour.r * 0.85f, defaultColour.g * 0.85f, defaultColour.b * 0.85f, 1);
+                itemSprite.enabled = true;
+            }
+
+            if (inventoryList.itemInventory[satchelSlot.uniqueIdentifier].itemAttribute == ItemsDatabase.ItemAttribute.ElementalMindset && enemyManager.wild)
+            {
+                giveBerryButton.gameObject.SetActive(true);
+            }
+            else
+            {
+                giveBerryButton.gameObject.SetActive(false);
             }
         }
-        else if (selectedObject != SelectedObject.Submit)
+        else if (selectedSection == 2)
         {
-            submitButton.color = defaultButtonColour;
+            descriptionName.text = satchelSlot.itemNameText.text;
+            descriptionText.text = satchelSlot.itemDescription;
+            healthPointsText.text = "HP: " + inventoryList.couCouInventory[satchelSlot.uniqueIdentifier].currentHealth + "/" + inventoryList.couCouInventory[satchelSlot.uniqueIdentifier].maxHealth;
+            attackText.text = "Atk: " + inventoryList.couCouInventory[satchelSlot.uniqueIdentifier].currentAttack;
+            resistanceText.text = "Res: " + Mathf.Round(inventoryList.couCouInventory[satchelSlot.uniqueIdentifier].currentResistance * 1000) / 1000;
+            determinationText.text = "Det: " + inventoryList.couCouInventory[satchelSlot.uniqueIdentifier].currentDetermination;
+            mindsetText.text = "Mind: " + inventoryList.couCouInventory[satchelSlot.uniqueIdentifier].currentMindset;
+            scrollRectEnsureVisible.CenterOnItem(currentSelectedButton.GetComponent<RectTransform>());
+            itemSprite.sprite = coucouFinder.GetElementSprite(inventoryList.couCouInventory[satchelSlot.uniqueIdentifier].element);
+
+            if (descriptionName.text == battleSystem.player.coucouName || inventoryList.couCouInventory[satchelSlot.uniqueIdentifier].hasCollapsed)
+            {
+                submitButton.interactable = false;
+            }
+            else
+            {
+                submitButton.interactable = true;
+            }
         }
     }
 
-    public IEnumerator NavigateItemUI()
+    public void OnSubmitPressed()
     {
-        // Wait for delay
-        if (currentFocusedItem + navigateDirection == -1)
+        inPrompt = true;
+        if (selectedSection == 1)
         {
-            headerSelection = 1;
+            promptText.GetComponent<TextMeshProUGUI>().text = "Do you want to use a " + descriptionName.text + "?";
         }
-        ChangeFocusedItem(currentFocusedItem, currentFocusedItem + navigateDirection);
-        yield return new WaitForSeconds(inputSystemUIInputModule.moveRepeatDelay);
-
-        // Proceed through UI
-        while (isNavigatingUI)
+        else if (selectedSection == 2)
         {
-            ChangeFocusedItem(currentFocusedItem, currentFocusedItem + navigateDirection);
-            if (currentFocusedItem + navigateDirection <= -1)
-            {
-                headerSelection = 1;
-                isNavigatingUI = false;
-                yield return null;
-            }
-            yield return new WaitForSeconds(inputSystemUIInputModule.moveRepeatRate);
+            promptText.GetComponent<TextMeshProUGUI>().text = "Do you want to swap " + battleManager.activeCouCou.coucouName + " with " + descriptionName.text + "?";
         }
+        else if (selectedSection == 3)
+        {
+            promptText.GetComponent<TextMeshProUGUI>().text = "Do you want to give a " + descriptionName.text + " to the wild " + battleSystem.enemy.coucouName + "?";
+        }
+        dialogueBox.SetActive(true);
+        dialogueText.SetActive(false);
+        prompt.SetActive(true);
+        acceptButton.GetComponent<Button>().Select();
     }
 
-    public IEnumerator NavigateCouCouUI()
+    public void OnSubmitAccepted()
     {
-        // Wait for delay
-        if (currentFocusedCouCou + navigateDirection == -1)
-        {
-            headerSelection = 2;
-        }
-        ChangeFocusedCouCou(currentFocusedCouCou, currentFocusedCouCou + navigateDirection);
-        yield return new WaitForSeconds(inputSystemUIInputModule.moveRepeatDelay);
+        inPrompt = false;
+        inSubmit = false;
+        prompt.SetActive(false);
+        dialogueText.SetActive(true);
 
-        // Proceed through UI
-        while (isNavigatingUI)
+        if (selectedSection == 1)
         {
-            ChangeFocusedCouCou(currentFocusedCouCou, currentFocusedCouCou + navigateDirection);
-            if (currentFocusedCouCou + navigateDirection <= -1)
-            {
-                headerSelection = 2;
-                isNavigatingUI = false;
-                yield return null;
-            }
-            yield return new WaitForSeconds(inputSystemUIInputModule.moveRepeatRate);
+            dialogueText.GetComponent<TextMeshProUGUI>().text = "You use " + descriptionName.text;
+            StartCoroutine(battleManager.UseItem(descriptionName.text));
         }
+        else if (selectedSection == 2)
+        {
+            StartCoroutine(battleManager.ChangeCouCou(descriptionName.text));
+        }
+        else if (selectedSection == 3)
+        {
+            dialogueText.GetComponent<TextMeshProUGUI>().text = "You use " + descriptionName.text;
+            StartCoroutine(enemyManager.GiveBerry(itemFinder.FindItem(descriptionName.text).element, descriptionName.text));
+        }
+        selectedSection = 0;
+        blurCamera.gameObject.SetActive(false);
+        ClearItems();
+        ClearCouCou();
+        satchel.SetActive(false);
+        battlingUI.OnCloseSatchel();
+        battlingUI.OnFinishTurn();
+    }
+
+    public void OnSubmitCancelled()
+    {
+        if (selectedSection == 3)
+        {
+            selectedSection = 1;
+        }
+        submitButton.Select();
+        inPrompt = false;
+        prompt.SetActive(false);
+        dialogueText.SetActive(true);
+        dialogueBox.SetActive(false);
+    }
+
+    public void OnGiveBerry()
+    {
+        selectedSection = 3;
+        OnSubmitPressed();
     }
 
     #region - Section Changes -
 
+    public void NavigateSections(float direction)
+    {
+        if (satchel.activeInHierarchy)
+        {
+            if (isStuck)
+            {
+                return;
+            }
+            if (direction > 0 && selectedSection == 1 && !inSubmit)
+            {
+                OnCouCouSection();
+            }
+            else if (direction < 0 && selectedSection == 2 && !inSubmit)
+            {
+                OnItemSection();
+            }
+        }
+    }
+
     public void OnItemSection()
     {
-        headerSelection = 1;
-        currentFocusedCouCou = 0;
-        satchelOpenClose.OnItemSection();
-        ChangeFocusedItem(currentFocusedItem, -1);
-        gameObject.GetComponentInParent<ScrollRect>().enabled = false;
-
+        if (selectedSection == 1 || isStuck)
+        {
+            return;
+        }
+        abilitiesDescriptionUI.SetActive(false);
         submitButton.GetComponentInChildren<TextMeshProUGUI>().text = "Use Item";
+        blurCamera.gameObject.SetActive(true);
+        satchel.SetActive(true);
+        submitButton.interactable = true;
+        selectedSection = 1;
+        ClearCouCou();
+        DisplayItems();
+        scrollRect.normalizedPosition = new Vector2(0, 1);
+        scrollRect.enabled = false;
     }
 
     public void OnCouCouSection()
     {
-        headerSelection = 2;
-        currentFocusedItem = 0;
-        satchelOpenClose.OnCouCouSection();
-        ChangeFocusedCouCou(currentFocusedCouCou, -1);
-        gameObject.GetComponentInParent<ScrollRect>().enabled = true;
-
+        if (selectedSection == 2)
+        {
+            return;
+        }
         submitButton.GetComponentInChildren<TextMeshProUGUI>().text = "Change CouCou";
+        giveBerryButton.gameObject.SetActive(false);
+        blurCamera.gameObject.SetActive(true);
+        satchel.SetActive(true);
+        submitButton.interactable = true;
+        selectedSection = 2;
+        ClearItems();
+        DisplayCouCou();
+        scrollRect.enabled = true;
+        scrollRect.normalizedPosition = new Vector2(0, 1);
+    }
+
+    public void OpenCouCouSelect()
+    {
+        itemsSection.enabled = false;
+        giveBerryButton.gameObject.SetActive(false);
+        isStuck = true;
+        selectedSection = 2;
+        satchel.SetActive(true);
+        submitButton.interactable = true;
+        blurCamera.gameObject.SetActive(true);
+        submitButton.GetComponentInChildren<TextMeshProUGUI>().text = "Change CouCou";
+        DisplayCouCou();
+        scrollRect.enabled = true;
+        scrollRect.normalizedPosition = new Vector2(0, 1);
     }
 
     #endregion

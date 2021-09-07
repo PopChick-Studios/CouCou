@@ -8,96 +8,222 @@ using UnityEngine.InputSystem.Users;
 
 public class DisplayManager : MonoBehaviour
 {
-    [SerializeField] private GameObject HUD;
-    [SerializeField] private GameObject Interaction;
-    [SerializeField] private GameObject Satchel;
-    [SerializeField] private GameObject Pause;
+    private GameManager gameManager;
+    private FindWildCouCou findWildCouCou;
+    private SatchelAdventureManager satchelAdventureManager;
+    private PlayerInteraction playerInteraction;
+    private IntoFight intoFight;
 
-    [SerializeField] private GameObject CollectUI;
-    [SerializeField] private GameObject LetterUI;
-    [SerializeField] private GameObject SaveUI;
+    [Header("Blur Camera")]
+    public GameObject blurCamera;
+
+    [Header("UI Elements")]
+    [SerializeField] private GameObject HUD;
+    [SerializeField] private GameObject interaction;
+    [SerializeField] private GameObject satchel;
+    [SerializeField] private GameObject pause;
+    [SerializeField] private GameObject confirmation;
+    [SerializeField] private GameObject options;
+    [SerializeField] private GameObject crossfade;
+    [SerializeField] private GameObject coucouCamera;
+
+    [Header("Interactables")]
+    [SerializeField] private GameObject collectUI;
+    [SerializeField] private TextMeshProUGUI collectText;
+    [SerializeField] private GameObject letterUI;
+    [SerializeField] private GameObject saveUI;
+    [SerializeField] private GameObject coucouUI;
+    [SerializeField] private TextMeshProUGUI coucouUIText;
+
+
+    [Header("Buttons")]
+    [SerializeField] private Button coucouUIYes;
+    [SerializeField] private Button continueButton;
+    public Button confirmationQuitButton;
+
+    private string coucouInteractingName;
 
     public enum InteractionTypes
     {
         Collect,
         Letter,
-        Save
+        Save,
+        CouCou,
+        CouCorp
     }
 
     // Inputs
     PlayerInputActions playerInputActions;
-    public bool isPaused = false;
+
 
     private void Awake()
     {
+        intoFight = GetComponent<IntoFight>();
+        findWildCouCou = GetComponent<FindWildCouCou>();
+        gameManager = GetComponent<GameManager>();
+        satchelAdventureManager = GameObject.FindGameObjectWithTag("AdventureUI").GetComponent<SatchelAdventureManager>();
+        playerInteraction = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerInteraction>();
+
         playerInputActions = new PlayerInputActions();
 
         playerInputActions.Wandering.Pause.performed += x => PauseMenu();
+
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+
+        HeadsUpDisplay();
+
+        confirmation.SetActive(false);
     }
 
     public void PauseMenu()
     {
-        Time.timeScale = 0;
+        if (satchelAdventureManager.inSubmit || satchelAdventureManager.changingCouCou || satchelAdventureManager.isStuck)
+        {
+            satchelAdventureManager.GoBack();
+        }
+        else if (!playerInteraction.interacting && gameManager.State != GameManager.GameState.Fishing)
+        {
+            Time.timeScale = 0;
+            options.SetActive(false);
+            HUD.SetActive(false);
+            interaction.SetActive(false);
+            satchel.SetActive(false);
+            pause.SetActive(true);
+            coucouCamera.SetActive(false);
+            confirmation.SetActive(false);
+            blurCamera.SetActive(true);
 
-        HUD.SetActive(false);
-        Interaction.SetActive(false);
-        Satchel.SetActive(false);
-        Pause.SetActive(true);
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+            gameManager.SetState(GameManager.GameState.Paused);
 
-        Cursor.lockState = CursorLockMode.None;
+            continueButton.Select();
+        }
+    }
+
+    public void OnConfirmation()
+    {
+        pause.SetActive(false);
+        confirmation.SetActive(true);
+        confirmationQuitButton.Select();
     }
 
     public void HeadsUpDisplay()
     {
+        gameManager.SetState(GameManager.GameState.Wandering);
         Time.timeScale = 1;
-
+        blurCamera.SetActive(false);
+        options.SetActive(false);
         HUD.SetActive(true);
-        Interaction.SetActive(false);
-        Satchel.SetActive(false);
-        Pause.SetActive(false);
+        interaction.SetActive(false);
+        satchel.SetActive(false);
+        satchelAdventureManager.ClearItems();
+        satchelAdventureManager.ClearCouCou();
+        pause.SetActive(false);
+        coucouCamera.SetActive(false);
 
         Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+    }
+
+    public void OpenSatchel()
+    {
+        satchel.SetActive(true);
+        satchelAdventureManager.ClearCouCou();
+        satchelAdventureManager.OnItemSection();
+        interaction.SetActive(false);
+        pause.SetActive(false);
+        coucouCamera.SetActive(true);
     }
 
     public void OnApplicationPause(bool pause)
     {
-        Debug.Log("Application is paused");
-        PauseMenu();
+        if (pause == true)
+        {
+            Debug.Log("Application is paused");
+            PauseMenu();
+        }
     }
 
-    public void OnInteraction(InteractionTypes type)
+    public void OpenOptions()
     {
+        options.SetActive(true);
+        pause.SetActive(false);
+    }
+
+    public void OnInteraction(InteractionTypes type, string name, int amount)
+    {
+        if (!string.IsNullOrEmpty(name))
+        {
+            coucouInteractingName = name;
+        }
+
         HUD.SetActive(false);
-        Interaction.SetActive(true);
-        Satchel.SetActive(false);
-        Pause.SetActive(false);
+        interaction.SetActive(true);
+        satchel.SetActive(false);
+        pause.SetActive(false);
 
         Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
 
         switch (type)
         {
             case InteractionTypes.Collect:
-                CollectUI.SetActive(true);
-                LetterUI.SetActive(false);
-                SaveUI.SetActive(false);
+                collectUI.SetActive(true);
+                letterUI.SetActive(false);
+                saveUI.SetActive(false);
+                coucouUI.SetActive(false);
+
+                collectText.text = name + " x" + amount;
                 break;
 
             case InteractionTypes.Letter:
-                LetterUI.SetActive(true);
-                SaveUI.SetActive(false);
-                CollectUI.SetActive(false);
+                letterUI.SetActive(true);
+                saveUI.SetActive(false);
+                collectUI.SetActive(false);
+                coucouUI.SetActive(false);
                 break;
 
             case InteractionTypes.Save:
-                SaveUI.SetActive(true);
-                LetterUI.SetActive(false);
-                CollectUI.SetActive(false);
+                saveUI.SetActive(true);
+                letterUI.SetActive(false);
+                collectUI.SetActive(false);
+                coucouUI.SetActive(false);
+                break;
+
+            case InteractionTypes.CouCou:
+                saveUI.SetActive(false);
+                letterUI.SetActive(false);
+                collectUI.SetActive(false);
+                coucouUI.SetActive(true);
+                coucouUIText.text = "Do you want to choose " + name + "?";
+                coucouUIYes.Select();
+                break;
+
+            case InteractionTypes.CouCorp:
+                saveUI.SetActive(false);
+                letterUI.SetActive(false);
+                collectUI.SetActive(false);
+                coucouUI.SetActive(false);
                 break;
 
             default:
-                Interaction.SetActive(false);
+                interaction.SetActive(false);
                 break;
         }
+    }
+
+    public void OnChooseCouCou()
+    {
+        Time.timeScale = 1;
+        findWildCouCou.ChooseWildCouCou(coucouInteractingName, 15);
+    }
+
+    public void OnFightingCouCorp(InteractableUI coucorp)
+    {
+        Time.timeScale = 1;
+        intoFight.GoIntoFight(coucorp.itemName, coucorp.itemAmount);
     }
 
     #region - Enable/Disable -

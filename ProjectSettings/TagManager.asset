@@ -10,9 +10,11 @@ TagManager:
   - Collect
   - Letter
   - Save
-  - ItemManager
   - Satchel
   - BattlingUI
+  - AdventureUI
+  - CannotDieOnLoad
+  - Boundary
   layers:
   - Default
   - TransparentFX
@@ -24,7 +26,7 @@ TagManager:
   - 
   - PostProcessing
   - Focused
-  - 
+  - SecondCam
   - 
   - 
   - 
