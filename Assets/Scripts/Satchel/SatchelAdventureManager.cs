@@ -129,7 +129,7 @@ public class SatchelAdventureManager : MonoBehaviour
     public void DisplayItems()
     {
         statDisplay.SetActive(false);
-
+        experienceLeft.text = "";
         for (int i = 0; i < playerInventory.itemInventory.Count; i++)
         {
             SatchelSlotControllerAdventure newSatchelSlot = Instantiate(satchelSlotPrefab, satchelList.transform);

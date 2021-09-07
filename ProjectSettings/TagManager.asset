@@ -16,6 +16,7 @@ TagManager:
   - CannotDieOnLoad
   - Boundary
   - QuestBook
+  - CameraRig
   layers:
   - Default
   - TransparentFX

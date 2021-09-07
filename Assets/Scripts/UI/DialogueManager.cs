@@ -59,7 +59,6 @@ public class DialogueManager : MonoBehaviour
                 sentences.Clear();
                 foreach (string sentence in dialogue[i].sentences)
                 {
-                    Debug.Log("Queued " + sentence);
                     sentences.Enqueue(sentence);
                 }
                 speechFinished = false;
@@ -73,7 +72,6 @@ public class DialogueManager : MonoBehaviour
 
     public void CompleteSentence()
     {
-        Debug.Log("Completing Sentence");
         dialogueOccuring = false;
         if (lastCoroutine != null)
         {
@@ -84,7 +82,6 @@ public class DialogueManager : MonoBehaviour
 
     public void DisplayNextSentence()
     {
-        Debug.Log("Displaying Next Sentence");
         if (sentences.Count == 0)
         {
             speechFinished = true;
@@ -101,7 +98,6 @@ public class DialogueManager : MonoBehaviour
 
         foreach (char letter in sentence.ToCharArray())
         {
-            Debug.Log("Typing Sentence");
             dialogueText.text += letter;
             yield return new WaitForSeconds(0.04f);
         }

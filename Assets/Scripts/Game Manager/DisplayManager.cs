@@ -49,7 +49,8 @@ public class DisplayManager : MonoBehaviour
         Letter,
         Save,
         CouCou,
-        CouCorp
+        CouCorp,
+        NPC
     }
 
     // Inputs
@@ -136,7 +137,7 @@ public class DisplayManager : MonoBehaviour
 
     public void OpenSatchel()
     {
-        if (!satchel.activeInHierarchy && gameManager.State == GameManager.GameState.Wandering)
+        if (!satchel.activeInHierarchy && (gameManager.State == GameManager.GameState.Wandering || pause.activeInHierarchy))
         {
             Time.timeScale = 0;
             satchel.SetActive(true);
