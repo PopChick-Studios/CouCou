@@ -36,7 +36,7 @@ public class FindWildCouCou : MonoBehaviour
     {
         inventoryManager.AddCouCou(coucouName, level);
 
-        if (playerInventory.couCouInventory.Count == 1)
+        if (string.IsNullOrEmpty(playerInventory.starterCouCou.coucouName))
         {
             playerInventory.starterCouCou = playerInventory.couCouInventory[0];
         }

@@ -253,12 +253,11 @@ public class InventoryManager : MonoBehaviour
         Debug.Log("exp to add " + expToAdd);
         experienceIncrement = false;
         experienceGained = Mathf.RoundToInt(expToAdd);
-        StartCoroutine(IncrementallyIncreaseEXP(expToAdd, playerCouCou, enemyLevel, playerLevel));
+        StartCoroutine(IncrementallyIncreaseEXP(expToAdd, playerCouCou.currentEXP, playerCouCou, enemyLevel, playerLevel));
     }
 
-    public IEnumerator IncrementallyIncreaseEXP(float desiredEXP, InventoryList.CouCouInventory coucou, int enemyLevel, int playerLevel)
+    public IEnumerator IncrementallyIncreaseEXP(float desiredEXP, float increase, InventoryList.CouCouInventory coucou, int enemyLevel, int playerLevel)
     {
-        float increase = coucou.currentEXP;
         float maxEXP = Mathf.Pow(10 * coucou.coucouLevel, 2) / 4;
 
         while (increase != desiredEXP && coucou.currentEXP < maxEXP)
@@ -282,7 +281,7 @@ public class InventoryManager : MonoBehaviour
 
             if (coucou.currentEXP < desiredEXP)
             {
-                StartCoroutine(IncrementallyIncreaseEXP(desiredEXP - increase, coucou, enemyLevel, playerLevel));
+                StartCoroutine(IncrementallyIncreaseEXP(desiredEXP - increase, increase, coucou, enemyLevel, playerLevel));
             }
         }
         else
@@ -298,9 +297,10 @@ public class InventoryManager : MonoBehaviour
 
                     if (playerInventory.couCouInventory[i].currentEXP > maxEXPForI)
                     {
+                        float difference = playerInventory.couCouInventory[i].currentEXP - maxEXPForI;
                         playerInventory.couCouInventory[i].coucouLevel++;
+                        playerInventory.couCouInventory[i].currentEXP = difference;
                         partyLevelUps.Add(playerInventory.couCouInventory[i].coucouName);
-                        playerInventory.couCouInventory[i].currentEXP -= maxEXPForI;
                     }
                 }
             }
