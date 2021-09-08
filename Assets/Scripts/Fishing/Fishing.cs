@@ -51,7 +51,20 @@ public class Fishing : MonoBehaviour
         }
         else if (canPlayerFish.playerCanFish && isFishing && gameManager.State == GameManager.GameState.Fishing)
         {
-            // pull back animation;
+            // Play the right animation when needed.
+            for (int i = 0; i < 6; i++)
+            {
+                if (i == 3)
+                {
+                    player.transform.GetChild(i).gameObject.SetActive(true);
+                    Debug.Log("Success");
+                }
+                else
+                {
+                    player.transform.GetChild(i).gameObject.SetActive(false);
+                    Debug.Log("Fail");
+                }
+            }
             playerInputActions.Fishing.Disable();
             playerInputActions.Wandering.Enable();
             CancelFish();
@@ -88,7 +101,20 @@ public class Fishing : MonoBehaviour
 
         DestroyUI();
 
-        // animate fishing
+        // Play the right animation when needed.
+        for (int i = 0; i < 6; i++)
+        {
+            if (i == 1)
+            {
+                player.transform.GetChild(i).gameObject.SetActive(true);
+                Debug.Log("Success");
+            }
+            else
+            {
+                player.transform.GetChild(i).gameObject.SetActive(false);
+                Debug.Log("Fail");
+            }
+        }
 
         yield return new WaitForSeconds(2f);
 
@@ -100,7 +126,20 @@ public class Fishing : MonoBehaviour
             Debug.Log("waiting: " + rnd);
             yield return new WaitForSeconds(rnd);
 
-            // tug animation
+            // Play the right animation when needed.
+            for (int i = 0; i < 6; i++)
+            {
+                if (i == 2)
+                {
+                    player.transform.GetChild(i).gameObject.SetActive(true);
+                    Debug.Log("Success");
+                }
+                else
+                {
+                    player.transform.GetChild(i).gameObject.SetActive(false);
+                    Debug.Log("Fail");
+                }
+            }
 
             pullUp = false;
             countdownFinished = false;
