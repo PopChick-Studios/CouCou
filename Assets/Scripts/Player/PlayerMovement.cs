@@ -7,6 +7,7 @@ using UnityEngine.InputSystem;
 public class PlayerMovement : MonoBehaviour
 {
     private GameManager gameManager;
+    //private TerrainDetector terrainDetector;
 
     private CharacterController controller;
     public Animator playerAnimator;
@@ -33,6 +34,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Awake()
     {
+        //terrainDetector = new TerrainDetector();
         controller = gameObject.GetComponent<CharacterController>();
         gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
 
@@ -116,6 +118,8 @@ public class PlayerMovement : MonoBehaviour
                 // Move the player
                 Vector3 moveDirection = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
                 controller.Move(moveDirection.normalized * moveSpeed * Time.deltaTime);
+
+                //Debug.Log(terrainDetector.GetActiveTerrainTextureIdx(transform.position));
             }
             else
             {

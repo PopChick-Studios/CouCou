@@ -75,10 +75,13 @@ public class DisplayManager : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
-        HeadsUpDisplay();
-
         confirmation.SetActive(false);
         questBookDisplay.SetActive(false);
+    }
+
+    private void Start()
+    {
+        HeadsUpDisplay();
     }
 
     public void PauseMenu()

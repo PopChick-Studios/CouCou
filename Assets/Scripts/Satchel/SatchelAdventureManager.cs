@@ -14,7 +14,7 @@ public class SatchelAdventureManager : MonoBehaviour
     private InventoryManager inventoryManager;
     private AbilityDescriptions abilityDescriptions;
     private DisplayManager displayManager;
-    private DisplayModelsInSatchel displayModelsInSatchel;
+    public DisplayModelsInSatchel displayModelsInSatchel;
 
     [Header("Experience")]
     public Animator levelUpAnimator;
