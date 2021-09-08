@@ -159,7 +159,7 @@ public class DisplayManager : MonoBehaviour
 
     public void OpenSatchel()
     {
-        if (!satchel.activeInHierarchy && (gameManager.State == GameManager.GameState.Wandering || pause.activeInHierarchy))
+        if (!satchel.activeInHierarchy && (gameManager.State == GameManager.GameState.Wandering || pause.activeInHierarchy) && !interaction.activeInHierarchy)
         {
             Time.timeScale = 0;
             satchel.SetActive(true);
@@ -213,7 +213,7 @@ public class DisplayManager : MonoBehaviour
             Cursor.visible = false;
             gameManager.SetState(GameManager.GameState.Wandering);
         }
-        else if (!questBookDisplay.activeInHierarchy && gameManager.State == GameManager.GameState.Wandering)
+        else if (!questBookDisplay.activeInHierarchy && gameManager.State == GameManager.GameState.Wandering && !interaction.activeInHierarchy)
         {
             Time.timeScale = 0;
             questBookDisplay.SetActive(true);

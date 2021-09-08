@@ -3287,9 +3287,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 501a478398de2fb43962d8f2373b28b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerModel: {fileID: 0}
-  enemyModel: {fileID: 0}
   menu: {fileID: 789084512}
+  playerInScene: {fileID: 0}
+  enemyInScene: {fileID: 0}
   player:
     coucouName: 
     coucouLevel: 0
@@ -8265,6 +8265,7 @@ MonoBehaviour:
   audioMixer: {fileID: 24100000, guid: 6c382a7b606a1ae4d873fc76c8724e85, type: 2}
   resolutionDropdown: {fileID: 1393107540}
   qualityDropdown: {fileID: 2132723231}
+  invertY: {fileID: 404940654}
 --- !u!114 &1074471359
 MonoBehaviour:
   m_ObjectHideFlags: 0

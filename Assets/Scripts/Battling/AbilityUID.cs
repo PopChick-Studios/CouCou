@@ -10,7 +10,7 @@ public class AbilityUID : MonoBehaviour
     public int abilityUID;
     public bool isUtility;
 
-    private void Start()
+    public void LoadAbility()
     {
         abilityFinder = GameObject.FindGameObjectWithTag("GameManager").GetComponent<AbilityFinder>();
 

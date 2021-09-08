@@ -252,6 +252,7 @@ public class InventoryManager : MonoBehaviour
         }
         Debug.Log("exp to add " + expToAdd);
         experienceIncrement = false;
+        experienceGained = Mathf.RoundToInt(expToAdd);
         StartCoroutine(IncrementallyIncreaseEXP(expToAdd, playerCouCou, enemyLevel, playerLevel));
     }
 
@@ -286,8 +287,6 @@ public class InventoryManager : MonoBehaviour
         }
         else
         {
-            experienceGained = Mathf.RoundToInt((enemyLevel - playerLevel + 100) * playerLevel - increase);
-
             restOfPartyGains = experienceGained / 3;
 
             for (int i = 0; i < playerInventory.couCouInventory.Count; i++)
