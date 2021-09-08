@@ -67,9 +67,10 @@ public class DisplayManager : MonoBehaviour
         questBook = GameObject.FindGameObjectWithTag("QuestBook").GetComponent<QuestBook>();
         playerInputActions = new PlayerInputActions();
 
-        playerInputActions.Wandering.Pause.performed += x => PauseMenu();
+        playerInputActions.Wandering.Pause.started += x => PauseMenu();
         playerInputActions.Wandering.QuestBook.started += x => OnQuestBook();
         playerInputActions.Wandering.Satchel.started += x => OpenSatchel();
+        playerInputActions.Wandering.GoBack.started += x => GoBack();
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
@@ -82,6 +83,7 @@ public class DisplayManager : MonoBehaviour
 
     public void PauseMenu()
     {
+        Debug.Log("Pause Menu");
         if (satchel.activeInHierarchy)
         {
             satchelAdventureManager.GoBack();
@@ -107,6 +109,26 @@ public class DisplayManager : MonoBehaviour
             gameManager.SetState(GameManager.GameState.Paused);
 
             continueButton.Select();
+        }
+        else if (pause.activeInHierarchy)
+        {
+            HeadsUpDisplay();
+        }
+    }
+
+    public void GoBack()
+    {
+        if (satchel.activeInHierarchy)
+        {
+            satchelAdventureManager.GoBack();
+        }
+        else if (questBookDisplay.activeInHierarchy)
+        {
+            OnQuestBook();
+        }
+        else if (pause.activeInHierarchy)
+        {
+            HeadsUpDisplay();
         }
     }
 

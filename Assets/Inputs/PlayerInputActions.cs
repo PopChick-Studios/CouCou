@@ -89,6 +89,14 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""GoBack"",
+                    ""type"": ""Button"",
+                    ""id"": ""04afadcd-06f7-4c11-92bc-0ee813ae9503"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -287,6 +295,17 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Satchel"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d205d071-fce6-4bec-acb8-f4d7f88eb3db"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""GoBack"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1089,6 +1108,7 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
         m_Wandering_Pause = m_Wandering.FindAction("Pause", throwIfNotFound: true);
         m_Wandering_QuestBook = m_Wandering.FindAction("QuestBook", throwIfNotFound: true);
         m_Wandering_Satchel = m_Wandering.FindAction("Satchel", throwIfNotFound: true);
+        m_Wandering_GoBack = m_Wandering.FindAction("GoBack", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1165,6 +1185,7 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
     private readonly InputAction m_Wandering_Pause;
     private readonly InputAction m_Wandering_QuestBook;
     private readonly InputAction m_Wandering_Satchel;
+    private readonly InputAction m_Wandering_GoBack;
     public struct WanderingActions
     {
         private @PlayerInputActions m_Wrapper;
@@ -1178,6 +1199,7 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
         public InputAction @Pause => m_Wrapper.m_Wandering_Pause;
         public InputAction @QuestBook => m_Wrapper.m_Wandering_QuestBook;
         public InputAction @Satchel => m_Wrapper.m_Wandering_Satchel;
+        public InputAction @GoBack => m_Wrapper.m_Wandering_GoBack;
         public InputActionMap Get() { return m_Wrapper.m_Wandering; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1214,6 +1236,9 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                 @Satchel.started -= m_Wrapper.m_WanderingActionsCallbackInterface.OnSatchel;
                 @Satchel.performed -= m_Wrapper.m_WanderingActionsCallbackInterface.OnSatchel;
                 @Satchel.canceled -= m_Wrapper.m_WanderingActionsCallbackInterface.OnSatchel;
+                @GoBack.started -= m_Wrapper.m_WanderingActionsCallbackInterface.OnGoBack;
+                @GoBack.performed -= m_Wrapper.m_WanderingActionsCallbackInterface.OnGoBack;
+                @GoBack.canceled -= m_Wrapper.m_WanderingActionsCallbackInterface.OnGoBack;
             }
             m_Wrapper.m_WanderingActionsCallbackInterface = instance;
             if (instance != null)
@@ -1245,6 +1270,9 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                 @Satchel.started += instance.OnSatchel;
                 @Satchel.performed += instance.OnSatchel;
                 @Satchel.canceled += instance.OnSatchel;
+                @GoBack.started += instance.OnGoBack;
+                @GoBack.performed += instance.OnGoBack;
+                @GoBack.canceled += instance.OnGoBack;
             }
         }
     }
@@ -1440,6 +1468,7 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
         void OnPause(InputAction.CallbackContext context);
         void OnQuestBook(InputAction.CallbackContext context);
         void OnSatchel(InputAction.CallbackContext context);
+        void OnGoBack(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

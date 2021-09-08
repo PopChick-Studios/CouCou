@@ -763,10 +763,10 @@ MonoBehaviour:
   m_Navigation:
     m_Mode: 4
     m_WrapAround: 0
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
+    m_SelectOnUp: {fileID: 1969716232}
+    m_SelectOnDown: {fileID: 365766304}
     m_SelectOnLeft: {fileID: 0}
-    m_SelectOnRight: {fileID: 0}
+    m_SelectOnRight: {fileID: 1320128275}
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
@@ -1316,9 +1316,9 @@ MonoBehaviour:
   m_Navigation:
     m_Mode: 4
     m_WrapAround: 0
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
-    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnUp: {fileID: 556579248}
+    m_SelectOnDown: {fileID: 1320128275}
+    m_SelectOnLeft: {fileID: 1969716232}
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
   m_Colors:
@@ -1396,7 +1396,7 @@ RectTransform:
   - {fileID: 255802518}
   - {fileID: 736637477}
   m_Father: {fileID: 1796238135}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -4589,6 +4589,7 @@ MonoBehaviour:
   audioMixer: {fileID: 24100000, guid: 6c382a7b606a1ae4d873fc76c8724e85, type: 2}
   resolutionDropdown: {fileID: 1969716232}
   qualityDropdown: {fileID: 26028703}
+  invertY: {fileID: 50016216}
 --- !u!114 &339469834
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6604,10 +6605,10 @@ Light:
   m_GameObject: {fileID: 454136867}
   m_Enabled: 1
   serializedVersion: 10
-  m_Type: 0
+  m_Type: 2
   m_Shape: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 1.3
+  m_Intensity: 1
   m_Range: 20
   m_SpotAngle: 179
   m_InnerSpotAngle: 1
@@ -7133,7 +7134,7 @@ RectTransform:
   m_Children:
   - {fileID: 387290650}
   m_Father: {fileID: 1796238135}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -7824,8 +7825,8 @@ MonoBehaviour:
     m_Mode: 4
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
-    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnDown: {fileID: 50016216}
+    m_SelectOnLeft: {fileID: 1969716232}
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
   m_Colors:
@@ -8623,10 +8624,10 @@ Light:
   m_GameObject: {fileID: 591941098}
   m_Enabled: 1
   serializedVersion: 10
-  m_Type: 0
+  m_Type: 2
   m_Shape: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 1.3
+  m_Intensity: 1
   m_Range: 20
   m_SpotAngle: 179
   m_InnerSpotAngle: 1
@@ -9648,7 +9649,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1796238135}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -10627,7 +10628,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 780636610}
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: 0, y: 0, z: 19.84}
+  m_LocalPosition: {x: 0, y: -0.044, z: 19.84}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 713374352}
@@ -16598,10 +16599,10 @@ Light:
   m_GameObject: {fileID: 1199652718}
   m_Enabled: 1
   serializedVersion: 10
-  m_Type: 0
+  m_Type: 2
   m_Shape: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 1.3
+  m_Intensity: 1
   m_Range: 20
   m_SpotAngle: 179
   m_InnerSpotAngle: 1
@@ -16866,7 +16867,7 @@ RectTransform:
   - {fileID: 1236029010}
   - {fileID: 652777596}
   m_Father: {fileID: 1796238135}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -17333,8 +17334,8 @@ MonoBehaviour:
   m_Navigation:
     m_Mode: 4
     m_WrapAround: 0
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
+    m_SelectOnUp: {fileID: 50016216}
+    m_SelectOnDown: {fileID: 365766304}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
@@ -18422,10 +18423,10 @@ Light:
   m_GameObject: {fileID: 1409087740}
   m_Enabled: 1
   serializedVersion: 10
-  m_Type: 0
+  m_Type: 2
   m_Shape: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 1.3
+  m_Intensity: 1
   m_Range: 20
   m_SpotAngle: 179
   m_InnerSpotAngle: 1
@@ -20291,11 +20292,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 4
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
-    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnLeft: {fileID: 1983530051}
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
   m_Colors:
@@ -21931,7 +21932,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1796238135}
-  m_RootOrder: 6
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -23038,11 +23039,11 @@ RectTransform:
   m_Children:
   - {fileID: 962367716}
   - {fileID: 825747929}
+  - {fileID: 1709328510}
   - {fileID: 54861840}
   - {fileID: 513117877}
   - {fileID: 1273924216}
   - {fileID: 717854169}
-  - {fileID: 1709328510}
   m_Father: {fileID: 1382944626}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -24395,7 +24396,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1516373075622941582, guid: 8781bbc77487d5646b9aafd7fd80a651, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.716
+      value: 1.674
       objectReference: {fileID: 0}
     - target: {fileID: 1516373075622941582, guid: 8781bbc77487d5646b9aafd7fd80a651, type: 3}
       propertyPath: m_LocalPosition.z
@@ -24898,9 +24899,9 @@ MonoBehaviour:
     m_Mode: 4
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
+    m_SelectOnDown: {fileID: 26028703}
     m_SelectOnLeft: {fileID: 0}
-    m_SelectOnRight: {fileID: 0}
+    m_SelectOnRight: {fileID: 556579248}
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
@@ -25346,12 +25347,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 4
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
-    m_SelectOnRight: {fileID: 0}
+    m_SelectOnRight: {fileID: 1550847599}
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}

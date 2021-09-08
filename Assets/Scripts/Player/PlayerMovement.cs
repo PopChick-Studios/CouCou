@@ -81,8 +81,9 @@ public class PlayerMovement : MonoBehaviour
                     playerAnimator.SetBool("isCrouching", true);
                     moveSpeed = walkSpeed;
                 }
-                else if (inputMovement.magnitude != 1)
+                else if (inputMovement.magnitude < 0.9)
                 {
+                    Debug.Log(inputMovement.magnitude);
                     playerAnimator.SetBool("isCrouching", false);
                     playerAnimator.SetBool("isRunning", false);
                     runTimer = 2;

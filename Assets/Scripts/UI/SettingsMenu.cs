@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.Audio;
 using TMPro;
 using System;
@@ -12,6 +13,7 @@ public class SettingsMenu : MonoBehaviour
 
     public TMP_Dropdown resolutionDropdown;
     public TMP_Dropdown qualityDropdown;
+    public Toggle invertY;
 
     Resolution[] finalResolutions;
 
@@ -80,6 +82,18 @@ public class SettingsMenu : MonoBehaviour
         }
         resolutionDropdown.RefreshShownValue();
 
+        if (PlayerPrefs.HasKey("InvertY"))
+        {
+            if (PlayerPrefs.GetInt("InvertY") == 1)
+            {
+                invertY.isOn = true;
+            }
+            else
+            {
+                invertY.isOn = false;
+            }
+        }
+
         qualityDropdown.value = QualitySettings.GetQualityLevel();
         qualityDropdown.RefreshShownValue();
     }
@@ -110,11 +124,11 @@ public class SettingsMenu : MonoBehaviour
     {
         if (isInverted)
         {
-            PlayerPrefs.SetInt("InvertY", -1);
+            PlayerPrefs.SetInt("InvertY", 1);
         }
         else
         {
-            PlayerPrefs.SetInt("InvertY", 1);
+            PlayerPrefs.SetInt("InvertY", -1);
         }
     }
 }
