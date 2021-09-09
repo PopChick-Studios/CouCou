@@ -6,7 +6,6 @@ using TMPro;
 
 public class InteractableUI : MonoBehaviour
 {
-    private DisplayManager displayManager;
     public InventoryList playerInventory;
 
     [Header("Interaction Type")]
@@ -51,7 +50,6 @@ public class InteractableUI : MonoBehaviour
         {
             nameText.text = "";
         }
-        displayManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<DisplayManager>();
 
         arrowPlaceholder.sprite = arrowSprite;
         arrowPlaceholder.rectTransform.position = new Vector3(originTransform.position.x, originTransform.position.y + 2.5f, originTransform.position.z);

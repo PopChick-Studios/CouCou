@@ -7,6 +7,7 @@ using UnityEngine.InputSystem;
 public class PlayerMovement : MonoBehaviour
 {
     private GameManager gameManager;
+    private Player player;
     //private TerrainDetector terrainDetector;
 
     private CharacterController controller;
@@ -34,6 +35,8 @@ public class PlayerMovement : MonoBehaviour
 
     private void Awake()
     {
+        player = GetComponent<Player>();
+
         //terrainDetector = new TerrainDetector();
         controller = gameObject.GetComponent<CharacterController>();
         gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
@@ -45,6 +48,21 @@ public class PlayerMovement : MonoBehaviour
 
         playerInputActions.Wandering.CrouchStart.performed += x => CrouchPressed();
         playerInputActions.Wandering.CrouchFinish.performed += x => CrouchReleased();
+    }
+
+    private void Start()
+    {
+        PlayerData data = SaveSystem.LoadPlayer();
+        if (data == null)
+        {
+            return;
+        }
+        player.questProgress = data.questProgress;
+        player.amountOfCapsules = data.amountOfCapsules;
+        controller.enabled = false;
+        transform.position = new Vector3(data.position[0], data.position[1], data.position[2]);
+        cam.position = transform.position;
+        controller.enabled = true;
     }
 
     #region - Crouch -
@@ -117,7 +135,7 @@ public class PlayerMovement : MonoBehaviour
 
                 // Move the player
                 Vector3 moveDirection = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
-                controller.Move(moveDirection.normalized * moveSpeed * Time.deltaTime);
+                controller.Move(moveSpeed * Time.deltaTime * moveDirection.normalized);
 
                 //Debug.Log(terrainDetector.GetActiveTerrainTextureIdx(transform.position));
             }

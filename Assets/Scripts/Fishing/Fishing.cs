@@ -13,6 +13,9 @@ public class Fishing : MonoBehaviour
     private Transform cameraPosition;
 
     public GameObject player;
+    public Animator playerAnimator;
+    public GameObject fishingRod1;
+    public GameObject fishingRod2;
 
     public LookAtPlayer displayPromptPrefab;
     private LookAtPlayer displayPrompt;
@@ -51,23 +54,9 @@ public class Fishing : MonoBehaviour
         }
         else if (canPlayerFish.playerCanFish && isFishing && gameManager.State == GameManager.GameState.Fishing)
         {
-            // Play the right animation when needed.
-            for (int i = 0; i < 6; i++)
-            {
-                if (i == 3)
-                {
-                    player.transform.GetChild(i).gameObject.SetActive(true);
-                    Debug.Log("Success");
-                }
-                else
-                {
-                    player.transform.GetChild(i).gameObject.SetActive(false);
-                    Debug.Log("Fail");
-                }
-            }
             playerInputActions.Fishing.Disable();
             playerInputActions.Wandering.Enable();
-            CancelFish();
+            StartCoroutine(CancelFish());
         }
     }
 
@@ -78,7 +67,6 @@ public class Fishing : MonoBehaviour
             yield break;
         }
         Debug.Log("Started Fishing");
-
         gameManager.SetState(GameManager.GameState.Fishing);
         isFishing = true;
 
@@ -99,22 +87,12 @@ public class Fishing : MonoBehaviour
 
         player.transform.SetPositionAndRotation(new Vector3(displayPrompt.transform.position.x + xNormalValue, player.transform.position.y, displayPrompt.transform.position.z + zNormalValue), Quaternion.LookRotation(new Vector3(-xNormalValue, 0, -zNormalValue)));
 
-        DestroyUI();
+        fishingRod1.SetActive(true);
+        fishingRod2.SetActive(true);
 
-        // Play the right animation when needed.
-        for (int i = 0; i < 6; i++)
-        {
-            if (i == 1)
-            {
-                player.transform.GetChild(i).gameObject.SetActive(true);
-                Debug.Log("Success");
-            }
-            else
-            {
-                player.transform.GetChild(i).gameObject.SetActive(false);
-                Debug.Log("Fail");
-            }
-        }
+        DestroyUI();
+        playerAnimator.ResetTrigger("finishFishing");
+        playerAnimator.SetTrigger("startFishing");
 
         yield return new WaitForSeconds(2f);
 
@@ -126,20 +104,7 @@ public class Fishing : MonoBehaviour
             Debug.Log("waiting: " + rnd);
             yield return new WaitForSeconds(rnd);
 
-            // Play the right animation when needed.
-            for (int i = 0; i < 6; i++)
-            {
-                if (i == 2)
-                {
-                    player.transform.GetChild(i).gameObject.SetActive(true);
-                    Debug.Log("Success");
-                }
-                else
-                {
-                    player.transform.GetChild(i).gameObject.SetActive(false);
-                    Debug.Log("Fail");
-                }
-            }
+            playerAnimator.SetTrigger("caughtFish");
 
             pullUp = false;
             countdownFinished = false;
@@ -151,11 +116,13 @@ public class Fishing : MonoBehaviour
                 caughtSomething = true;
                 break;
             }
+            playerAnimator.SetTrigger("failedCatch");
         }
 
         int randomCatch = Random.Range(0, 5);
 
         Debug.Log("Successful Catch!");
+        playerAnimator.SetTrigger("finishFishing");
 
         if (randomCatch < 2 && inventoryManager.HasPlayableCouCou())
         {
@@ -168,8 +135,10 @@ public class Fishing : MonoBehaviour
 
         playerInputActions.Fishing.Disable();
         playerInputActions.Wandering.Enable();
-
+        yield return new WaitForSeconds(0.7f);
         isFishing = false;
+        fishingRod1.SetActive(false);
+        fishingRod2.SetActive(false);
     }
 
     public IEnumerator CountdownTimer()
@@ -187,7 +156,7 @@ public class Fishing : MonoBehaviour
         countdownFinished = true;
     }
 
-    public void CancelFish()
+    public IEnumerator CancelFish()
     {
         if (timer != 0)
         {
@@ -195,10 +164,15 @@ public class Fishing : MonoBehaviour
         }
         else
         {
+            playerAnimator.SetTrigger("finishFishing");
+            yield return new WaitForSeconds(0.7f);
             StopAllCoroutines();
             isFishing = false;
             gameManager.SetState(GameManager.GameState.Wandering);
             InstantiateUI();
+
+            fishingRod1.SetActive(false);
+            fishingRod2.SetActive(false);
         }
     }
 
