@@ -6,12 +6,14 @@ using UnityEngine;
 public class PlayerData
 {
     public int questProgress;
+    public int subquestProgress;
     public int amountOfCapsules;
     public float[] position;
     
-    public PlayerData (Player player)
+    public PlayerData (Player player, QuestScriptable questScriptable)
     {
-        questProgress = player.questProgress;
+        questProgress = questScriptable.questProgress;
+        subquestProgress = questScriptable.subquestProgress;
         amountOfCapsules = player.amountOfCapsules;
 
         position = new float[3];

@@ -10,18 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 702f33a5e8631ca4996ad7764405fcba, type: 3}
-  m_Name: CrimsonDukeInventory
+  m_Name: UmbriInventory
   m_EditorClassIdentifier: 
   preGameDialogue:
-    name: Crimson Duke
+    name: Umbri
     sentences: []
   starterCouCou:
-    coucouName: Brawlster
-    coucouLevel: 30
+    coucouName: Moinyaa
+    coucouLevel: 28
     currentEXP: 0
-    coucouVariant: 6
+    coucouVariant: 2
     element: 3
-    lineupOrder: 0
+    lineupOrder: 1
     maxHealth: 0
     currentAttack: 0
     currentResistance: 0
@@ -31,40 +31,12 @@ MonoBehaviour:
     isStunned: 0
     hasCollapsed: 0
   couCouInventory:
-  - coucouName: Brawlster
-    coucouLevel: 30
-    currentEXP: 0
-    coucouVariant: 6
-    element: 3
-    lineupOrder: 1
-    maxHealth: 0
-    currentAttack: 0
-    currentResistance: 0
-    currentHealth: 0
-    currentMindset: 0
-    currentDetermination: 0
-    isStunned: 0
-    hasCollapsed: 0
-  - coucouName: Candleflambe
-    coucouLevel: 30
-    currentEXP: 0
-    coucouVariant: 3
-    element: 1
-    lineupOrder: 1
-    maxHealth: 0
-    currentAttack: 0
-    currentResistance: 0
-    currentHealth: 0
-    currentMindset: 0
-    currentDetermination: 0
-    isStunned: 0
-    hasCollapsed: 0
-  - coucouName: Chappa
-    coucouLevel: 30
+  - coucouName: Birdpool
+    coucouLevel: 25
     currentEXP: 0
     coucouVariant: 2
-    element: 2
-    lineupOrder: 3
+    element: 3
+    lineupOrder: 2
     maxHealth: 0
     currentAttack: 0
     currentResistance: 0
@@ -78,6 +50,20 @@ MonoBehaviour:
     currentEXP: 0
     coucouVariant: 1
     element: 5
+    lineupOrder: 3
+    maxHealth: 0
+    currentAttack: 0
+    currentResistance: 0
+    currentHealth: 0
+    currentMindset: 0
+    currentDetermination: 0
+    isStunned: 0
+    hasCollapsed: 0
+  - coucouName: Squelsh
+    coucouLevel: 29
+    currentEXP: 0
+    coucouVariant: 2
+    element: 3
     lineupOrder: 4
     maxHealth: 0
     currentAttack: 0
@@ -87,11 +73,11 @@ MonoBehaviour:
     currentDetermination: 0
     isStunned: 0
     hasCollapsed: 0
-  - coucouName: Hurculight
+  - coucouName: Shrake
     coucouLevel: 30
     currentEXP: 0
-    coucouVariant: 1
-    element: 4
+    coucouVariant: 4
+    element: 3
     lineupOrder: 5
     maxHealth: 0
     currentAttack: 0
@@ -102,27 +88,11 @@ MonoBehaviour:
     isStunned: 0
     hasCollapsed: 0
   itemInventory:
-  - itemName: Ripe Berry
-    itemAmount: 3
-    itemAttribute: 0
-    element: 0
-  - itemName: Burnt Berry
-    itemAmount: 3
-    itemAttribute: 3
-    element: 1
-  - itemName: Frozen Berry
-    itemAmount: 3
-    itemAttribute: 3
-    element: 3
-  - itemName: Fruitful Berry
-    itemAmount: 3
-    itemAttribute: 3
-    element: 2
   - itemName: Dark Berry
-    itemAmount: 3
+    itemAmount: 5
     itemAttribute: 3
     element: 5
-  - itemName: Bright Berry
-    itemAmount: 3
+  - itemName: Frozen Berry
+    itemAmount: 5
     itemAttribute: 3
-    element: 4
+    element: 3

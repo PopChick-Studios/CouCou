@@ -8,18 +8,19 @@ public class PlayerInteraction : MonoBehaviour
     private InteractableUI interactableUI;
     private DisplayManager displayManager;
     private InventoryManager inventoryManager;
-    private DialogueTrigger dialogueTrigger;
+    private EventTrigger eventTrigger;
     private DialogueManager dialogueManager;
     private Fishing fishing;
     private PlayerMovement playerMovement;
-
+    public QuestScriptable questScriptable;
     public List<Dialogue> dialogue;
 
-    // Saving game
     public bool onSaveButton;
     public bool onCancelSaveButton;
     public bool interacting;
     public bool canFinishInteracting;
+    public bool hasQuestMarker;
+
 
     // Animator
     public Animator animator;
@@ -39,6 +40,8 @@ public class PlayerInteraction : MonoBehaviour
         playerInputActions = new PlayerInputActions();
 
         playerInputActions.Wandering.Interact.started += x => StartCoroutine(Interact());
+        playerInputActions.Wandering.Interact.started += x => FinishQuestRewards();
+        playerInputActions.UI.Cancel.started += x => FinishQuestRewards();
         playerInputActions.UI.Cancel.started += x => OnCouCouCancelButton();
         playerInputActions.UI.Submit.started += x => StartCoroutine(FinishInteraction(interactableUI.interactionType));
         playerInputActions.Fishing.Interact.started += x => FinishFishingInteraction();
@@ -50,7 +53,8 @@ public class PlayerInteraction : MonoBehaviour
     {
         if (interactableUI != null && !interacting && gameManager.State == GameManager.GameState.Wandering)
         {
-            if (interactableUI.canInteract && interactableUI.interactionType != DisplayManager.InteractionTypes.CouCorp)
+            eventTrigger = interactableUI.GetComponent<EventTrigger>();
+            if (interactableUI.canInteract && eventTrigger == null)
             {
                 interacting = true;
 
@@ -74,16 +78,15 @@ public class PlayerInteraction : MonoBehaviour
                 Time.timeScale = 0;
                 canFinishInteracting = true;
             }
-            else if (interactableUI.interactionType == DisplayManager.InteractionTypes.CouCorp && dialogueManager.dialogueFinished)
+            else if (interactableUI.canInteract && eventTrigger != null && dialogueManager.dialogueFinished)
             {
-                if (!inventoryManager.HasPlayableCouCou())
+                if (!inventoryManager.HasPlayableCouCou() && eventTrigger.eventTriggerType == EventTrigger.EventTriggerType.InteractionFight)
                 {
                     StartCoroutine(FindObjectOfType<DialogueManager>().StartDialogue(dialogue));
                 }
                 else
                 {
-                    dialogueTrigger = interactableUI.gameObject.GetComponent<DialogueTrigger>();
-                    dialogueTrigger.InteractDialogue();
+                    StartCoroutine(eventTrigger.Interact());
                 }
                 canFinishInteracting = true;
             }
@@ -92,6 +95,7 @@ public class PlayerInteraction : MonoBehaviour
 
     public IEnumerator FinishInteraction(DisplayManager.InteractionTypes interactionType)
     {
+        interactableUI.GiveProgress();
         if (!canFinishInteracting)
         {
             yield break;
@@ -127,6 +131,11 @@ public class PlayerInteraction : MonoBehaviour
             onCancelSaveButton = false;
         }
 
+        if (hasQuestMarker)
+        {
+            questScriptable.subquestProgress++;
+        }
+
         interacting = false;
         canFinishInteracting = false;
     }
@@ -147,6 +156,17 @@ public class PlayerInteraction : MonoBehaviour
             playerInputActions.Wandering.Enable();
             fishing.caughtSomething = false;
             fishing.InstantiateUI();
+        }
+    }
+
+    public void FinishQuestRewards()
+    {
+        if (gameManager.questRewardFinish)
+        {
+            displayManager.HeadsUpDisplay();
+            gameManager.SetState(GameManager.GameState.Wandering);
+            playerInputActions.Wandering.Enable();
+            gameManager.questRewardFinish = false;
         }
     }
 

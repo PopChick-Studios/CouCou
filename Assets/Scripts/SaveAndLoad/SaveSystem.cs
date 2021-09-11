@@ -4,14 +4,14 @@ using UnityEngine;
 
 public static class SaveSystem
 {
-    public static void SavePlayer(Player player)
+    public static void SavePlayer(Player player, QuestScriptable questScriptable)
     {
         BinaryFormatter formatter = new BinaryFormatter();
         string path = Application.persistentDataPath + "/SaveFiles/PlayerData.save";
 
         FileStream stream = new FileStream(path, FileMode.Create);
 
-        PlayerData data = new PlayerData(player);
+        PlayerData data = new PlayerData(player, questScriptable);
 
         formatter.Serialize(stream, data);
         stream.Close();

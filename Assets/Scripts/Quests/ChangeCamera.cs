@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PanToObject : MonoBehaviour
+public class ChangeCamera : MonoBehaviour
 {
     public GameObject mainCamera;
     public GameObject diggleTownCamera;

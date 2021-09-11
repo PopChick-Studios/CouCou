@@ -12,6 +12,7 @@ public class BattleSystem : MonoBehaviour
     public GameObject playerInScene;
     public GameObject enemyInScene;
 
+    public QuestScriptable questScriptable;
     public InventoryList.CouCouInventory player;
     public InventoryList.CouCouInventory enemy;
     public bool takeDamageFinished = false;
@@ -749,6 +750,7 @@ public class BattleSystem : MonoBehaviour
             {
                 dialogueText.text = "You defeated " + enemyManager.enemyInventory.preGameDialogue.name;
                 yield return new WaitForSeconds(2f);
+                questScriptable.subquestProgress++;
             }
 
             gameManager.SetState(GameManager.GameState.Wandering);
@@ -761,9 +763,12 @@ public class BattleSystem : MonoBehaviour
             {
                 dialogueText.text = "You lost to " + enemyManager.enemyInventory.preGameDialogue.name;
                 yield return new WaitForSeconds(2f);
+                StartCoroutine(gameManager.BadEnding());
             }
-
-            gameManager.SetState(GameManager.GameState.Wandering);
+            else
+            {
+                gameManager.SetState(GameManager.GameState.Wandering);
+            }
         }
     }
 }

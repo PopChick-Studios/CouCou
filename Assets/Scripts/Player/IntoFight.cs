@@ -13,6 +13,7 @@ public class IntoFight : MonoBehaviour
     public InventoryList shorter2Inventory;
     public InventoryList skip1Inventory;
     public InventoryList skip2Inventory;
+    public InventoryList umbriInventory;
     public InventoryList crimsonDukeInventory;
 
     private void Awake()
@@ -44,6 +45,10 @@ public class IntoFight : MonoBehaviour
 
             case ("Skip", 2):
                 inventoryChange = skip2Inventory;
+                break;
+
+            case ("Umbri", 1):
+                inventoryChange = umbriInventory;
                 break;
 
             case ("Crimson Duke", 1):

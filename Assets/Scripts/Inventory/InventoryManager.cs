@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using UnityEngine.SceneManagement;
 
 public class InventoryManager : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class InventoryManager : MonoBehaviour
     private CouCouFinder coucouFinder;
     private BattleSystem battleSystem;
     private BattleManager battleManager;
+    private Player player;
 
     public InventoryList playerInventory;
     public InventoryList enemyInventory;
@@ -29,6 +31,14 @@ public class InventoryManager : MonoBehaviour
         battleManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<BattleManager>();
         coucouFinder = GameObject.FindGameObjectWithTag("GameManager").GetComponent<CouCouFinder>();
         itemFinder = GameObject.FindGameObjectWithTag("GameManager").GetComponent<ItemFinder>();
+        if (SceneManager.GetActiveScene().name == "TestingScene")
+        {
+            player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
+        }
+        else
+        {
+            player = null;
+        }
 
         partyLevelUps = new List<string>();
         coucouVariantList = new List<CouCouDatabase.CouCouVariant>();
@@ -49,7 +59,7 @@ public class InventoryManager : MonoBehaviour
             coucouVariantList.Add(variant);
         }
         
-        /* - GIVES PLAYER EVERY ITEM AND COUCOU - 
+        /*// - GIVES PLAYER EVERY ITEM AND COUCOU - 
         foreach (ItemsDatabase.ItemData item in itemDatabase.itemData)
         {
             FoundItem(item.itemName, 3);
@@ -153,6 +163,12 @@ public class InventoryManager : MonoBehaviour
                     break;
                 }
             }
+        }
+
+        if (name == "CouCou Capsule")
+        {
+            Debug.Log("Added" + amount + " capsules");
+            player.amountOfCapsules += amount;
         }
 
         SortItemInventory();
@@ -309,5 +325,20 @@ public class InventoryManager : MonoBehaviour
         }
         experienceIncrement = true;
         yield break;
+    }
+
+    public int GetCurrentAmount(string itemName)
+    {
+        int amount = 0;
+        foreach (InventoryList.ItemInventory item in playerInventory.itemInventory)
+        {
+            if (item.itemName == itemName)
+            {
+                amount = item.itemAmount;
+                break;
+            }
+        }
+
+        return amount;
     }
 }

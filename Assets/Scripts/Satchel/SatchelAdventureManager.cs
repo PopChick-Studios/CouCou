@@ -14,7 +14,7 @@ public class SatchelAdventureManager : MonoBehaviour
     private InventoryManager inventoryManager;
     private AbilityDescriptions abilityDescriptions;
     private DisplayManager displayManager;
-    public DisplayModelsInSatchel displayModelsInSatchel;
+    private DisplayModelsInSatchel displayModelsInSatchel;
 
     [Header("Experience")]
     public Animator levelUpAnimator;
@@ -582,17 +582,15 @@ public class SatchelAdventureManager : MonoBehaviour
             yield return new WaitForSecondsRealtime(0.005f);
         }
 
-        levelUpAnimator.SetBool("hasLeveledUp", false);
-
         if (coucou.currentEXP >= maxEXP)
         {
             Debug.Log("level up");
             coucou.coucouLevel++;
             experienceBar.fillAmount = 0;
             coucou.currentEXP = 0;
-            levelUpAnimator.SetBool("hasLeveledUp", true);
+            levelUpAnimator.SetTrigger("hasLeveledUp");
             yield return new WaitForSecondsRealtime(1.5f);
-            coucouSlotList[currentSelectedButton.GetComponent<SatchelSlotControllerAdventure>().uniqueIdentifier].itemAmountText.text = coucou.coucouLevel.ToString();
+            coucouSlotList[currentSelectedButton.GetComponent<SatchelSlotControllerAdventure>().uniqueIdentifier].itemAmountText.text = "Lv: " + coucou.coucouLevel;
             UpdateCouCouStats(coucou);
 
             if (coucou.currentEXP < desiredEXP)

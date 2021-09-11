@@ -5,6 +5,8 @@ using TMPro;
 
 public class DialogueManager : MonoBehaviour
 {
+    private PlayerMovement playerMovement;
+
     public TextMeshProUGUI nameText;
     public TextMeshProUGUI dialogueText;
 
@@ -22,6 +24,8 @@ public class DialogueManager : MonoBehaviour
 
     private void Awake()
     {
+        playerMovement = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>();
+
         playerInputActions = new PlayerInputActions();
         playerInputActions.UI.Click.started += x => OnDialogueSkip();
         playerInputActions.UI.Submit.started += x => OnDialogueSkip();
@@ -52,6 +56,7 @@ public class DialogueManager : MonoBehaviour
         {
             animatior.SetBool("DialogueIsOpen", true);
             dialogueFinished = false;
+            playerMovement.canMove = false;
             sentences.Clear();
             for (int i = 0; i < dialogue.Count; i++)
             {
@@ -109,6 +114,7 @@ public class DialogueManager : MonoBehaviour
     {
         animatior.SetBool("DialogueIsOpen", false);
         dialogueFinished = true;
+        playerMovement.canMove = true;
     }
 
     #region - Enable/Disable -

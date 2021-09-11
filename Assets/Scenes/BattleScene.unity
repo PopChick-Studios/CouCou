@@ -3290,6 +3290,7 @@ MonoBehaviour:
   menu: {fileID: 789084512}
   playerInScene: {fileID: 0}
   enemyInScene: {fileID: 0}
+  questScriptable: {fileID: 11400000, guid: 7e68a8077602474489a7f958ead3536e, type: 2}
   player:
     coucouName: 
     coucouLevel: 0
@@ -3423,7 +3424,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 82d97f5c16cb47d4584fa1571765b648, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  questScriptable: {fileID: 0}
+  crossfadeAnimator: {fileID: 839258854}
+  endingText: {fileID: 839258853}
+  badEndingText: The punks brainwash you and force you to work with the CouCorp.
+    Now with no one standing in their way, they take control of all of Norwich
+  goodEndingText: 
   playerInventory: {fileID: 11400000, guid: 44ee79a05ad81ff4d8652799fc7d7f56, type: 2}
+  typingEnding: 0
+  questRewardFinish: 0
   gameState: 0
 --- !u!1 &404940652
 GameObject:
@@ -3563,10 +3572,10 @@ Light:
   m_GameObject: {fileID: 413423496}
   m_Enabled: 1
   serializedVersion: 10
-  m_Type: 0
+  m_Type: 2
   m_Shape: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 1.3
+  m_Intensity: 1
   m_Range: 20
   m_SpotAngle: 179
   m_InnerSpotAngle: 1
@@ -4943,10 +4952,10 @@ Light:
   m_GameObject: {fileID: 649223285}
   m_Enabled: 1
   serializedVersion: 10
-  m_Type: 0
+  m_Type: 2
   m_Shape: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 1.3
+  m_Intensity: 1
   m_Range: 20
   m_SpotAngle: 179
   m_InnerSpotAngle: 1
@@ -5383,10 +5392,10 @@ Light:
   m_GameObject: {fileID: 704956803}
   m_Enabled: 1
   serializedVersion: 10
-  m_Type: 0
+  m_Type: 2
   m_Shape: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 1.3
+  m_Intensity: 1
   m_Range: 20
   m_SpotAngle: 179
   m_InnerSpotAngle: 1
@@ -6709,10 +6718,10 @@ Light:
   m_GameObject: {fileID: 796930658}
   m_Enabled: 1
   serializedVersion: 10
-  m_Type: 0
+  m_Type: 2
   m_Shape: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 1.3
+  m_Intensity: 1
   m_Range: 20
   m_SpotAngle: 179
   m_InnerSpotAngle: 1
@@ -7052,6 +7061,22 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 727499644bd6ba74193d0bfb0123971e, type: 3}
+--- !u!114 &839258853 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1027843114184551071, guid: 727499644bd6ba74193d0bfb0123971e, type: 3}
+  m_PrefabInstance: {fileID: 839258852}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!95 &839258854 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 3266448115033020358, guid: 727499644bd6ba74193d0bfb0123971e, type: 3}
+  m_PrefabInstance: {fileID: 839258852}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &871058377
 GameObject:
   m_ObjectHideFlags: 0

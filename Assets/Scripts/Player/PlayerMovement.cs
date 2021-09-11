@@ -8,10 +8,12 @@ public class PlayerMovement : MonoBehaviour
 {
     private GameManager gameManager;
     private Player player;
+    public QuestScriptable questScriptable;
     //private TerrainDetector terrainDetector;
 
     private CharacterController controller;
     public Animator playerAnimator;
+    public Animator crossfadeAnimator;
     public Transform cam;
 
     private float turnSmoothVelocity;
@@ -62,6 +64,8 @@ public class PlayerMovement : MonoBehaviour
         controller.enabled = false;
         transform.position = new Vector3(data.position[0], data.position[1], data.position[2]);
         cam.position = transform.position;
+        questScriptable.questProgress = data.questProgress;
+        questScriptable.subquestProgress = data.subquestProgress;
         controller.enabled = true;
     }
 
@@ -151,6 +155,24 @@ public class PlayerMovement : MonoBehaviour
             playerVelocity.y += gravityValue * Time.deltaTime;
             controller.Move(playerVelocity * Time.deltaTime);
         }
+        else if (!canMove)
+        {
+            playerAnimator.SetBool("isCrouching", false);
+            playerAnimator.SetBool("isRunning", false);
+            playerAnimator.SetBool("isWalking", false);
+            runTimer = 2;
+        }
+    }
+
+    public IEnumerator WarpPlayer(Vector3 position)
+    {
+        crossfadeAnimator.SetTrigger("Start");
+        yield return new WaitForSeconds(1.5f);
+        controller.enabled = false;
+        transform.position = position;
+        cam.position = position;
+        controller.enabled = true;
+        crossfadeAnimator.SetTrigger("Reset");
     }
 
     #region - Enable/Disable -

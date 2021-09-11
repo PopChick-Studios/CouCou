@@ -10,6 +10,7 @@ public class SceneLoader : MonoBehaviour
     private LightingManager lightingManager;
     private DialogueManager dialogueManager;
     private Player player;
+    public QuestScriptable questScriptable;
     public GameManager.GameState previousState;
 
     public Animator transition;
@@ -51,7 +52,7 @@ public class SceneLoader : MonoBehaviour
         if (inventoryManager.HasPlayableCouCou())
         {
             inventoryManager.SaveInventory();
-            SaveSystem.SavePlayer(player);
+            SaveSystem.SavePlayer(player, questScriptable);
             StartCoroutine(LoadScene("BattleScene"));
         }
     }
@@ -79,5 +80,13 @@ public class SceneLoader : MonoBehaviour
         {
             SaveSystem.LoadPlayer();
         }
+    }
+
+    public IEnumerator TitleScreen()
+    {
+        transition.SetTrigger("Start");
+        PlayerPrefs.Save();
+        yield return new WaitForSeconds(1f);
+        SceneManager.LoadScene("TitleScreen");
     }
 }

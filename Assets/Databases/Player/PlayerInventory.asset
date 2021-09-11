@@ -32,15 +32,15 @@ MonoBehaviour:
     hasCollapsed: 0
   couCouInventory:
   - coucouName: Bonzie
-    coucouLevel: 15
-    currentEXP: 1500
+    coucouLevel: 12
+    currentEXP: 2030.9695
     coucouVariant: 1
     element: 2
     lineupOrder: 1
-    maxHealth: 272
-    currentAttack: 198
-    currentResistance: 1.93
-    currentHealth: 30
+    maxHealth: 218
+    currentAttack: 157
+    currentResistance: 1.7199999
+    currentHealth: -24
     currentMindset: 30
     currentDetermination: 50
     isStunned: 0
@@ -61,7 +61,7 @@ MonoBehaviour:
     hasCollapsed: 0
   itemInventory:
   - itemName: CouCou Capsule
-    itemAmount: 4
+    itemAmount: 13
     itemAttribute: 5
     element: 0
   - itemName: Ripe Berry
@@ -73,7 +73,7 @@ MonoBehaviour:
     itemAttribute: 3
     element: 1
   - itemName: Frozen Berry
-    itemAmount: 3
+    itemAmount: 4
     itemAttribute: 3
     element: 3
   - itemName: Fruitful Berry
@@ -88,3 +88,7 @@ MonoBehaviour:
     itemAmount: 3
     itemAttribute: 3
     element: 4
+  - itemName: Mystic Berry
+    itemAmount: 8
+    itemAttribute: 4
+    element: 6

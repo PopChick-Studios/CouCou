@@ -9,9 +9,11 @@ public class DisplayManager : MonoBehaviour
     private GameManager gameManager;
     private FindWildCouCou findWildCouCou;
     private SatchelAdventureManager satchelAdventureManager;
+    private LetterManager letterManager;
     private PlayerInteraction playerInteraction;
     private IntoFight intoFight;
     private QuestBook questBook;
+    public QuestScriptable questScriptable;
 
     [Header("Blur Camera")]
     public GameObject blurCamera;
@@ -48,6 +50,7 @@ public class DisplayManager : MonoBehaviour
         Collect,
         Letter,
         Save,
+        StarterCouCou,
         CouCou,
         CouCorp,
         NPC
@@ -59,6 +62,7 @@ public class DisplayManager : MonoBehaviour
 
     private void Awake()
     {
+        letterManager = GameObject.FindGameObjectWithTag("AdventureUI").GetComponent<LetterManager>();
         intoFight = GetComponent<IntoFight>();
         findWildCouCou = GetComponent<FindWildCouCou>();
         gameManager = GetComponent<GameManager>();
@@ -68,6 +72,7 @@ public class DisplayManager : MonoBehaviour
         playerInputActions = new PlayerInputActions();
 
         playerInputActions.Wandering.Pause.started += x => PauseMenu();
+        //playerInputActions.UI.Cancel.started += x => PauseMenu();
         playerInputActions.Wandering.QuestBook.started += x => OnQuestBook();
         playerInputActions.Wandering.Satchel.started += x => OpenSatchel();
         playerInputActions.Wandering.GoBack.started += x => GoBack();
@@ -95,7 +100,7 @@ public class DisplayManager : MonoBehaviour
         {
             OnQuestBook();
         }
-        else if (!playerInteraction.interacting && gameManager.State != GameManager.GameState.Fishing)
+        else if (!playerInteraction.interacting && gameManager.State != GameManager.GameState.Fishing && !pause.activeInHierarchy)
         {
             Time.timeScale = 0;
             options.SetActive(false);
@@ -128,10 +133,6 @@ public class DisplayManager : MonoBehaviour
         else if (questBookDisplay.activeInHierarchy)
         {
             OnQuestBook();
-        }
-        else if (pause.activeInHierarchy)
-        {
-            HeadsUpDisplay();
         }
     }
 
@@ -254,6 +255,7 @@ public class DisplayManager : MonoBehaviour
                 break;
 
             case InteractionTypes.Letter:
+                letterManager.DisplayQuestLetter(questScriptable.questProgress, questScriptable.subquestProgress);
                 letterUI.SetActive(true);
                 saveUI.SetActive(false);
                 collectUI.SetActive(false);
@@ -267,7 +269,7 @@ public class DisplayManager : MonoBehaviour
                 coucouUI.SetActive(false);
                 break;
 
-            case InteractionTypes.CouCou:
+            case InteractionTypes.StarterCouCou:
                 saveUI.SetActive(false);
                 letterUI.SetActive(false);
                 collectUI.SetActive(false);

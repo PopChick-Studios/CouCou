@@ -11,8 +11,9 @@ public class Fishing : MonoBehaviour
     private InventoryManager inventoryManager;
     private GameManager gameManager;
     private Transform cameraPosition;
+    private Player player;
 
-    public GameObject player;
+    public GameObject playerGO;
     public Animator playerAnimator;
     public GameObject fishingRod1;
     public GameObject fishingRod2;
@@ -35,6 +36,7 @@ public class Fishing : MonoBehaviour
         displayManager = GetComponent<DisplayManager>();
         inventoryManager = GetComponent<InventoryManager>();
         canPlayerFish = GameObject.FindGameObjectWithTag("Player").GetComponent<CanPlayerFish>();
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
         playerInteraction = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerInteraction>();
         cameraPosition = GameObject.FindGameObjectWithTag("MainCamera").transform;
 
@@ -42,6 +44,11 @@ public class Fishing : MonoBehaviour
         playerInputActions.Wandering.Interact.started += x => ValidateFishRequest();
         playerInputActions.Fishing.Interact.started += x => ValidateFishRequest();
         playerInputActions.Fishing.Cancel.started += x => ValidateFishRequest();
+    }
+
+    private void Start()
+    {
+        Debug.Log(player.HasMaxCapsules());
     }
 
     public void ValidateFishRequest()
@@ -85,7 +92,7 @@ public class Fishing : MonoBehaviour
         Debug.Log(xNormalValue);
         Debug.Log(zNormalValue);
 
-        player.transform.SetPositionAndRotation(new Vector3(displayPrompt.transform.position.x + xNormalValue, player.transform.position.y, displayPrompt.transform.position.z + zNormalValue), Quaternion.LookRotation(new Vector3(-xNormalValue, 0, -zNormalValue)));
+        playerGO.transform.SetPositionAndRotation(new Vector3(displayPrompt.transform.position.x + xNormalValue, playerGO.transform.position.y, displayPrompt.transform.position.z + zNormalValue), Quaternion.LookRotation(new Vector3(-xNormalValue, 0, -zNormalValue)));
 
         fishingRod1.SetActive(true);
         fishingRod2.SetActive(true);
@@ -188,17 +195,16 @@ public class Fishing : MonoBehaviour
         int randomItem = Random.Range(0, 4);
         string item = "";
         int amount = 0;
-        if (randomItem < 3 || PlayerPrefs.GetInt("currentCapsules") == PlayerPrefs.GetInt("maxCapsules"))
+        if (randomItem < 3 || player.HasMaxCapsules())
         {
             item = "Frozen Berry";
             amount = 1;
         }
-        else if (randomItem > 3 && PlayerPrefs.GetInt("currentCapsules") != PlayerPrefs.GetInt("maxCapsules"))
+        else if (randomItem > 3 && !player.HasMaxCapsules())
         {
             item = "CouCou Capsule";
             amount = 1;
         }
-
         
         displayManager.OnInteraction(DisplayManager.InteractionTypes.Collect, item, amount);
         inventoryManager.FoundItem(item, amount);
