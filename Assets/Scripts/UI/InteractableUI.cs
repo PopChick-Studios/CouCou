@@ -41,11 +41,11 @@ public class InteractableUI : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        if (interactionType == DisplayManager.InteractionTypes.CouCou)
+        if (interactionType == DisplayManager.InteractionTypes.StarterCouCou)
         {
             itemName = gameObject.name;
             nameText.text = itemName;
-            if (playerInventory.starterCouCou != null)
+            if (!string.IsNullOrEmpty(playerInventory.starterCouCou.coucouName))
             {
                 gameObject.SetActive(false);
             }
@@ -66,6 +66,10 @@ public class InteractableUI : MonoBehaviour
         nameText.rectTransform.transform.rotation = Quaternion.LookRotation(nameText.rectTransform.transform.position - cameraTransform.position);
         if (isInRange && player != null)
         {
+            if (!arrowPlaceholder.gameObject.activeInHierarchy)
+            {
+                arrowPlaceholder.gameObject.SetActive(true);
+            }
             float y = Mathf.PingPong(Time.time * bounceTime, 1);
             arrowPlaceholder.rectTransform.position = new Vector3(originTransform.position.x, height + originTransform.position.y + 1.5f + y, originTransform.position.z);
             arrowPlaceholder.rectTransform.transform.rotation = Quaternion.LookRotation(arrowPlaceholder.rectTransform.transform.position - cameraTransform.position);
@@ -96,10 +100,9 @@ public class InteractableUI : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        player = other.gameObject;
-
         if (other.CompareTag("Player") && enabled)
         {
+            player = other.gameObject;
             isInRange = true;
             arrowPlaceholder.gameObject.SetActive(true);
         }
@@ -107,10 +110,9 @@ public class InteractableUI : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        player = null;
-
         if (other.CompareTag("Player") && enabled)
         {
+            player = null;
             arrowPlaceholder.gameObject.SetActive(false);
             isInRange = false;
         }

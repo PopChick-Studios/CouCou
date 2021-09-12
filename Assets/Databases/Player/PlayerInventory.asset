@@ -17,51 +17,23 @@ MonoBehaviour:
     sentences: []
   starterCouCou:
     coucouName: Bonzie
-    coucouLevel: 15
+    coucouLevel: 1
     currentEXP: 0
     coucouVariant: 1
     element: 2
-    lineupOrder: 1
-    maxHealth: 272
-    currentAttack: 198
-    currentResistance: 1.93
-    currentHealth: 272
+    lineupOrder: 0
+    maxHealth: 50
+    currentAttack: 15
+    currentResistance: 1.05
+    currentHealth: 50
     currentMindset: 30
     currentDetermination: 50
     isStunned: 0
     hasCollapsed: 0
-  couCouInventory:
-  - coucouName: Bonzie
-    coucouLevel: 12
-    currentEXP: 2030.9695
-    coucouVariant: 1
-    element: 2
-    lineupOrder: 1
-    maxHealth: 218
-    currentAttack: 157
-    currentResistance: 1.7199999
-    currentHealth: -24
-    currentMindset: 30
-    currentDetermination: 50
-    isStunned: 0
-    hasCollapsed: 0
-  - coucouName: Flizzard
-    coucouLevel: 15
-    currentEXP: 500
-    coucouVariant: 4
-    element: 1
-    lineupOrder: 2
-    maxHealth: 278
-    currentAttack: 192
-    currentResistance: 2.01
-    currentHealth: 278
-    currentMindset: 30
-    currentDetermination: 50
-    isStunned: 0
-    hasCollapsed: 0
+  couCouInventory: []
   itemInventory:
   - itemName: CouCou Capsule
-    itemAmount: 13
+    itemAmount: 10
     itemAttribute: 5
     element: 0
   - itemName: Ripe Berry

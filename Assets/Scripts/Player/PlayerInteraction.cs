@@ -14,6 +14,7 @@ public class PlayerInteraction : MonoBehaviour
     private PlayerMovement playerMovement;
     public QuestScriptable questScriptable;
     public List<Dialogue> dialogue;
+    public InventoryList playerInventory;
 
     public bool onSaveButton;
     public bool onCancelSaveButton;
@@ -100,7 +101,7 @@ public class PlayerInteraction : MonoBehaviour
         {
             yield break;
         }
-        if (interactionType == DisplayManager.InteractionTypes.Collect || interactionType == DisplayManager.InteractionTypes.Letter)
+        if (interactionType == DisplayManager.InteractionTypes.Collect)
         {
             displayManager.HeadsUpDisplay();
             gameManager.SetState(GameManager.GameState.Wandering);
@@ -115,9 +116,16 @@ public class PlayerInteraction : MonoBehaviour
             yield return new WaitForSeconds(1.7f);
             playerMovement.canMove = true;
         }
+        else if (interactionType == DisplayManager.InteractionTypes.Letter)
+        {
+            displayManager.HeadsUpDisplay();
+            gameManager.SetState(GameManager.GameState.Wandering);
+            // Swap inputs
+            playerInputActions.UI.Disable();
+            playerInputActions.Wandering.Enable();
+        }
         else if (onSaveButton)
         {
-            interactableUI.gameObject.SetActive(false);
             playerInputActions.UI.Disable();
             playerInputActions.Wandering.Enable();
 
@@ -172,11 +180,14 @@ public class PlayerInteraction : MonoBehaviour
 
     public void OnSaveGame()
     {
+        SaveSystem.SavePlayer(GetComponent<Player>(), questScriptable);
+        SaveSystem.SaveInventory(playerInventory);
+
         displayManager.HeadsUpDisplay();
         gameManager.SetState(GameManager.GameState.Wandering);
 
         onSaveButton = true;
-
+        canFinishInteracting = true;
         StartCoroutine(FinishInteraction(interactableUI.interactionType));
     }
 
@@ -186,7 +197,7 @@ public class PlayerInteraction : MonoBehaviour
         gameManager.SetState(GameManager.GameState.Wandering);
 
         onCancelSaveButton = true;
-
+        canFinishInteracting = true;
         StartCoroutine(FinishInteraction(interactableUI.interactionType));
     }
 

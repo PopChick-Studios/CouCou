@@ -5,6 +5,8 @@ using UnityEngine;
 public class ChangeCamera : MonoBehaviour
 {
     public GameObject mainCamera;
+    public GameObject tortureRoomDoorCamera;
+    public GameObject punksNoteCamera;
     public GameObject diggleTownCamera;
     public GameObject cherroomTownCamera;
     public GameObject punks1Camera;
@@ -12,12 +14,10 @@ public class ChangeCamera : MonoBehaviour
     public Animator crossfadeAnimator;
 
     private GameManager gameManager;
-    private CameraFollow cameraFollow;
 
     private void Awake()
     {
         gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
-        cameraFollow = GetComponent<CameraFollow>();
     }
 
     private void Start()

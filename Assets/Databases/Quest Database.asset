@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Quest Database
   m_EditorClassIdentifier: 
   questProgress: 1
-  subquestProgress: 1
+  subquestProgress: 3

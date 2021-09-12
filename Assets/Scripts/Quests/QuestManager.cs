@@ -6,6 +6,7 @@ public class QuestManager : MonoBehaviour
 {
     private GameManager gameManager;
     private DialogueManager dialogueManager;
+    private ChangeCamera changeCamera;
     public QuestScriptable questScriptable;
 
     public List<Dialogue> starterCouCouDialogue;
@@ -19,6 +20,7 @@ public class QuestManager : MonoBehaviour
 
     private void Awake()
     {
+        changeCamera = GameObject.FindGameObjectWithTag("CameraRig").GetComponent<ChangeCamera>();
         gameManager = GetComponent<GameManager>();
         dialogueManager = GetComponent<DialogueManager>();
         
@@ -49,7 +51,9 @@ public class QuestManager : MonoBehaviour
                             StartCoroutine(dialogueManager.StartDialogue(wildCouCouDialogue));
                             break;
                         case 7:
-                            Debug.Log("gfdsjklgdsahfjkadlhfkfjdsah");
+                            StartCoroutine(changeCamera.SwitchToCamera(changeCamera.tortureRoomDoorCamera));
+                            break;
+                        case 8:
                             StartCoroutine(gameManager.CompleteQuest(1));
                             break;
                     }
@@ -82,6 +86,9 @@ public class QuestManager : MonoBehaviour
                             StartCoroutine(dialogueManager.StartDialogue(firstPunksDialogue));
                             break;
                         case 4:
+                            StartCoroutine(changeCamera.SwitchToCamera(changeCamera.punksNoteCamera));
+                            break;
+                        case 5:
                             StartCoroutine(gameManager.CompleteQuest(3));
                             break;
                     }
@@ -96,6 +103,9 @@ public class QuestManager : MonoBehaviour
                         case 2:
                             break;
                         case 3:
+                            StartCoroutine(changeCamera.SwitchToCamera(changeCamera.diggleTownCamera));
+                            break;
+                        case 4:
                             StartCoroutine(gameManager.CompleteQuest(4));
                             break;
                     }

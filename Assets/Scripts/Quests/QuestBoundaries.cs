@@ -18,6 +18,7 @@ public class QuestBoundaries : MonoBehaviour
 
     public List<BoundairesList> boundairesList;
     private int previousSubquestProgress;
+    private int index;
 
     void Update()
     {
@@ -26,22 +27,7 @@ public class QuestBoundaries : MonoBehaviour
             Debug.Log("Subquest changed value. Changing all boundaries");
             for (int i = 0; i < boundairesList.Count; i++)
             {
-                if (boundairesList[i].requiredQuestProgress == questScriptable.questProgress && boundairesList[i].requiredSubquestProgress == questScriptable.subquestProgress)
-                {
-                    for (int a = 0; a < boundairesList[i].boundaries.Count; a++)
-                    {
-                        boundairesList[i].boundaries[a].SetActive(true);
-                    }
-                    for (int a = 0; a < boundairesList[i].triggers.Count; a++)
-                    {
-                        boundairesList[i].triggers[a].SetActive(true);
-                    }
-                    for (int a = 0; a < boundairesList[i].interactableUI.Count; a++)
-                    {
-                        boundairesList[i].interactableUI[a].enabled = true;
-                    }
-                }
-                else
+                if (boundairesList[i].requiredQuestProgress != questScriptable.questProgress || boundairesList[i].requiredSubquestProgress != questScriptable.subquestProgress)
                 {
                     for (int a = 0; a < boundairesList[i].boundaries.Count; a++)
                     {
@@ -56,6 +42,23 @@ public class QuestBoundaries : MonoBehaviour
                         boundairesList[i].interactableUI[a].enabled = false;
                     }
                 }
+                else
+                {
+                    index = i;
+                }
+            }
+
+            for (int a = 0; a < boundairesList[index].boundaries.Count; a++)
+            {
+                boundairesList[index].boundaries[a].SetActive(true);
+            }
+            for (int a = 0; a < boundairesList[index].triggers.Count; a++)
+            {
+                boundairesList[index].triggers[a].SetActive(true);
+            }
+            for (int a = 0; a < boundairesList[index].interactableUI.Count; a++)
+            {
+                boundairesList[index].interactableUI[a].enabled = true;
             }
         }
         previousSubquestProgress = questScriptable.subquestProgress;

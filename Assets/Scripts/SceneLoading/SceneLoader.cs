@@ -51,8 +51,8 @@ public class SceneLoader : MonoBehaviour
     {
         if (inventoryManager.HasPlayableCouCou())
         {
-            inventoryManager.SaveInventory();
-            SaveSystem.SavePlayer(player, questScriptable);
+            //inventoryManager.SaveInventory();
+            //SaveSystem.SavePlayer(player, questScriptable);
             StartCoroutine(LoadScene("BattleScene"));
         }
     }

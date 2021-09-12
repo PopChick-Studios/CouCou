@@ -45,7 +45,8 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        if(questScriptable.questProgress == 0)
+        PlayerData data = SaveSystem.LoadPlayer();
+        if(data == null)
         {
             questScriptable.questProgress = 1;
             questScriptable.subquestProgress = 1;

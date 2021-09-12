@@ -41,6 +41,7 @@ public class DisplayManager : MonoBehaviour
     [Header("Buttons")]
     [SerializeField] private Button coucouUIYes;
     [SerializeField] private Button continueButton;
+    [SerializeField] private Button saveButton;
     public Button confirmationQuitButton;
 
     private string coucouInteractingName;
@@ -193,7 +194,7 @@ public class DisplayManager : MonoBehaviour
 
     public void OnApplicationPause(bool pause)
     {
-        if (pause == true)
+        if (pause == true && gameManager.State == GameManager.GameState.Wandering)
         {
             Debug.Log("Application is paused");
             PauseMenu();
@@ -267,6 +268,7 @@ public class DisplayManager : MonoBehaviour
                 letterUI.SetActive(false);
                 collectUI.SetActive(false);
                 coucouUI.SetActive(false);
+                saveButton.Select();
                 break;
 
             case InteractionTypes.StarterCouCou:
@@ -294,7 +296,7 @@ public class DisplayManager : MonoBehaviour
     public void OnChooseCouCou()
     {
         Time.timeScale = 1;
-        findWildCouCou.ChooseWildCouCou(coucouInteractingName, 15);
+        findWildCouCou.ChooseWildCouCou(coucouInteractingName, 1);
     }
 
     public void OnFightingCouCorp(InteractableUI coucorp)
