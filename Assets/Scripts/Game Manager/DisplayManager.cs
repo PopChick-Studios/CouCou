@@ -48,6 +48,7 @@ public class DisplayManager : MonoBehaviour
 
     public enum InteractionTypes
     {
+        Door,
         Collect,
         Letter,
         Save,

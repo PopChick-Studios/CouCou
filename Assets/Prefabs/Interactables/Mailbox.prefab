@@ -662,7 +662,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerInventory: {fileID: 11400000, guid: 44ee79a05ad81ff4d8652799fc7d7f56, type: 2}
-  interactionType: 1
+  interactionType: 2
   nameText: {fileID: 123065939423029746}
   itemName: 
   itemAmount: 0
@@ -673,6 +673,7 @@ MonoBehaviour:
   originTransform: {fileID: 638494849807712496}
   cameraTransform: {fileID: 0}
   bounceTime: 1.5
+  isInRange: 0
   canInteract: 0
 --- !u!135 &638494849807712510
 SphereCollider:

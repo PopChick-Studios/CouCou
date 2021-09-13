@@ -115,7 +115,7 @@ public class Fishing : MonoBehaviour
 
             pullUp = false;
             countdownFinished = false;
-            timer = 3f;
+            timer = 1.8f;
             StartCoroutine(CountdownTimer());
             yield return new WaitUntil(() => countdownFinished);
             if (timer > 0)

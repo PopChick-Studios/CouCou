@@ -55,41 +55,48 @@ public class PlayerInteraction : MonoBehaviour
         if (interactableUI != null && !interacting && gameManager.State == GameManager.GameState.Wandering)
         {
             eventTrigger = interactableUI.GetComponent<EventTrigger>();
-            if (interactableUI.canInteract && eventTrigger == null)
+            if (interactableUI.canInteract)
             {
-                interacting = true;
+                
 
-                playerInputActions.UI.Enable();
-                playerInputActions.Wandering.Disable();
+                switch (interactableUI.interactionType)
+                {
+                    case DisplayManager.InteractionTypes.Door:
+                        interactableUI.doorOpen = !interactableUI.doorOpen;
+                        interactableUI.gameObject.GetComponent<Animator>().SetBool("doorOpen", interactableUI.doorOpen);
+                        break;
 
-                if (interactableUI.interactionType == DisplayManager.InteractionTypes.Collect)
-                {
-                    playerMovement.canMove = false;
-                    animator.SetTrigger("grabbingItem");
-                    yield return new WaitForSeconds(1.3f);
-                    displayManager.OnInteraction(interactableUI.interactionType, interactableUI.itemName, interactableUI.itemAmount);
-                    inventoryManager.FoundItem(interactableUI.itemName, interactableUI.itemAmount);
-                }
-                else
-                {
-                    displayManager.OnInteraction(interactableUI.interactionType, interactableUI.itemName, interactableUI.itemAmount);
-                }
+                    case DisplayManager.InteractionTypes.Collect:
+                        playerInputActions.UI.Enable();
+                        playerInputActions.Wandering.Disable();
+                        playerMovement.canMove = false;
+                        animator.SetTrigger("grabbingItem");
+                        yield return new WaitForSeconds(1.3f);
+                        inventoryManager.FoundItem(interactableUI.itemName, interactableUI.itemAmount);
+                        goto default;
 
-                // Pause the game
-                Time.timeScale = 0;
-                canFinishInteracting = true;
-            }
-            else if (interactableUI.canInteract && eventTrigger != null && dialogueManager.dialogueFinished)
-            {
-                if (!inventoryManager.HasPlayableCouCou() && eventTrigger.eventTriggerType == EventTrigger.EventTriggerType.InteractionFight)
-                {
-                    StartCoroutine(FindObjectOfType<DialogueManager>().StartDialogue(dialogue));
+                    default:
+                        if (eventTrigger != null && dialogueManager.dialogueFinished)
+                        {
+                            if (!inventoryManager.HasPlayableCouCou() && eventTrigger.eventTriggerType == EventTrigger.EventTriggerType.InteractionFight)
+                            {
+                                StartCoroutine(FindObjectOfType<DialogueManager>().StartDialogue(dialogue));
+                            }
+                            else
+                            {
+                                StartCoroutine(eventTrigger.Interact());
+                            }
+                            canFinishInteracting = true;
+                            break;
+                        }
+                        interacting = true;
+                        playerInputActions.UI.Enable();
+                        playerInputActions.Wandering.Disable();
+                        displayManager.OnInteraction(interactableUI.interactionType, interactableUI.itemName, interactableUI.itemAmount);
+                        Time.timeScale = 0;
+                        canFinishInteracting = true;
+                        break;
                 }
-                else
-                {
-                    StartCoroutine(eventTrigger.Interact());
-                }
-                canFinishInteracting = true;
             }
         }
     }

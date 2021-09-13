@@ -515,6 +515,8 @@ MonoBehaviour:
   originTransform: {fileID: 8096278144689313799}
   cameraTransform: {fileID: 0}
   bounceTime: 1.5
+  doorOpen: 0
+  isInRange: 0
   canInteract: 0
 --- !u!135 &6374276226181177049
 SphereCollider:
@@ -527,7 +529,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 15
+  m_Radius: 10
   m_Center: {x: 0, y: 2.5, z: 0}
 --- !u!1 &4773537441156673771
 GameObject:

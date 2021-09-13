@@ -30,7 +30,8 @@ public class InteractableUI : MonoBehaviour
 
     private GameObject player;
 
-    private bool isInRange = false;
+    public bool doorOpen = false;
+    public bool isInRange = false;
     public bool canInteract = false;
 
     private void Awake()
@@ -75,7 +76,7 @@ public class InteractableUI : MonoBehaviour
             arrowPlaceholder.rectTransform.transform.rotation = Quaternion.LookRotation(arrowPlaceholder.rectTransform.transform.position - cameraTransform.position);
 
             // Check the distance from the player
-            if (Vector3.Distance(player.transform.position, gameObject.transform.position) < range)
+            if (Vector3.Distance(player.transform.position, originTransform.position) < range)
             {
                 arrowPlaceholder.color = new Color32(255, 212, 73, 255);
                 canInteract = true;
