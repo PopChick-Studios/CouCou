@@ -1,16 +1,29 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
 public class BattlingUI : MonoBehaviour
 {
-    private SatchelOpenClose satchelOpenClose;
     private AbilityDisplay abilityDisplay;
+    private BattleSystem battleSystem;
+    private SatchelManager satchelManager;
+    private BattleManager battleManager;
 
+    public GameObject satchel;
+    public GameObject blurCamera;
     public GameObject fightButtons;
-    public GameObject menuButtons;
+    public GameObject menu;
     public GameObject healthBars;
+    public GameObject dialogueBox;
+    public GameObject prompt;
+    public GameObject pause;
+    public GameObject options;
+    public GameObject confirmation;
+
+    public Button continueButton;
+    public Button confirmationQuitButton;
 
     public GameObject menuFirstButton;
     public GameObject abilitiesFirstButton;
@@ -18,28 +31,63 @@ public class BattlingUI : MonoBehaviour
 
     private PlayerInputActions playerInputActions;
 
+    public bool inFightMenu = false;
+    public bool inPause = false;
+    public bool inSatchel = false;
+
     private void Awake()
     {
-        playerInputActions = new PlayerInputActions();
-        playerInputActions.UI.Cancel.performed += x => BackToMenu();
-
+        battleManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<BattleManager>();
+        battleSystem = GameObject.FindGameObjectWithTag("GameManager").GetComponent<BattleSystem>();
         abilityDisplay = GetComponent<AbilityDisplay>();
-        satchelOpenClose = GameObject.FindGameObjectWithTag("Satchel").GetComponent<SatchelOpenClose>();
-        
+        playerInputActions = new PlayerInputActions();
+        playerInputActions.UI.Cancel.started += x => BackToMenu();
+        options.SetActive(false);
+        pause.SetActive(false);
+        prompt.SetActive(false);
         fightButtons.SetActive(false);
-        menuButtons.SetActive(true);
+        confirmation.SetActive(false);
 
         lastButtonPressed = menuFirstButton;
     }
 
     private void Start()
     {
-        OnNewRound();
+        satchelManager = GameObject.FindGameObjectWithTag("BattlingUI").GetComponent<SatchelManager>();
     }
 
-    public void InitializeCouCou()
+    public void OnPause()
     {
+        Time.timeScale = 0;
+        inPause = true;
+        options.SetActive(false);
+        confirmation.SetActive(false);
+        pause.SetActive(true);
+        continueButton.Select();
+    }
 
+    public void OnOptions()
+    {
+        options.SetActive(true);
+        pause.SetActive(false);
+        inPause = false;
+    }
+
+    public void OnConfirmation()
+    {
+        pause.SetActive(false);
+        confirmation.SetActive(true);
+        confirmationQuitButton.Select();
+        inPause = false;
+    }
+
+    public void OnApplicationPause(bool pause)
+    {
+        if (pause == true)
+        {
+            Debug.Log("Application is paused");
+            OnPause();
+        }
     }
 
     public void LastButtonPressed(GameObject button)
@@ -49,57 +97,122 @@ public class BattlingUI : MonoBehaviour
 
     public void OnFight()
     {
-        // create selected object
-        EventSystem.current.SetSelectedGameObject(null);
-
         fightButtons.SetActive(true);
-        menuButtons.SetActive(false);
+        menu.SetActive(false);
 
-        EventSystem.current.SetSelectedGameObject(abilitiesFirstButton);
+        abilitiesFirstButton.GetComponent<Button>().Select();
+
+        inFightMenu = true;
     }
 
     public void BackToMenu()
     {
-        // create selected object
-        EventSystem.current.SetSelectedGameObject(null);
+        Time.timeScale = 1;
+        if (battleSystem.state == BattleState.PLAYERTURN)
+        {
+            if (inFightMenu)
+            {
+                Debug.Log("Out of fight menu");
+                fightButtons.SetActive(false);
+                menu.SetActive(true);
+                healthBars.SetActive(true);
+                dialogueBox.SetActive(true);
+                lastButtonPressed.GetComponent<Button>().Select();
 
+                inSatchel = false;
+                inFightMenu = false;
+            }
+            else if (inPause)
+            {
+                Debug.Log("Out of pause");
+                pause.SetActive(false);
+                inPause = false;
+                lastButtonPressed.GetComponent<Button>().Select();
+            }
+            else if (inSatchel || satchelManager.inPrompt || satchelManager.inSubmit)
+            {
+                satchelManager.GoBack();
+            }
+            else
+            {
+                Debug.Log("pausing");
+                OnPause();
+            }
+        }
+        else if (inPause)
+        {
+            Debug.Log("Out of pause");
+            pause.SetActive(false);
+            inPause = false;
+            lastButtonPressed.GetComponent<Button>().Select();
+        }
+        else
+        {
+            Debug.Log("pausing");
+            OnPause();
+        }
+    }
+
+    public void OnCloseSatchel()
+    {
+
+        Debug.Log("Out of satchel");
         fightButtons.SetActive(false);
-        menuButtons.SetActive(true);
+        menu.SetActive(true);
         healthBars.SetActive(true);
+        dialogueBox.SetActive(true);
+        lastButtonPressed.GetComponent<Button>().Select();
 
-        EventSystem.current.SetSelectedGameObject(lastButtonPressed);
+        inSatchel = false;
+        inFightMenu = false;
     }
 
     public void OnNewRound()
     {
-        // create selected object
-        EventSystem.current.SetSelectedGameObject(null);
-        EventSystem.current.SetSelectedGameObject(menuFirstButton);
+        Time.timeScale = 1;
 
-        menuButtons.SetActive(true);
+        menuFirstButton.GetComponent<Button>().Select();
+
+        satchel.SetActive(false);
+        menu.SetActive(true);
     }
 
     public void OnFinishTurn()
     {
+        Time.timeScale = 1;
+
+        satchelManager.ClearItems();
+        satchelManager.ClearCouCou();
+
+        inFightMenu = false;
+        blurCamera.SetActive(false);
+        satchel.SetActive(false);
+        healthBars.SetActive(true);
         fightButtons.SetActive(false);
-        menuButtons.SetActive(false);
+        menu.SetActive(false);
+        dialogueBox.SetActive(true);
     }
 
     public void OnSatchel()
     {
-        EventSystem.current.SetSelectedGameObject(null);
-
+        dialogueBox.SetActive(false);
         fightButtons.SetActive(false);
-        menuButtons.SetActive(false);
+        menu.SetActive(false);
         healthBars.SetActive(false);
-        satchelOpenClose.gameObject.SetActive(true);
+        inFightMenu = false;
+        inSatchel = true;
+    }
+
+    public void OnRun()
+    {
+        OnFinishTurn();
+        StartCoroutine(battleManager.OnRun());
     }
 
     private void OnEnable()
     {
         playerInputActions.Enable();
     }
-
     private void OnDisable()
     {
         playerInputActions.Disable();
