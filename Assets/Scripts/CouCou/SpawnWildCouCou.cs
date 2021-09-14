@@ -34,6 +34,7 @@ public class SpawnWildCouCou : MonoBehaviour
     {
         if (previousCoroutine != null)
         {
+            StopCoroutine(previousCoroutine);
             previousCoroutine = null;
         }
     }

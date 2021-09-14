@@ -28,7 +28,7 @@ RectTransform:
   m_GameObject: {fileID: 899837560849131618}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 3, y: 3, z: 3}
   m_Children:
   - {fileID: 8744044028571884971}
   - {fileID: 1541585490430873052}
@@ -482,7 +482,7 @@ Transform:
   m_GameObject: {fileID: 4615877668149538635}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.3, y: 0.3, z: 0.3}
   m_Children:
   - {fileID: 5601578434779280353}
   - {fileID: 1387908669982300924}
@@ -490,7 +490,7 @@ Transform:
   - {fileID: 8017096893509339552}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -117.102, z: 0}
 --- !u!114 &5142326388958397119
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -504,12 +504,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerInventory: {fileID: 11400000, guid: 44ee79a05ad81ff4d8652799fc7d7f56, type: 2}
-  interactionType: 2
+  interactionType: 4
   nameText: {fileID: 7341626043056222895}
   itemName: 
   itemAmount: 0
   range: 3.5
-  height: 4
+  height: 1
   arrowSprite: {fileID: 21300000, guid: 3a462df434e422849afad7ee5be5867a, type: 3}
   arrowPlaceholder: {fileID: 6818093908010034155}
   originTransform: {fileID: 8096278144689313799}
@@ -529,7 +529,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 10
+  m_Radius: 30
   m_Center: {x: 0, y: 2.5, z: 0}
 --- !u!1 &4773537441156673771
 GameObject:

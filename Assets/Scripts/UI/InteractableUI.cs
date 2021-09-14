@@ -123,7 +123,10 @@ public class InteractableUI : MonoBehaviour
 
     private void OnDisable()
     {
-        arrowPlaceholder.gameObject.SetActive(false);
+        if (arrowPlaceholder != null)
+        {
+            arrowPlaceholder.gameObject.SetActive(false);
+        }
         canInteract = false;
     }
 }

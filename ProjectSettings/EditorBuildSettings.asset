@@ -5,7 +5,7 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/CouCou.unity
     guid: 52a1e820258a6f14b9e4f18c3f70c470
   - enabled: 1

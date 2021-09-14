@@ -12,12 +12,12 @@ public class SceneLoader : MonoBehaviour
     private Player player;
     public QuestScriptable questScriptable;
     public GameManager.GameState previousState;
-
+    public InventoryList playerInventory;
     public Animator transition;
 
     private void Awake()
     {
-        if (SceneManager.GetActiveScene().name == "TestingScene")
+        if (SceneManager.GetActiveScene().name == "TestingScene" || SceneManager.GetActiveScene().name == "CouCou")
         {
             player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
         }
@@ -51,8 +51,8 @@ public class SceneLoader : MonoBehaviour
     {
         if (inventoryManager.HasPlayableCouCou())
         {
-            //inventoryManager.SaveInventory();
-            //SaveSystem.SavePlayer(player, questScriptable);
+            inventoryManager.SaveInventory();
+            SaveSystem.SavePlayer(player, questScriptable);
             StartCoroutine(LoadScene("BattleScene"));
         }
     }
@@ -60,13 +60,16 @@ public class SceneLoader : MonoBehaviour
     public void LoadAdventureScene()
     {
         inventoryManager.SaveInventory();
-        StartCoroutine(LoadScene("TestingScene"));
+        StartCoroutine(LoadScene("CouCou"));
     }
 
     public void LoadNewGame()
     {
         SaveSystem.DeleteAllSaveFiles();
-        StartCoroutine(LoadScene("TestingScene"));
+        playerInventory.starterCouCou = null;
+        playerInventory.couCouInventory.Clear();
+        playerInventory.itemInventory.Clear();
+        StartCoroutine(LoadScene("CouCou"));
     }
 
     public IEnumerator LoadScene(string sceneName)

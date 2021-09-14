@@ -7,6 +7,7 @@ public class QuestManager : MonoBehaviour
     private GameManager gameManager;
     private DialogueManager dialogueManager;
     private ChangeCamera changeCamera;
+    private InventoryManager inventoryManager;
     public QuestScriptable questScriptable;
 
     public List<Dialogue> starterCouCouDialogue;
@@ -20,8 +21,10 @@ public class QuestManager : MonoBehaviour
 
     private void Awake()
     {
+        
         changeCamera = GameObject.FindGameObjectWithTag("CameraRig").GetComponent<ChangeCamera>();
         gameManager = GetComponent<GameManager>();
+        inventoryManager = GetComponent<InventoryManager>();
         dialogueManager = GetComponent<DialogueManager>();
         
     }
@@ -38,22 +41,18 @@ public class QuestManager : MonoBehaviour
                         case 1:
                             break;
                         case 2:
-                            
                             break;
                         case 3:
                             break;
                         case 4:
                             break;
                         case 5:
-                            StartCoroutine(dialogueManager.StartDialogue(starterCouCouDialogue));
+                            //inventoryManager.FoundItem("CouCou Capsule", 10);
                             break;
                         case 6:
-                            StartCoroutine(dialogueManager.StartDialogue(wildCouCouDialogue));
-                            break;
-                        case 7:
                             StartCoroutine(changeCamera.SwitchToCamera(changeCamera.tortureRoomDoorCamera));
                             break;
-                        case 8:
+                        case 7:
                             StartCoroutine(gameManager.CompleteQuest(1));
                             break;
                     }

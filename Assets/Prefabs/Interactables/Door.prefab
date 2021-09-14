@@ -372,6 +372,7 @@ GameObject:
   - component: {fileID: 2946464208803987261}
   - component: {fileID: 4038790633383316330}
   - component: {fileID: 2675794904634129236}
+  - component: {fileID: 3008699305494513784}
   m_Layer: 0
   m_Name: Door
   m_TagString: Interactable
@@ -413,13 +414,14 @@ MonoBehaviour:
   nameText: {fileID: 8538365854814575471}
   itemName: 
   itemAmount: 0
-  range: 3
+  range: 5
   height: 2
   arrowSprite: {fileID: 21300000, guid: 3a462df434e422849afad7ee5be5867a, type: 3}
   arrowPlaceholder: {fileID: 2981869219476754696}
   originTransform: {fileID: 6973698405107785292}
   cameraTransform: {fileID: 0}
   bounceTime: 1.5
+  doorOpen: 0
   isInRange: 0
   canInteract: 0
 --- !u!135 &2675794904634129236
@@ -435,6 +437,25 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 5
   m_Center: {x: -1.5, y: 0, z: 0}
+--- !u!95 &3008699305494513784
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6829917562930005261}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 940533015d6021a4b8b3e4523af9e816, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &6860882773694992226
 GameObject:
   m_ObjectHideFlags: 0

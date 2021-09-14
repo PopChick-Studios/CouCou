@@ -498,7 +498,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 82d97f5c16cb47d4584fa1571765b648, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  questScriptable: {fileID: 0}
+  questScriptable: {fileID: 11400000, guid: 7e68a8077602474489a7f958ead3536e, type: 2}
   crossfadeAnimator: {fileID: 0}
   endingText: {fileID: 0}
   badEndingText: 

@@ -31,7 +31,7 @@ public class InventoryManager : MonoBehaviour
         battleManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<BattleManager>();
         coucouFinder = GameObject.FindGameObjectWithTag("GameManager").GetComponent<CouCouFinder>();
         itemFinder = GameObject.FindGameObjectWithTag("GameManager").GetComponent<ItemFinder>();
-        if (SceneManager.GetActiveScene().name == "TestingScene")
+        if (SceneManager.GetActiveScene().name == "TestingScene" || SceneManager.GetActiveScene().name == "CouCou")
         {
             player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
         }
@@ -167,7 +167,7 @@ public class InventoryManager : MonoBehaviour
 
         if (name == "CouCou Capsule")
         {
-            Debug.Log("Added" + amount + " capsules");
+            Debug.Log("Added " + amount + " capsules");
             player.amountOfCapsules += amount;
         }
 

@@ -6,8 +6,10 @@ public class EventTrigger : MonoBehaviour
 {
     private DisplayManager displayManager;
     private DialogueManager dialogueManager;
+    private PlayerMovement playerMovement;
 
     public QuestScriptable questScriptable;
+    public Transform warpPosition;
     public int requiredQuest;
     public int requiredSubquest;
 
@@ -19,7 +21,8 @@ public class EventTrigger : MonoBehaviour
         Interaction,
         InteractionFight,
         InteractionQuest,
-        Warp
+        Warp,
+        InteractionWildCouCou
     }
 
     public EventTriggerType eventTriggerType;
@@ -29,6 +32,7 @@ public class EventTrigger : MonoBehaviour
     {
         displayManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<DisplayManager>();
         dialogueManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<DialogueManager>();
+        playerMovement = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>();
     }
 
     public void TriggerDialogue()
@@ -36,7 +40,14 @@ public class EventTrigger : MonoBehaviour
         StartCoroutine(dialogueManager.StartDialogue(dialogue));
     }
 
-    public IEnumerator Interact()
+    public IEnumerator TriggerDialogueQuest()
+    {
+        StartCoroutine(dialogueManager.StartDialogue(dialogue));
+        yield return new WaitUntil(() => dialogueManager.dialogueFinished);
+        questScriptable.subquestProgress++;
+    }
+
+    public IEnumerator Interact(string coucouName)
     {
         switch (eventTriggerType)
         {
@@ -58,6 +69,16 @@ public class EventTrigger : MonoBehaviour
                     questScriptable.subquestProgress++;
                 }
                 break;
+            case EventTriggerType.InteractionWildCouCou:
+                if (requiredQuest == questScriptable.questProgress && requiredSubquest == questScriptable.subquestProgress)
+                {
+                    StartCoroutine(dialogueManager.StartDialogue(dialogue));
+                    yield return new WaitUntil(() => dialogueManager.dialogueFinished);
+                    Debug.Log("Starting Fight");
+                    displayManager.OnChooseSpecificCouCou(coucouName);
+                    questScriptable.subquestProgress++;
+                }
+                break;
         }
     }
 
@@ -71,7 +92,7 @@ public class EventTrigger : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") && requiredQuest == questScriptable.questProgress && requiredSubquest == questScriptable.subquestProgress)
         {
             switch (eventTriggerType)
             {
@@ -82,7 +103,11 @@ public class EventTrigger : MonoBehaviour
                     TriggerDialogue();
                     break;
                 case EventTriggerType.EnterTriggerDialogueQuest:
-                    TriggerDialogue();
+                    StartCoroutine(TriggerDialogueQuest());
+                    break;
+
+                case EventTriggerType.Warp:
+                    StartCoroutine(playerMovement.WarpPlayer(warpPosition.position));
                     break;
             }
         }

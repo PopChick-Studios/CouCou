@@ -84,9 +84,13 @@ public class PlayerInteraction : MonoBehaviour
                             }
                             else
                             {
-                                StartCoroutine(eventTrigger.Interact());
+                                StartCoroutine(eventTrigger.Interact(interactableUI.itemName));
                             }
                             canFinishInteracting = true;
+                            break;
+                        }
+                        else if (eventTrigger != null && !dialogueManager.dialogueFinished)
+                        {
                             break;
                         }
                         interacting = true;

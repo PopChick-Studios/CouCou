@@ -49,6 +49,7 @@ public class DisplayManager : MonoBehaviour
     public enum InteractionTypes
     {
         Door,
+        Warp,
         Collect,
         Letter,
         Save,
@@ -298,6 +299,12 @@ public class DisplayManager : MonoBehaviour
     {
         Time.timeScale = 1;
         findWildCouCou.ChooseWildCouCou(coucouInteractingName, 1);
+    }
+
+    public void OnChooseSpecificCouCou(string coucouName)
+    {
+        Time.timeScale = 1;
+        findWildCouCou.ChooseSpecificWildCouCou(coucouName);
     }
 
     public void OnFightingCouCorp(InteractableUI coucorp)

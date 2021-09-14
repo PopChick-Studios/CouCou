@@ -16,51 +16,37 @@ MonoBehaviour:
     name: Player
     sentences: []
   starterCouCou:
-    coucouName: Bonzie
-    coucouLevel: 1
-    currentEXP: 0
-    coucouVariant: 1
-    element: 2
-    lineupOrder: 0
-    maxHealth: 50
-    currentAttack: 15
-    currentResistance: 1.05
-    currentHealth: 50
-    currentMindset: 30
+    coucouName: 
+    coucouLevel: 3
+    currentEXP: 3.3985977
+    coucouVariant: 2
+    element: 4
+    lineupOrder: 1
+    maxHealth: 84
+    currentAttack: 40
+    currentResistance: 1.24
+    currentHealth: 66
+    currentMindset: 15
     currentDetermination: 50
     isStunned: 0
     hasCollapsed: 0
-  couCouInventory: []
+  couCouInventory:
+  - coucouName: Foxtning
+    coucouLevel: 3
+    currentEXP: 3.3985977
+    coucouVariant: 2
+    element: 4
+    lineupOrder: 1
+    maxHealth: 84
+    currentAttack: 40
+    currentResistance: 1.24
+    currentHealth: 54
+    currentMindset: 15
+    currentDetermination: 50
+    isStunned: 0
+    hasCollapsed: 0
   itemInventory:
   - itemName: CouCou Capsule
-    itemAmount: 10
+    itemAmount: 9
     itemAttribute: 5
     element: 0
-  - itemName: Ripe Berry
-    itemAmount: 4
-    itemAttribute: 0
-    element: 0
-  - itemName: Burnt Berry
-    itemAmount: 6
-    itemAttribute: 3
-    element: 1
-  - itemName: Frozen Berry
-    itemAmount: 4
-    itemAttribute: 3
-    element: 3
-  - itemName: Fruitful Berry
-    itemAmount: 6
-    itemAttribute: 3
-    element: 2
-  - itemName: Dark Berry
-    itemAmount: 3
-    itemAttribute: 3
-    element: 5
-  - itemName: Bright Berry
-    itemAmount: 3
-    itemAttribute: 3
-    element: 4
-  - itemName: Mystic Berry
-    itemAmount: 8
-    itemAttribute: 4
-    element: 6
