@@ -7,7 +7,7 @@ public class ChangeCamera : MonoBehaviour
     public GameObject mainCamera;
     public GameObject tortureRoomDoorCamera;
     public GameObject punksNoteCamera;
-    public GameObject diggleTownCamera;
+    public GameObject docksCamera;
     public GameObject cherroomTownCamera;
     public GameObject punks1Camera;
     public GameObject punks2Camera;

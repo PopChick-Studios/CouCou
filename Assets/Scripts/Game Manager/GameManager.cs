@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour
     public PlayerMovement playerMovement;
 
     public Animator crossfadeAnimator;
+    public TextMeshProUGUI fadeOutText;
     public TextMeshProUGUI endingText;
     [TextArea(3, 10)]
     public string badEndingText;
@@ -139,7 +140,7 @@ public class GameManager : MonoBehaviour
             case 7:
                 questScriptable.questProgress = 8;
                 questScriptable.subquestProgress = 0;
-                GoodEnding();
+                StartCoroutine(GoodEnding(goodEndingText));
                 break;
         }
         questRewardFinish = true;
@@ -155,7 +156,7 @@ public class GameManager : MonoBehaviour
         crossfadeAnimator.SetTrigger("Start");
         yield return new WaitForSeconds(1.5f);
         typingEnding = true;
-        StartCoroutine(TypeSentence(badEndingText));
+        StartCoroutine(TypeSentence(fadeOutText, badEndingText, 1));
         yield return new WaitWhile(() => typingEnding);
         StartCoroutine(sceneLoader.TitleScreen());
     }
@@ -168,26 +169,30 @@ public class GameManager : MonoBehaviour
         if (!string.IsNullOrEmpty(text))
         {
             typingEnding = true;
-            StartCoroutine(TypeSentence(text));
+            StartCoroutine(TypeSentence(fadeOutText, text, 1));
             yield return new WaitWhile(() => typingEnding);
         }
         crossfadeAnimator.SetTrigger("Reset");
         playerMovement.canMove = true;
     }
 
-    public void GoodEnding()
+    public IEnumerator GoodEnding(string text)
     {
-
+        yield return new WaitForSeconds(1.5f);
+        typingEnding = true;
+        StartCoroutine(TypeSentence(endingText, text, 2));
+        yield return new WaitWhile(() => typingEnding);
+        StartCoroutine(sceneLoader.TitleScreen());
     }
 
-    public IEnumerator TypeSentence(string sentence)
+    public IEnumerator TypeSentence(TextMeshProUGUI textarea, string sentence, int speed)
     {
-        endingText.text = "";
+        textarea.text = "";
 
         foreach (char letter in sentence.ToCharArray())
         {
-            endingText.text += letter;
-            yield return new WaitForSeconds(0.04f);
+            textarea.text += letter;
+            yield return new WaitForSeconds(0.04f * speed);
         }
 
         typingEnding = false;

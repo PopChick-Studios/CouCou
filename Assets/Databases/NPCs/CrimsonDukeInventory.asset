@@ -14,7 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   preGameDialogue:
     name: Crimson Duke
-    sentences: []
+    sentences:
+    - You've been nothing but an embarrassment for the CouCorp.
+    - I'd hate to have to clean you off the floor after I'm done with you.
   starterCouCou:
     coucouName: Brawlster
     coucouLevel: 30

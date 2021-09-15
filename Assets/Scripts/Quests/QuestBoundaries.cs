@@ -17,7 +17,7 @@ public class QuestBoundaries : MonoBehaviour
     public QuestScriptable questScriptable;
 
     public List<BoundairesList> boundairesList;
-    private int previousSubquestProgress;
+    private int previousSubquestProgress = -1;
     private int index;
 
     void Update()

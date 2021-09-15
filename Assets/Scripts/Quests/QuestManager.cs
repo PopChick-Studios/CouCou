@@ -8,7 +8,9 @@ public class QuestManager : MonoBehaviour
     private DialogueManager dialogueManager;
     private ChangeCamera changeCamera;
     private InventoryManager inventoryManager;
+    private IncreaseCouCouHealth increaseCouCouHealth;
     public QuestScriptable questScriptable;
+    public List<NPCMovement> npcMovementList;
 
     public List<GameObject> punksList;
 
@@ -18,6 +20,7 @@ public class QuestManager : MonoBehaviour
     public List<Dialogue> afterFishingCatchDialogue;
     public List<Dialogue> firstPunksSecondDialogue;
     public List<Dialogue> afterPunksNoteDialogue;
+    public List<Dialogue> postmanDialogue;
     public List<Dialogue> secondPunksDialogue;
     public List<Dialogue> umbriDialogue;
 
@@ -30,6 +33,7 @@ public class QuestManager : MonoBehaviour
         gameManager = GetComponent<GameManager>();
         inventoryManager = GetComponent<InventoryManager>();
         dialogueManager = GetComponent<DialogueManager>();
+        increaseCouCouHealth = GetComponent<IncreaseCouCouHealth>();
         
     }
 
@@ -108,14 +112,13 @@ public class QuestManager : MonoBehaviour
                 case 4:
                     switch (questScriptable.subquestProgress)
                     {
-                        case 1:
+                        case 1: // Meet the postman + start walking
+                            StartCoroutine(npcMovementList[0].MoveNPC(postmanDialogue));
                             break;
-                        case 2:
+                        case 2: // camera then go to docks
+                            StartCoroutine(changeCamera.SwitchToCamera(changeCamera.docksCamera));
                             break;
                         case 3:
-                            StartCoroutine(changeCamera.SwitchToCamera(changeCamera.diggleTownCamera));
-                            break;
-                        case 4:
                             StartCoroutine(gameManager.CompleteQuest(4));
                             break;
                     }
@@ -127,12 +130,13 @@ public class QuestManager : MonoBehaviour
                     {
                         case 1:
                             break;
-                        case 2:
+                        case 2: // Second time beating the punks
+                            StartCoroutine(RemovePunksAfterDelay(1));
+                            StartCoroutine(gameManager.FadeToBlack(null));
                             break;
                         case 3:
-                            StartCoroutine(dialogueManager.StartDialogue(secondPunksDialogue));
                             break;
-                        case 4:
+                        case 4: // Finish Krontril
                             StartCoroutine(gameManager.CompleteQuest(5));
                             break;
                     }
@@ -142,12 +146,12 @@ public class QuestManager : MonoBehaviour
                 case 6:
                     switch (questScriptable.subquestProgress)
                     {
-                        case 1:
+                        case 1: // Walk near the CouCorp
                             break;
-                        case 2:
+                        case 2: // Beat Umbri
                             break;
-                        case 3:
-                            StartCoroutine(dialogueManager.StartDialogue(umbriDialogue));
+                        case 3: // Have Umbri heal your party
+                            increaseCouCouHealth.FullPartyHeal();
                             break;
                         case 4:
                             StartCoroutine(gameManager.CompleteQuest(6));
@@ -157,7 +161,12 @@ public class QuestManager : MonoBehaviour
 
 
                 case 7:
-                    StartCoroutine(gameManager.CompleteQuest(7));
+                    switch (questScriptable.subquestProgress)
+                    {
+                        case 1:
+                            StartCoroutine(gameManager.CompleteQuest(7));
+                            break;
+                    }
                     break;
             }
         }

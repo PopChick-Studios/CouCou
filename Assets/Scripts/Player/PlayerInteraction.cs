@@ -57,8 +57,6 @@ public class PlayerInteraction : MonoBehaviour
             eventTrigger = interactableUI.GetComponent<EventTrigger>();
             if (interactableUI.canInteract)
             {
-                
-
                 switch (interactableUI.interactionType)
                 {
                     case DisplayManager.InteractionTypes.Door:
@@ -84,7 +82,7 @@ public class PlayerInteraction : MonoBehaviour
                             }
                             else
                             {
-                                StartCoroutine(eventTrigger.Interact(interactableUI.itemName));
+                                StartCoroutine(eventTrigger.Interact(interactableUI.itemName, interactableUI.itemAmount));
                             }
                             canFinishInteracting = true;
                             break;

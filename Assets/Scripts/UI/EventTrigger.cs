@@ -12,6 +12,7 @@ public class EventTrigger : MonoBehaviour
     public Transform warpPosition;
     public int requiredQuest;
     public int requiredSubquest;
+    public bool greaterThan;
 
     public enum EventTriggerType
     {
@@ -48,7 +49,7 @@ public class EventTrigger : MonoBehaviour
         questScriptable.subquestProgress++;
     }
 
-    public IEnumerator Interact(string coucouName)
+    public IEnumerator Interact(string coucouName, int coucouLevel)
     {
         switch (eventTriggerType)
         {
@@ -76,8 +77,22 @@ public class EventTrigger : MonoBehaviour
                     StartCoroutine(dialogueManager.StartDialogue(dialogue));
                     yield return new WaitUntil(() => dialogueManager.dialogueFinished);
                     Debug.Log("Starting Fight");
-                    displayManager.OnChooseSpecificCouCou(coucouName);
+                    if (string.IsNullOrEmpty(coucouName))
+                    {
+                        displayManager.OnChooseCouCou();
+                    }
+                    else
+                    {
+                        displayManager.OnChooseSpecificCouCou(coucouName, coucouLevel);
+                    }
                     questScriptable.subquestProgress++;
+                }
+                break;
+
+            case EventTriggerType.Warp:
+                if ((requiredQuest == questScriptable.questProgress && requiredSubquest == questScriptable.subquestProgress) || (greaterThan && (requiredQuest <= questScriptable.questProgress || requiredSubquest <= questScriptable.subquestProgress)))
+                {
+                    StartCoroutine(playerMovement.WarpPlayer(warpPosition.position));
                 }
                 break;
         }
@@ -108,9 +123,6 @@ public class EventTrigger : MonoBehaviour
                 case EventTriggerType.EnterTriggerDialogueFight:
                     TriggerDialogue();
                     StartCoroutine(StartFight());
-                    break;
-                case EventTriggerType.Warp:
-                    StartCoroutine(playerMovement.WarpPlayer(warpPosition.position));
                     break;
             }
         }

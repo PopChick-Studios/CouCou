@@ -106,7 +106,7 @@ public class BattleSystem : MonoBehaviour
         sentenceText.gameObject.SetActive(true);
         speakerText.text = enemyManager.enemyInventory.preGameDialogue.name;
         sentenceText.text = "";
-        yield return new WaitForSeconds(0.7f);
+        yield return new WaitForSeconds(0.65f);
         foreach (string sentence in enemyManager.enemyInventory.preGameDialogue.sentences)
         {
             Debug.Log(sentence);
@@ -114,7 +114,7 @@ public class BattleSystem : MonoBehaviour
             foreach (char letter in sentence.ToCharArray())
             {
                 sentenceText.text += letter;
-                yield return new WaitForSeconds(0.1f);
+                yield return new WaitForSeconds(0.05f);
             }
             yield return new WaitForSeconds(2f);
         }

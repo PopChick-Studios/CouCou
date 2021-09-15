@@ -66,7 +66,7 @@ public class IntoFight : MonoBehaviour
 
         if (string.IsNullOrEmpty(inventoryChange.starterCouCou.coucouName))
         {
-            InventoryList.CouCouInventory starter = ChoosePunkStarter(inventoryChange);
+            InventoryList.CouCouInventory starter = ChoosePunkStarter(inventoryChange, battleNumber);
             inventoryChange.starterCouCou = starter;
             inventoryChange.couCouInventory.Insert(0, starter);
             enemyInventory.starterCouCou = starter;
@@ -90,16 +90,25 @@ public class IntoFight : MonoBehaviour
         gameManager.SetState(GameManager.GameState.Battling);
     }
 
-    public InventoryList.CouCouInventory ChoosePunkStarter(InventoryList inventory)
+    public InventoryList.CouCouInventory ChoosePunkStarter(InventoryList inventory, int version)
     {
+        int level = 25;
         CouCouDatabase.CouCouData starterCouCou = coucouFinder.FindCouCou(playerInventory.starterCouCou.coucouName);
         List<CouCouDatabase.Element> elementList = new List<CouCouDatabase.Element>();
         if (inventory.preGameDialogue.name == "Shorter")
         {
+            if (version == 1)
+            {
+                level = 15;
+            }
             elementList = coucouFinder.FindAdvantages(starterCouCou.coucouElement);
         }
         else if (inventory.preGameDialogue.name == "Skip")
         {
+            if (version == 1)
+            {
+                level = 15;
+            }
             elementList = coucouFinder.FindDisadvantages(starterCouCou.coucouElement);
         }
         else
@@ -116,7 +125,7 @@ public class IntoFight : MonoBehaviour
         InventoryList.CouCouInventory newEnemyCouCou = new InventoryList.CouCouInventory()
         {
             coucouName = possibleEnemies[randomCouCou].coucouName,
-            coucouLevel = 15,
+            coucouLevel = level,
             lineupOrder = 1,
             coucouVariant = possibleEnemies[randomCouCou].coucouVariant,
             element = elementList[randomElement]

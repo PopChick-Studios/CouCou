@@ -15,11 +15,11 @@ MonoBehaviour:
   preGameDialogue:
     name: Shorter
     sentences:
-    - 
+    - You've got a big ego if you think you'll beat me!
   starterCouCou:
     coucouName: 
     coucouLevel: 0
-    coucouEXP: 0
+    currentEXP: 0
     coucouVariant: 0
     element: 0
     lineupOrder: -1
@@ -33,8 +33,8 @@ MonoBehaviour:
     hasCollapsed: 0
   couCouInventory:
   - coucouName: Parelly
-    coucouLevel: 15
-    coucouEXP: 0
+    coucouLevel: 21
+    currentEXP: 0
     coucouVariant: 2
     element: 2
     lineupOrder: 2
@@ -47,8 +47,8 @@ MonoBehaviour:
     isStunned: 0
     hasCollapsed: 0
   - coucouName: Grimmly
-    coucouLevel: 25
-    coucouEXP: 0
+    coucouLevel: 20
+    currentEXP: 0
     coucouVariant: 4
     element: 5
     lineupOrder: 0

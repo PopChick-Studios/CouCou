@@ -4,16 +4,21 @@ using UnityEngine;
 
 public class NPCMovement : MonoBehaviour
 {
+    private DialogueManager dialogueManager;
+
+    public QuestScriptable questScriptable;
     public List<Transform> positions;
     public Animator npcAnimator;
+    public bool isMoving = false;
 
-    private void Start()
+    private void Awake()
     {
-        StartCoroutine(MoveNPC());
+        dialogueManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<DialogueManager>();
     }
 
-    public IEnumerator MoveNPC()
+    public IEnumerator MoveNPC(List<Dialogue> dialogue)
     {
+        isMoving = true;
         Vector3 lookPos;
         Quaternion rotation;
         Vector3 MovePos;
@@ -25,9 +30,10 @@ public class NPCMovement : MonoBehaviour
             lookPos = newposition.position - transform.position;
             lookPos.y = 0;
             rotation = Quaternion.LookRotation(lookPos);
-            while (transform.rotation.eulerAngles.magnitude - rotation.eulerAngles.magnitude > 1f)
+            Debug.Log(transform.rotation.eulerAngles.magnitude - rotation.eulerAngles.magnitude);
+            while (Mathf.Abs(transform.rotation.eulerAngles.magnitude - rotation.eulerAngles.magnitude) > 1f)
             {
-                //Debug.Log("ROTATING: " + (transform.rotation.eulerAngles.magnitude - rotation.eulerAngles.magnitude) + " + " + Quaternion.LerpUnclamped(startRotation, rotation, 3 * Time.deltaTime).eulerAngles.magnitude);
+                Debug.Log("ROTATING: " + (transform.rotation.eulerAngles.magnitude - rotation.eulerAngles.magnitude) + " + " + Quaternion.LerpUnclamped(transform.rotation, rotation, 3 * Time.deltaTime).eulerAngles.magnitude);
                 transform.rotation = Quaternion.LerpUnclamped(transform.rotation, rotation, 3 * Time.deltaTime);
                 yield return new WaitForEndOfFrame();
             }
@@ -42,6 +48,15 @@ public class NPCMovement : MonoBehaviour
                 yield return new WaitForEndOfFrame();
             }
             npcAnimator.SetBool("isWalking", false);
+        }
+
+        isMoving = false;
+
+        if (dialogue != null)
+        {
+            StartCoroutine(dialogueManager.StartDialogue(dialogue));
+            yield return new WaitUntil(() => dialogueManager.dialogueFinished);
+            questScriptable.subquestProgress++;
         }
     }
 }

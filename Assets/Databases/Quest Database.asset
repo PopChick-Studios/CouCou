@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd297c03dd6a226469a9da4f39e82950, type: 3}
   m_Name: Quest Database
   m_EditorClassIdentifier: 
-  questProgress: 4
-  subquestProgress: 0
+  questProgress: 5
+  subquestProgress: 3

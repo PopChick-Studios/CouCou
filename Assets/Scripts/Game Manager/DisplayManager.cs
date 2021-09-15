@@ -301,10 +301,10 @@ public class DisplayManager : MonoBehaviour
         findWildCouCou.ChooseWildCouCou(coucouInteractingName, 1);
     }
 
-    public void OnChooseSpecificCouCou(string coucouName)
+    public void OnChooseSpecificCouCou(string coucouName, int coucouLevel)
     {
         Time.timeScale = 1;
-        findWildCouCou.ChooseSpecificWildCouCou(coucouName);
+        findWildCouCou.ChooseSpecificWildCouCou(coucouName, coucouLevel);
     }
 
     public void OnFightingCouCorp(InteractableUI coucorp)

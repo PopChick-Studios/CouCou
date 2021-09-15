@@ -78,7 +78,7 @@ public class FindWildCouCou : MonoBehaviour
         WildCouCouFound();
     }
 
-    public void ChooseSpecificWildCouCou(string coucouName)
+    public void ChooseSpecificWildCouCou(string coucouName, int coucouLevel)
     {
         CouCouDatabase.CouCouData chosenCouCou = coucouFinder.FindCouCou(coucouName);
 
@@ -88,7 +88,7 @@ public class FindWildCouCou : MonoBehaviour
         InventoryList.CouCouInventory newEnemyCouCou = new InventoryList.CouCouInventory()
         {
             coucouName = chosenCouCou.coucouName,
-            coucouLevel = FindAverageLevel(),
+            coucouLevel = coucouLevel,
             lineupOrder = 0,
             coucouVariant = chosenCouCou.coucouVariant,
             element = chosenCouCou.coucouElement

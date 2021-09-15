@@ -17,7 +17,7 @@ MonoBehaviour:
     sentences: []
   starterCouCou:
     coucouName: Moinyaa
-    coucouLevel: 28
+    coucouLevel: 25
     currentEXP: 0
     coucouVariant: 2
     element: 3
@@ -46,7 +46,7 @@ MonoBehaviour:
     isStunned: 0
     hasCollapsed: 0
   - coucouName: Shand
-    coucouLevel: 30
+    coucouLevel: 27
     currentEXP: 0
     coucouVariant: 1
     element: 5
@@ -60,7 +60,7 @@ MonoBehaviour:
     isStunned: 0
     hasCollapsed: 0
   - coucouName: Squelsh
-    coucouLevel: 29
+    coucouLevel: 26
     currentEXP: 0
     coucouVariant: 2
     element: 3
@@ -74,7 +74,7 @@ MonoBehaviour:
     isStunned: 0
     hasCollapsed: 0
   - coucouName: Shrake
-    coucouLevel: 30
+    coucouLevel: 25
     currentEXP: 0
     coucouVariant: 4
     element: 3
