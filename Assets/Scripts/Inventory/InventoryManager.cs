@@ -11,6 +11,7 @@ public class InventoryManager : MonoBehaviour
     private BattleSystem battleSystem;
     private BattleManager battleManager;
     private Player player;
+    private CanPlayerFish canPlayerFish;
 
     public InventoryList playerInventory;
     public InventoryList enemyInventory;
@@ -34,6 +35,7 @@ public class InventoryManager : MonoBehaviour
         if (SceneManager.GetActiveScene().name == "TestingScene" || SceneManager.GetActiveScene().name == "CouCou")
         {
             player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
+            canPlayerFish = GameObject.FindGameObjectWithTag("Player").GetComponent<CanPlayerFish>();
         }
         else
         {
@@ -169,6 +171,10 @@ public class InventoryManager : MonoBehaviour
         {
             Debug.Log("Added " + amount + " capsules");
             player.amountOfCapsules += amount;
+        }
+        else if (name == "Fishing Rod")
+        {
+            canPlayerFish.playerHasRod = true;
         }
 
         SortItemInventory();

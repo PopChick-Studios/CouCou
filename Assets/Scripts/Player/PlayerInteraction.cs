@@ -107,11 +107,23 @@ public class PlayerInteraction : MonoBehaviour
 
     public IEnumerator FinishInteraction(DisplayManager.InteractionTypes interactionType)
     {
-        interactableUI.GiveProgress();
         if (!canFinishInteracting)
         {
+            if (displayManager.interaction.activeInHierarchy)
+            {
+                displayManager.HeadsUpDisplay();
+                gameManager.SetState(GameManager.GameState.Wandering);
+                // Swap inputs
+                playerInputActions.UI.Disable();
+                playerInputActions.Wandering.Enable();
+                playerMovement.canMove = true;
+
+                interacting = false;
+                canFinishInteracting = false;
+            }
             yield break;
         }
+        interactableUI.GiveProgress();
         if (interactionType == DisplayManager.InteractionTypes.Collect)
         {
             displayManager.HeadsUpDisplay();
@@ -148,11 +160,6 @@ public class PlayerInteraction : MonoBehaviour
             playerInputActions.Wandering.Enable();
 
             onCancelSaveButton = false;
-        }
-
-        if (hasQuestMarker)
-        {
-            questScriptable.subquestProgress++;
         }
 
         interacting = false;
@@ -223,7 +230,7 @@ public class PlayerInteraction : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Interactable"))
+        if (other.CompareTag("Interactable") && other.GetComponent<InteractableUI>().isActiveAndEnabled)
         {
             interactableUI = other.GetComponent<InteractableUI>();
         }

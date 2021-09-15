@@ -10,10 +10,14 @@ public class QuestManager : MonoBehaviour
     private InventoryManager inventoryManager;
     public QuestScriptable questScriptable;
 
+    public List<GameObject> punksList;
+
     public List<Dialogue> starterCouCouDialogue;
     public List<Dialogue> wildCouCouDialogue;
     public List<Dialogue> fishingCatchDialogue;
-    public List<Dialogue> firstPunksDialogue;
+    public List<Dialogue> afterFishingCatchDialogue;
+    public List<Dialogue> firstPunksSecondDialogue;
+    public List<Dialogue> afterPunksNoteDialogue;
     public List<Dialogue> secondPunksDialogue;
     public List<Dialogue> umbriDialogue;
 
@@ -47,7 +51,7 @@ public class QuestManager : MonoBehaviour
                         case 4:
                             break;
                         case 5:
-                            //inventoryManager.FoundItem("CouCou Capsule", 10);
+                            inventoryManager.FoundItem("CouCou Capsule", 10);
                             break;
                         case 6:
                             StartCoroutine(changeCamera.SwitchToCamera(changeCamera.tortureRoomDoorCamera));
@@ -65,9 +69,14 @@ public class QuestManager : MonoBehaviour
                         case 1:
                             break;
                         case 2:
-                            StartCoroutine(dialogueManager.StartDialogue(fishingCatchDialogue));
                             break;
                         case 3:
+                            StartCoroutine(dialogueManager.StartDialogue(fishingCatchDialogue));
+                            break;
+                        case 4:
+                            StartCoroutine(dialogueManager.StartDialogue(afterFishingCatchDialogue));
+                            break;
+                        case 5:
                             StartCoroutine(gameManager.CompleteQuest(2));
                             break;
                     }
@@ -77,15 +86,17 @@ public class QuestManager : MonoBehaviour
                 case 3:
                     switch (questScriptable.subquestProgress)
                     {
-                        case 1:
+                        case 1: // Shorter
                             break;
-                        case 2:
+                        case 2: // Skip
+                            StartCoroutine(dialogueManager.StartDialogue(firstPunksSecondDialogue));
                             break;
-                        case 3:
-                            StartCoroutine(dialogueManager.StartDialogue(firstPunksDialogue));
+                        case 3: // First time beating Punks
+                            StartCoroutine(RemovePunksAfterDelay(1));
+                            StartCoroutine(gameManager.FadeToBlack(null));
                             break;
                         case 4:
-                            StartCoroutine(changeCamera.SwitchToCamera(changeCamera.punksNoteCamera));
+                            StartCoroutine(dialogueManager.StartDialogue(afterPunksNoteDialogue));
                             break;
                         case 5:
                             StartCoroutine(gameManager.CompleteQuest(3));
@@ -151,5 +162,22 @@ public class QuestManager : MonoBehaviour
             }
         }
         previousSubquest = questScriptable.subquestProgress;
+    }
+
+    public IEnumerator RemovePunksAfterDelay(int time)
+    {
+        yield return new WaitForSeconds(1.5f);
+        switch (time)
+        {
+            case 1:
+                punksList[0].SetActive(false);
+                punksList[1].SetActive(false);
+                break;
+
+            case 2:
+                punksList[2].SetActive(false);
+                punksList[3].SetActive(false);
+                break;
+        }
     }
 }

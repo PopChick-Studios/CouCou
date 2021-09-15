@@ -11,6 +11,8 @@ public class GameManager : MonoBehaviour
     private InventoryManager inventoryManager;
     private SceneLoader sceneLoader;
     public QuestScriptable questScriptable;
+    public PlayerInteraction playerInteraction;
+    public PlayerMovement playerMovement;
 
     public Animator crossfadeAnimator;
     public TextMeshProUGUI endingText;
@@ -62,6 +64,7 @@ public class GameManager : MonoBehaviour
     {
         string item = "";
         int amount = 0;
+        bool nextDay = false;
         List<string> berries = new List<string>() { "Burnt Berry", "Frozen Berry", "Fruitful Berry", "Dark Berry", "Bright Berry" };
         switch (questNumber)
         {
@@ -81,6 +84,7 @@ public class GameManager : MonoBehaviour
                 amount = 1;
                 displayManager.OnInteraction(DisplayManager.InteractionTypes.Collect, item, amount);
                 inventoryManager.FoundItem(item, amount);
+                nextDay = true;
                 break;
 
             case 3:
@@ -139,16 +143,36 @@ public class GameManager : MonoBehaviour
                 break;
         }
         questRewardFinish = true;
+        if (nextDay)
+        {
+            yield return new WaitWhile(() => displayManager.interaction.activeInHierarchy);
+            StartCoroutine(FadeToBlack("The Next Day..."));
+        }
     }
 
     public IEnumerator BadEnding()
     {
         crossfadeAnimator.SetTrigger("Start");
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(1.5f);
         typingEnding = true;
         StartCoroutine(TypeSentence(badEndingText));
         yield return new WaitWhile(() => typingEnding);
         StartCoroutine(sceneLoader.TitleScreen());
+    }
+
+    public IEnumerator FadeToBlack(string text)
+    {
+        playerMovement.canMove = false;
+        crossfadeAnimator.SetTrigger("Start");
+        yield return new WaitForSeconds(1.5f);
+        if (!string.IsNullOrEmpty(text))
+        {
+            typingEnding = true;
+            StartCoroutine(TypeSentence(text));
+            yield return new WaitWhile(() => typingEnding);
+        }
+        crossfadeAnimator.SetTrigger("Reset");
+        playerMovement.canMove = true;
     }
 
     public void GoodEnding()

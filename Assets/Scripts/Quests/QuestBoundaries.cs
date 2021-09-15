@@ -48,6 +48,8 @@ public class QuestBoundaries : MonoBehaviour
                 }
             }
 
+            Debug.Log(index);
+
             for (int a = 0; a < boundairesList[index].boundaries.Count; a++)
             {
                 boundairesList[index].boundaries[a].SetActive(true);

@@ -19,8 +19,8 @@ public class DisplayManager : MonoBehaviour
     public GameObject blurCamera;
 
     [Header("UI Elements")]
-    [SerializeField] private GameObject HUD;
-    [SerializeField] private GameObject interaction;
+    public GameObject HUD;
+    public GameObject interaction;
     [SerializeField] private GameObject satchel;
     [SerializeField] private GameObject pause;
     [SerializeField] private GameObject confirmation;

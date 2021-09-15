@@ -16,7 +16,7 @@ MonoBehaviour:
     name: Player
     sentences: []
   starterCouCou:
-    coucouName: 
+    coucouName: Lantiee
     coucouLevel: 3
     currentEXP: 3.3985977
     coucouVariant: 2
@@ -31,22 +31,36 @@ MonoBehaviour:
     isStunned: 0
     hasCollapsed: 0
   couCouInventory:
-  - coucouName: Foxtning
-    coucouLevel: 3
-    currentEXP: 3.3985977
-    coucouVariant: 2
-    element: 4
+  - coucouName: Lantiee
+    coucouLevel: 2
+    currentEXP: 72.5357
+    coucouVariant: 1
+    element: 5
     lineupOrder: 1
-    maxHealth: 84
-    currentAttack: 40
-    currentResistance: 1.24
-    currentHealth: 54
-    currentMindset: 15
+    maxHealth: 62
+    currentAttack: 27
+    currentResistance: 1.0999999
+    currentHealth: 62
+    currentMindset: 30
     currentDetermination: 50
     isStunned: 0
     hasCollapsed: 0
+  - coucouName: Foxtning
+    coucouLevel: 3
+    currentEXP: 36.398598
+    coucouVariant: 2
+    element: 4
+    lineupOrder: 2
+    maxHealth: 84
+    currentAttack: 40
+    currentResistance: 1.24
+    currentHealth: 0
+    currentMindset: 15
+    currentDetermination: 50
+    isStunned: 0
+    hasCollapsed: 1
   itemInventory:
-  - itemName: CouCou Capsule
-    itemAmount: 9
-    itemAttribute: 5
+  - itemName: Fishing Rod
+    itemAmount: 1
+    itemAttribute: 6
     element: 0

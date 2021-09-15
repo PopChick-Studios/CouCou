@@ -22,7 +22,8 @@ public class EventTrigger : MonoBehaviour
         InteractionFight,
         InteractionQuest,
         Warp,
-        InteractionWildCouCou
+        InteractionWildCouCou,
+        EnterTriggerDialogueFight
     }
 
     public EventTriggerType eventTriggerType;
@@ -82,7 +83,6 @@ public class EventTrigger : MonoBehaviour
         }
     }
 
-
     public IEnumerator StartFight()
     {
         yield return new WaitUntil(() => dialogueManager.dialogueFinished);
@@ -105,7 +105,10 @@ public class EventTrigger : MonoBehaviour
                 case EventTriggerType.EnterTriggerDialogueQuest:
                     StartCoroutine(TriggerDialogueQuest());
                     break;
-
+                case EventTriggerType.EnterTriggerDialogueFight:
+                    TriggerDialogue();
+                    StartCoroutine(StartFight());
+                    break;
                 case EventTriggerType.Warp:
                     StartCoroutine(playerMovement.WarpPlayer(warpPosition.position));
                     break;
