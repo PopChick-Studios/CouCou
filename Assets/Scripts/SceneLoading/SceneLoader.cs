@@ -66,7 +66,7 @@ public class SceneLoader : MonoBehaviour
     public void LoadNewGame()
     {
         SaveSystem.DeleteAllSaveFiles();
-        playerInventory.starterCouCou = null;
+        playerInventory.starterCouCou = new InventoryList.CouCouInventory();
         playerInventory.couCouInventory.Clear();
         playerInventory.itemInventory.Clear();
         StartCoroutine(LoadScene("CouCou"));

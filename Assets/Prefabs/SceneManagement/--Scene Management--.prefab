@@ -271,9 +271,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8488ba335815d24abf1af606c6d7f55, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  questScriptable: {fileID: 0}
+  questScriptable: {fileID: 11400000, guid: 7e68a8077602474489a7f958ead3536e, type: 2}
   previousState: 1
-  playerInventory: {fileID: 0}
+  playerInventory: {fileID: 11400000, guid: 44ee79a05ad81ff4d8652799fc7d7f56, type: 2}
   transition: {fileID: 3266448115033020358}
 --- !u!1 &4277951226768190055
 GameObject:

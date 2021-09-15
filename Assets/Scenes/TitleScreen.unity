@@ -499,7 +499,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   questScriptable: {fileID: 11400000, guid: 7e68a8077602474489a7f958ead3536e, type: 2}
-  crossfadeAnimator: {fileID: 0}
+  playerInteraction: {fileID: 0}
+  playerMovement: {fileID: 0}
+  crossfadeAnimator: {fileID: 1755433078}
+  fadeOutText: {fileID: 0}
   endingText: {fileID: 0}
   badEndingText: 
   goodEndingText: 
@@ -5874,9 +5877,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Quit
-
-'
+  m_text: New Game
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 15bf731e84de70b448b7f850026333ee, type: 2}
   m_sharedMaterial: {fileID: -7614700921714188360, guid: 15bf731e84de70b448b7f850026333ee, type: 2}
@@ -6802,6 +6803,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 727499644bd6ba74193d0bfb0123971e, type: 3}
+--- !u!95 &1755433078 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 3266448115033020358, guid: 727499644bd6ba74193d0bfb0123971e, type: 3}
+  m_PrefabInstance: {fileID: 1755433077}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1791225256
 GameObject:
   m_ObjectHideFlags: 0
