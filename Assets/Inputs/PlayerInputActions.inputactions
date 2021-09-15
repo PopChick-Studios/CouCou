@@ -68,6 +68,22 @@
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
+                },
+                {
+                    "name": "Satchel",
+                    "type": "Button",
+                    "id": "58140fa0-029f-4bab-a35f-3c00d07fc778",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "GoBack",
+                    "type": "Button",
+                    "id": "04afadcd-06f7-4c11-92bc-0ee813ae9503",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -228,7 +244,7 @@
                 {
                     "name": "",
                     "id": "104770df-6376-480d-b5d1-e88d857f3871",
-                    "path": "<Keyboard>/q",
+                    "path": "<Keyboard>/z",
                     "interactions": "",
                     "processors": "",
                     "groups": "KeyboardAndMouse",
@@ -244,6 +260,39 @@
                     "processors": "",
                     "groups": "Controller",
                     "action": "QuestBook",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b4bbfe86-27c3-480b-9bce-ea60afeca25f",
+                    "path": "<Keyboard>/c",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Satchel",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d62d17c7-6cb2-4e6d-a684-8b245bb7628a",
+                    "path": "<Gamepad>/buttonWest",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Satchel",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d205d071-fce6-4bec-acb8-f4d7f88eb3db",
+                    "path": "<Gamepad>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "GoBack",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

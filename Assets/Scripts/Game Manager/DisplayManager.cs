@@ -3,29 +3,31 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.Users;
 
 public class DisplayManager : MonoBehaviour
 {
     private GameManager gameManager;
     private FindWildCouCou findWildCouCou;
     private SatchelAdventureManager satchelAdventureManager;
+    private LetterManager letterManager;
     private PlayerInteraction playerInteraction;
     private IntoFight intoFight;
+    private QuestBook questBook;
+    public QuestScriptable questScriptable;
 
     [Header("Blur Camera")]
     public GameObject blurCamera;
 
     [Header("UI Elements")]
-    [SerializeField] private GameObject HUD;
-    [SerializeField] private GameObject interaction;
+    public GameObject HUD;
+    public GameObject interaction;
     [SerializeField] private GameObject satchel;
     [SerializeField] private GameObject pause;
     [SerializeField] private GameObject confirmation;
     [SerializeField] private GameObject options;
     [SerializeField] private GameObject crossfade;
     [SerializeField] private GameObject coucouCamera;
+    [SerializeField] private GameObject questBookDisplay;
 
     [Header("Interactables")]
     [SerializeField] private GameObject collectUI;
@@ -39,17 +41,22 @@ public class DisplayManager : MonoBehaviour
     [Header("Buttons")]
     [SerializeField] private Button coucouUIYes;
     [SerializeField] private Button continueButton;
+    [SerializeField] private Button saveButton;
     public Button confirmationQuitButton;
 
     private string coucouInteractingName;
 
     public enum InteractionTypes
     {
+        Door,
+        Warp,
         Collect,
         Letter,
         Save,
+        StarterCouCou,
         CouCou,
-        CouCorp
+        CouCorp,
+        NPC
     }
 
     // Inputs
@@ -58,31 +65,45 @@ public class DisplayManager : MonoBehaviour
 
     private void Awake()
     {
+        letterManager = GameObject.FindGameObjectWithTag("AdventureUI").GetComponent<LetterManager>();
         intoFight = GetComponent<IntoFight>();
         findWildCouCou = GetComponent<FindWildCouCou>();
         gameManager = GetComponent<GameManager>();
         satchelAdventureManager = GameObject.FindGameObjectWithTag("AdventureUI").GetComponent<SatchelAdventureManager>();
         playerInteraction = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerInteraction>();
-
+        questBook = GameObject.FindGameObjectWithTag("QuestBook").GetComponent<QuestBook>();
         playerInputActions = new PlayerInputActions();
 
-        playerInputActions.Wandering.Pause.performed += x => PauseMenu();
+        playerInputActions.Wandering.Pause.started += x => PauseMenu();
+        //playerInputActions.UI.Cancel.started += x => PauseMenu();
+        playerInputActions.Wandering.QuestBook.started += x => OnQuestBook();
+        playerInputActions.Wandering.Satchel.started += x => OpenSatchel();
+        playerInputActions.Wandering.GoBack.started += x => GoBack();
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
-        HeadsUpDisplay();
-
         confirmation.SetActive(false);
+        questBookDisplay.SetActive(false);
+    }
+
+    private void Start()
+    {
+        HeadsUpDisplay();
     }
 
     public void PauseMenu()
     {
-        if (satchelAdventureManager.inSubmit || satchelAdventureManager.changingCouCou || satchelAdventureManager.isStuck)
+        Debug.Log("Pause Menu");
+        if (satchel.activeInHierarchy)
         {
             satchelAdventureManager.GoBack();
         }
-        else if (!playerInteraction.interacting && gameManager.State != GameManager.GameState.Fishing)
+        else if (questBookDisplay.activeInHierarchy)
+        {
+            OnQuestBook();
+        }
+        else if (!playerInteraction.interacting && gameManager.State != GameManager.GameState.Fishing && !pause.activeInHierarchy)
         {
             Time.timeScale = 0;
             options.SetActive(false);
@@ -99,6 +120,22 @@ public class DisplayManager : MonoBehaviour
             gameManager.SetState(GameManager.GameState.Paused);
 
             continueButton.Select();
+        }
+        else if (pause.activeInHierarchy)
+        {
+            HeadsUpDisplay();
+        }
+    }
+
+    public void GoBack()
+    {
+        if (satchel.activeInHierarchy)
+        {
+            satchelAdventureManager.GoBack();
+        }
+        else if (questBookDisplay.activeInHierarchy)
+        {
+            OnQuestBook();
         }
     }
 
@@ -129,17 +166,37 @@ public class DisplayManager : MonoBehaviour
 
     public void OpenSatchel()
     {
-        satchel.SetActive(true);
-        satchelAdventureManager.ClearCouCou();
-        satchelAdventureManager.OnItemSection();
-        interaction.SetActive(false);
-        pause.SetActive(false);
-        coucouCamera.SetActive(true);
+        if (!satchel.activeInHierarchy && (gameManager.State == GameManager.GameState.Wandering || pause.activeInHierarchy) && !interaction.activeInHierarchy)
+        {
+            Time.timeScale = 0;
+            satchel.SetActive(true);
+            satchelAdventureManager.ClearCouCou();
+            satchelAdventureManager.OnItemSection();
+            interaction.SetActive(false);
+            pause.SetActive(false);
+            coucouCamera.SetActive(true);
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+            gameManager.SetState(GameManager.GameState.Paused);
+        }
+        else if (satchel.activeInHierarchy && gameManager.State == GameManager.GameState.Paused)
+        {
+            Time.timeScale = 1;
+            satchel.SetActive(false);
+            blurCamera.gameObject.SetActive(false);
+            satchelAdventureManager.ClearCouCou();
+            satchelAdventureManager.ClearItems();
+            satchelAdventureManager.selectedSection = 0;
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+            coucouCamera.SetActive(false);
+            gameManager.SetState(GameManager.GameState.Wandering);
+        }
     }
 
     public void OnApplicationPause(bool pause)
     {
-        if (pause == true)
+        if (pause == true && gameManager.State == GameManager.GameState.Wandering)
         {
             Debug.Log("Application is paused");
             PauseMenu();
@@ -150,6 +207,28 @@ public class DisplayManager : MonoBehaviour
     {
         options.SetActive(true);
         pause.SetActive(false);
+    }
+
+    public void OnQuestBook()
+    {
+        if (questBookDisplay.activeInHierarchy && gameManager.State == GameManager.GameState.Paused)
+        {
+            Time.timeScale = 1;
+            questBookDisplay.SetActive(false);
+            questBook.CloseBook();
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+            gameManager.SetState(GameManager.GameState.Wandering);
+        }
+        else if (!questBookDisplay.activeInHierarchy && gameManager.State == GameManager.GameState.Wandering && !interaction.activeInHierarchy)
+        {
+            Time.timeScale = 0;
+            questBookDisplay.SetActive(true);
+            questBook.OpenBook();
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+            gameManager.SetState(GameManager.GameState.Paused);
+        }
     }
 
     public void OnInteraction(InteractionTypes type, string name, int amount)
@@ -179,6 +258,7 @@ public class DisplayManager : MonoBehaviour
                 break;
 
             case InteractionTypes.Letter:
+                letterManager.DisplayQuestLetter(questScriptable.questProgress, questScriptable.subquestProgress);
                 letterUI.SetActive(true);
                 saveUI.SetActive(false);
                 collectUI.SetActive(false);
@@ -190,9 +270,10 @@ public class DisplayManager : MonoBehaviour
                 letterUI.SetActive(false);
                 collectUI.SetActive(false);
                 coucouUI.SetActive(false);
+                saveButton.Select();
                 break;
 
-            case InteractionTypes.CouCou:
+            case InteractionTypes.StarterCouCou:
                 saveUI.SetActive(false);
                 letterUI.SetActive(false);
                 collectUI.SetActive(false);
@@ -217,7 +298,13 @@ public class DisplayManager : MonoBehaviour
     public void OnChooseCouCou()
     {
         Time.timeScale = 1;
-        findWildCouCou.ChooseWildCouCou(coucouInteractingName, 15);
+        findWildCouCou.ChooseWildCouCou(coucouInteractingName, 1);
+    }
+
+    public void OnChooseSpecificCouCou(string coucouName)
+    {
+        Time.timeScale = 1;
+        findWildCouCou.ChooseSpecificWildCouCou(coucouName);
     }
 
     public void OnFightingCouCorp(InteractableUI coucorp)

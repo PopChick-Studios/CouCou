@@ -8,12 +8,11 @@ public enum BattleState { NOTBATTLING, START, PLAYERTURN, ENEMYTURN, WON, LOST }
 
 public class BattleSystem : MonoBehaviour
 {
-    public GameObject playerModel;
-    public GameObject enemyModel;
     public GameObject menu;
-    private GameObject playerInScene;
-    private GameObject enemyInScene;
+    public GameObject playerInScene;
+    public GameObject enemyInScene;
 
+    public QuestScriptable questScriptable;
     public InventoryList.CouCouInventory player;
     public InventoryList.CouCouInventory enemy;
     public bool takeDamageFinished = false;
@@ -58,30 +57,41 @@ public class BattleSystem : MonoBehaviour
         enemyManager = GetComponent<EnemyManager>();
         battlingUI = GameObject.FindGameObjectWithTag("BattlingUI").GetComponent<BattlingUI>();
         satchelManager = GameObject.FindGameObjectWithTag("BattlingUI").GetComponent<SatchelManager>();
-
-        //playerModel = coucouFinder.FindCouCou(battleManager.activeCouCou.coucouName).coucouModel;
-        //enemyModel = coucouFinder.FindCouCou(enemyManager.enemyActiveCouCou.coucouName).coucouModel;
     }
 
     void Start()
     {
         state = BattleState.START;
-        SetupBattle();
+        StartCoroutine(SetupBattle());
     }
 
-    public void SetupBattle()
+    public void InstantiateModels(bool isPlayer, string coucouName)
+    {
+        if (isPlayer)
+        {
+            playerInScene = Instantiate(coucouFinder.FindCouCou(coucouName).coucouBattleModel, playerSpawner);
+        }
+        else
+        {
+            enemyInScene = Instantiate(coucouFinder.FindCouCou(coucouName).coucouBattleModel, enemySpawner);
+        }
+    }
+
+    public IEnumerator SetupBattle()
     {
         gameManager.SetState(GameManager.GameState.Battling);
 
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
 
-        //playerInScene = Instantiate(playerModel, playerSpawner);
-        //enemyInScene = Instantiate(enemyModel, enemySpawner);
+        InstantiateModels(true, player.coucouName);
+        InstantiateModels(false, enemy.coucouName);
+
         if (!enemyManager.wild)
         {
             dialogueFinished = false;
             StartCoroutine(StartingDialogue());
+            yield return new WaitUntil(() => dialogueFinished);
         }
         speakerText.gameObject.SetActive(false);
         sentenceText.gameObject.SetActive(false);
@@ -99,6 +109,7 @@ public class BattleSystem : MonoBehaviour
         yield return new WaitForSeconds(0.7f);
         foreach (string sentence in enemyManager.enemyInventory.preGameDialogue.sentences)
         {
+            Debug.Log(sentence);
             sentenceText.text = "";
             foreach (char letter in sentence.ToCharArray())
             {
@@ -117,11 +128,6 @@ public class BattleSystem : MonoBehaviour
 
     public IEnumerator PlayerTurn()
     {
-        if (!enemyManager.wild)
-        {
-            yield return new WaitUntil(() => dialogueFinished);
-        }
-
         state = BattleState.PLAYERTURN;
         battlingUI.OnNewRound();
         dialogueText.text = "Choose an option...";
@@ -295,6 +301,7 @@ public class BattleSystem : MonoBehaviour
         {
             dialogueText.text = player.coucouName + " has collapsed";
             player.hasCollapsed = true;
+            Destroy(playerInScene);
             inventoryManager.SortCouCouInventory();
 
             if (inventoryManager.HasPlayableCouCou())
@@ -455,6 +462,7 @@ public class BattleSystem : MonoBehaviour
         {
             dialogueText.text = enemy.coucouName + " has collapsed";
             enemy.hasCollapsed = true;
+            Destroy(enemyInScene);
             StartCoroutine(GrantExperience(false));
             yield return new WaitWhile(() => grantingExperience);
             StartCoroutine(enemyManager.NextCouCou());
@@ -742,6 +750,7 @@ public class BattleSystem : MonoBehaviour
             {
                 dialogueText.text = "You defeated " + enemyManager.enemyInventory.preGameDialogue.name;
                 yield return new WaitForSeconds(2f);
+                questScriptable.subquestProgress++;
             }
 
             gameManager.SetState(GameManager.GameState.Wandering);
@@ -754,9 +763,12 @@ public class BattleSystem : MonoBehaviour
             {
                 dialogueText.text = "You lost to " + enemyManager.enemyInventory.preGameDialogue.name;
                 yield return new WaitForSeconds(2f);
+                StartCoroutine(gameManager.BadEnding());
             }
-
-            gameManager.SetState(GameManager.GameState.Wandering);
+            else
+            {
+                gameManager.SetState(GameManager.GameState.Wandering);
+            }
         }
     }
 }

@@ -10,7 +10,8 @@ public class CameraFollow : MonoBehaviour
     private GameManager gameManager;
 
     public float CameraMoveSpeed = 120f;
-    public GameObject CameraFollowObject;
+    public GameObject playerCameraFollow;
+    public Transform panningCameraFollow;
     public float upperClampAngle;
     public float lowerClampAngle;
     public float inputSensitivity = 150.0f;
@@ -73,16 +74,29 @@ public class CameraFollow : MonoBehaviour
 
     void LateUpdate()
     {
-        if (gameManager.State == GameManager.GameState.Wandering || gameManager.State == GameManager.GameState.Fishing)
+        switch (gameManager.State)
         {
-            CameraUpdater();
+            case GameManager.GameState.Wandering:
+                panningCameraFollow = playerCameraFollow.transform;
+                CameraUpdater();
+                break;
+            case GameManager.GameState.Fishing:
+                panningCameraFollow = playerCameraFollow.transform;
+                CameraUpdater();
+                break;
+            case GameManager.GameState.Dialogue:
+                CameraUpdater();
+                break;
+            case GameManager.GameState.Paused:
+
+                break;
         }
     }
 
     void CameraUpdater()
     {
         // Set target to follow
-        Transform target = CameraFollowObject.transform;
+        Transform target = playerCameraFollow.transform;
 
         // Move towards the target
         float step = CameraMoveSpeed * Time.deltaTime;

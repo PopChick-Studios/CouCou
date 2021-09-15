@@ -449,13 +449,12 @@ public class EnemyManager : MonoBehaviour
         {
             probabilitiesSum += probability[i]; // add the probability to the sum
             cumulativeProbability.SetValue(probabilitiesSum, i); // add the new sum to the list
-
-            // All Probabilities need to be under 100% or it'll throw an exception
-            if (probabilitiesSum > 100f)
-            {
-                Debug.LogError("Probabilities exceed 100%");
-                return false;
-            }
+        }
+        // All Probabilities need to be under 100% or it'll throw an exception
+        if (probabilitiesSum > 100f)
+        {
+            Debug.LogError("Probabilities exceed 100%");
+            return false;
         }
         return true;
     }
@@ -527,6 +526,8 @@ public class EnemyManager : MonoBehaviour
         }
         else
         {
+            battleSystem.InstantiateModels(false, enemyActiveCouCou.coucouName);
+            yield return new WaitForSeconds(1f);
             bool surpriseSuccess = battleManager.SurpriseAttack();
             if (surpriseSuccess)
             {

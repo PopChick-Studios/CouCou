@@ -28,4 +28,16 @@ public class IncreaseCouCouHealth : MonoBehaviour
             yield return new WaitForSeconds(20f);
         }
     }
+
+    public void FullPartyHeal()
+    {
+        foreach (InventoryList.CouCouInventory coucou in playerInventory.couCouInventory)
+        {
+            coucou.currentHealth = coucou.maxHealth;
+            if (coucou.hasCollapsed)
+            {
+                coucou.hasCollapsed = false;
+            }
+        }
+    }
 }

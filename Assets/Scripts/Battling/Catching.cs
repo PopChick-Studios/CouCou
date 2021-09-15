@@ -12,7 +12,7 @@ public class Catching : MonoBehaviour
     private InventoryManager inventoryManager;
 
     public InventoryList enemyInventory;
-
+    public QuestScriptable questScriptable;
     public TextMeshProUGUI dialogueText;
 
     public bool catchSuccessful = false;
@@ -79,6 +79,7 @@ public class Catching : MonoBehaviour
             battleSystem.state = BattleState.WON;
             StartCoroutine(battleSystem.GrantExperience(true));
             yield return new WaitWhile(() => battleSystem.grantingExperience);
+            questScriptable.subquestProgress++;
             StartCoroutine(battleSystem.EndBattle());
         }
     }

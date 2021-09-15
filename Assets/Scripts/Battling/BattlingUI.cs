@@ -13,6 +13,7 @@ public class BattlingUI : MonoBehaviour
 
     public GameObject satchel;
     public GameObject blurCamera;
+    public GameObject modelCamera;
     public GameObject fightButtons;
     public GameObject menu;
     public GameObject healthBars;
@@ -54,6 +55,7 @@ public class BattlingUI : MonoBehaviour
     private void Start()
     {
         satchelManager = GameObject.FindGameObjectWithTag("BattlingUI").GetComponent<SatchelManager>();
+        modelCamera.SetActive(false);
     }
 
     public void OnPause()
@@ -155,7 +157,8 @@ public class BattlingUI : MonoBehaviour
 
     public void OnCloseSatchel()
     {
-
+        Time.timeScale = 1;
+        modelCamera.SetActive(false);
         Debug.Log("Out of satchel");
         fightButtons.SetActive(false);
         menu.SetActive(true);
@@ -195,10 +198,12 @@ public class BattlingUI : MonoBehaviour
 
     public void OnSatchel()
     {
+        Time.timeScale = 0;
         dialogueBox.SetActive(false);
         fightButtons.SetActive(false);
         menu.SetActive(false);
         healthBars.SetActive(false);
+        modelCamera.SetActive(true);
         inFightMenu = false;
         inSatchel = true;
     }

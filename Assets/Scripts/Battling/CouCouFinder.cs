@@ -144,7 +144,7 @@ public class CouCouFinder : MonoBehaviour
 
         foreach (CouCouDatabase.CouCouData coucou in coucouList)
         {
-            if (coucou.coucouElement == element)
+            if (coucou.coucouElement == element && coucou.coucouName != "Krontril")
             {
                 elementalCouCouList.Add(coucou);
             }

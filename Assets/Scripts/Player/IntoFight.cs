@@ -13,9 +13,8 @@ public class IntoFight : MonoBehaviour
     public InventoryList shorter2Inventory;
     public InventoryList skip1Inventory;
     public InventoryList skip2Inventory;
+    public InventoryList umbriInventory;
     public InventoryList crimsonDukeInventory;
-
-    public Dialogue dialogue;
 
     private void Awake()
     {
@@ -48,6 +47,10 @@ public class IntoFight : MonoBehaviour
                 inventoryChange = skip2Inventory;
                 break;
 
+            case ("Umbri", 1):
+                inventoryChange = umbriInventory;
+                break;
+
             case ("Crimson Duke", 1):
                 inventoryChange = shorter1Inventory;
                 break;
@@ -68,29 +71,6 @@ public class IntoFight : MonoBehaviour
             inventoryChange.couCouInventory.Insert(0, starter);
             enemyInventory.starterCouCou = starter;
             enemyInventory.couCouInventory.Insert(0, starter);
-            /*
-            switch (enemyName, battleNumber)
-            {
-                case ("Shorter", 1):
-                    shorter1Inventory.starterCouCou = starter;
-                    shorter1Inventory.couCouInventory.Insert(0, starter);
-                    break;
-
-                case ("Shorter", 2):
-                    shorter2Inventory.starterCouCou = starter;
-                    shorter2Inventory.couCouInventory.Insert(0, starter);
-                    break;
-
-                case ("Skip", 1):
-                    skip1Inventory.starterCouCou = starter;
-                    skip1Inventory.couCouInventory.Insert(0, starter);
-                    break;
-
-                case ("Skip", 2):
-                    skip2Inventory.starterCouCou = starter;
-                    skip2Inventory.couCouInventory.Insert(0, starter);
-                    break;
-            }*/
         }
         else
         {
@@ -109,7 +89,6 @@ public class IntoFight : MonoBehaviour
 
         gameManager.SetState(GameManager.GameState.Battling);
     }
-
 
     public InventoryList.CouCouInventory ChoosePunkStarter(InventoryList inventory)
     {

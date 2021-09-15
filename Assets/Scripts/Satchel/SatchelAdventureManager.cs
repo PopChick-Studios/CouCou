@@ -14,6 +14,7 @@ public class SatchelAdventureManager : MonoBehaviour
     private InventoryManager inventoryManager;
     private AbilityDescriptions abilityDescriptions;
     private DisplayManager displayManager;
+    private DisplayModelsInSatchel displayModelsInSatchel;
 
     [Header("Experience")]
     public Animator levelUpAnimator;
@@ -87,6 +88,7 @@ public class SatchelAdventureManager : MonoBehaviour
         itemFinder = GameObject.FindGameObjectWithTag("GameManager").GetComponent<ItemFinder>();
         displayManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<DisplayManager>();
         abilityDescriptions = GetComponent<AbilityDescriptions>();
+        displayModelsInSatchel = FindObjectOfType<DisplayModelsInSatchel>();
 
         playerInputActions = new PlayerInputActions();
         playerInputActions.UI.NavigateSections.performed += x => NavigateSections(x.ReadValue<float>());
@@ -127,9 +129,7 @@ public class SatchelAdventureManager : MonoBehaviour
     public void DisplayItems()
     {
         statDisplay.SetActive(false);
-
-        //scrollRect.enabled = false;
-
+        experienceLeft.text = "";
         for (int i = 0; i < playerInventory.itemInventory.Count; i++)
         {
             SatchelSlotControllerAdventure newSatchelSlot = Instantiate(satchelSlotPrefab, satchelList.transform);
@@ -141,7 +141,7 @@ public class SatchelAdventureManager : MonoBehaviour
             newSatchelSlot.GetComponent<Button>().onClick.AddListener(delegate { GoToSubmit(newSatchelSlot.GetComponent<Button>()); });
             itemSlotList.Insert(Mathf.Min(item.positionIndex, itemSlotList.Count), newSatchelSlot);
         }
-        //scrollRect.enabled = true;
+
         for (int i = 0; i < itemSlotList.Count; i++)
         {
             Navigation newNav = new Navigation();
@@ -182,6 +182,7 @@ public class SatchelAdventureManager : MonoBehaviour
             descriptionText.text = "You don't own any items right now";
             submitButton.interactable = false;
             itemSprite.enabled = false;
+            displayModelsInSatchel.DestroyModelDisplay();
             submitButton.GetComponentInChildren<TextMeshProUGUI>().text = "";
         }
     }
@@ -236,6 +237,7 @@ public class SatchelAdventureManager : MonoBehaviour
 
         if (coucouSlotList.Count != 0)
         {
+            experienceBarCover.gameObject.SetActive(false);
             currentSelectedButton = coucouSlotList[previousSelectedButtonUID].gameObject;
             coucouSlotList[previousSelectedButtonUID].GetComponent<Button>().Select();
             UpdateDescription();
@@ -247,6 +249,8 @@ public class SatchelAdventureManager : MonoBehaviour
             statDisplay.SetActive(false);
             submitButton.interactable = false;
             itemSprite.enabled = false;
+            experienceBarCover.gameObject.SetActive(true);
+            displayModelsInSatchel.DestroyModelDisplay();
             submitButton.GetComponentInChildren<TextMeshProUGUI>().text = "";
             Debug.Log("Text changed");
         }
@@ -337,10 +341,13 @@ public class SatchelAdventureManager : MonoBehaviour
         ClearItems();
         ClearCouCou();
         satchel.SetActive(false);
+        displayManager.PauseMenu();
     }
 
     public void UpdateDescription()
     {
+        displayModelsInSatchel.DestroyModelDisplay();
+
         Vector3 defaultPosition = new Vector3(1335, 140, 0);
         submitButton.interactable = true;
         itemSprite.enabled = true;
@@ -351,6 +358,7 @@ public class SatchelAdventureManager : MonoBehaviour
             experienceLeft.text = "";
 
             descriptionName.text = satchelSlot.itemNameText.text;
+            displayModelsInSatchel.DisplayItem(satchelSlot.itemNameText.text);
             descriptionText.text = satchelSlot.itemDescription;
             itemSprite.sprite = coucouFinder.GetElementSprite(playerInventory.itemInventory[satchelSlot.uniqueIdentifier].element);
             submitButton.transform.position = defaultPosition;
@@ -388,6 +396,7 @@ public class SatchelAdventureManager : MonoBehaviour
             experienceBar.fillAmount = coucou.currentEXP / maxEXP;
 
             descriptionName.text = satchelSlot.itemNameText.text;
+            displayModelsInSatchel.DisplayCouCou(satchelSlot.itemNameText.text);
             descriptionText.text = satchelSlot.itemDescription;
             healthPointsText.text = "HP: " + coucou.currentHealth + "/" + coucou.maxHealth;
             attackText.text = "Atk: " + coucou.currentAttack;
@@ -573,17 +582,15 @@ public class SatchelAdventureManager : MonoBehaviour
             yield return new WaitForSecondsRealtime(0.005f);
         }
 
-        levelUpAnimator.SetBool("hasLeveledUp", false);
-
         if (coucou.currentEXP >= maxEXP)
         {
             Debug.Log("level up");
             coucou.coucouLevel++;
             experienceBar.fillAmount = 0;
             coucou.currentEXP = 0;
-            levelUpAnimator.SetBool("hasLeveledUp", true);
+            levelUpAnimator.SetTrigger("hasLeveledUp");
             yield return new WaitForSecondsRealtime(1.5f);
-            coucouSlotList[currentSelectedButton.GetComponent<SatchelSlotControllerAdventure>().uniqueIdentifier].itemAmountText.text = coucou.coucouLevel.ToString();
+            coucouSlotList[currentSelectedButton.GetComponent<SatchelSlotControllerAdventure>().uniqueIdentifier].itemAmountText.text = "Lv: " + coucou.coucouLevel;
             UpdateCouCouStats(coucou);
 
             if (coucou.currentEXP < desiredEXP)
@@ -682,10 +689,9 @@ public class SatchelAdventureManager : MonoBehaviour
         satchel.SetActive(true);
         submitButton.interactable = true;
         selectedSection = 1;
+        scrollRect.normalizedPosition = new Vector2(0, 1);
         ClearCouCou();
         DisplayItems();
-        scrollRect.normalizedPosition = new Vector2(0, 1);
-        scrollRect.enabled = false;
     }
 
     public void OnCouCouSection()
@@ -701,10 +707,9 @@ public class SatchelAdventureManager : MonoBehaviour
         satchel.SetActive(true);
         submitButton.interactable = true;
         selectedSection = 2;
+        scrollRect.normalizedPosition = new Vector2(0, 1);
         ClearItems();
         DisplayCouCou();
-        scrollRect.enabled = true;
-        scrollRect.normalizedPosition = new Vector2(0, 1);
     }
 
     public void OpenCouCouSelect()

@@ -74,7 +74,7 @@ public class AbilityDisplay : MonoBehaviour
                     updateButton = ability4;
                     break;
             }
-
+            Debug.Log("Ability " + (a+1) + " has UID of " + checkAbilityID);
             // Attack IDs are only up to 99
             if (checkAbilityID <= 99 && checkAbilityID != -1)
             {
@@ -86,6 +86,7 @@ public class AbilityDisplay : MonoBehaviour
                         updateButton.GetComponentInChildren<TextMeshProUGUI>().text = attackAbilitiesList[i].abilityName;
                         updateButton.GetComponent<Image>().color = attackAbilitiesList[i].abilityColor;
                         updateButton.GetComponent<AbilityUID>().abilityUID = checkAbilityID;
+                        updateButton.GetComponent<AbilityUID>().LoadAbility();
                         break;
                     }
                 }
@@ -102,6 +103,7 @@ public class AbilityDisplay : MonoBehaviour
                         updateButton.GetComponentInChildren<TextMeshProUGUI>().text = utilityAbilitiesList[i].abilityName;
                         updateButton.GetComponent<Image>().color = utilityAbilitiesList[i].abilityColor;
                         updateButton.GetComponent<AbilityUID>().abilityUID = checkAbilityID;
+                        updateButton.GetComponent<AbilityUID>().LoadAbility();
                         break;
                     }
                 }
