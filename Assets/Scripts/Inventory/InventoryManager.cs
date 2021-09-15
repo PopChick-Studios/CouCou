@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using UnityEngine.SceneManagement;
 
 public class InventoryManager : MonoBehaviour
 {
@@ -9,6 +10,8 @@ public class InventoryManager : MonoBehaviour
     private CouCouFinder coucouFinder;
     private BattleSystem battleSystem;
     private BattleManager battleManager;
+    private Player player;
+    private CanPlayerFish canPlayerFish;
 
     public InventoryList playerInventory;
     public InventoryList enemyInventory;
@@ -29,6 +32,15 @@ public class InventoryManager : MonoBehaviour
         battleManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<BattleManager>();
         coucouFinder = GameObject.FindGameObjectWithTag("GameManager").GetComponent<CouCouFinder>();
         itemFinder = GameObject.FindGameObjectWithTag("GameManager").GetComponent<ItemFinder>();
+        if (SceneManager.GetActiveScene().name == "TestingScene" || SceneManager.GetActiveScene().name == "CouCou")
+        {
+            player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
+            canPlayerFish = GameObject.FindGameObjectWithTag("Player").GetComponent<CanPlayerFish>();
+        }
+        else
+        {
+            player = null;
+        }
 
         partyLevelUps = new List<string>();
         coucouVariantList = new List<CouCouDatabase.CouCouVariant>();
@@ -48,6 +60,18 @@ public class InventoryManager : MonoBehaviour
         {
             coucouVariantList.Add(variant);
         }
+        
+        /*// - GIVES PLAYER EVERY ITEM AND COUCOU - 
+        foreach (ItemsDatabase.ItemData item in itemDatabase.itemData)
+        {
+            FoundItem(item.itemName, 3);
+        }
+        foreach (CouCouDatabase.CouCouData coucou in couCouDatabase.coucouData)
+        {
+            AddCouCou(coucou.coucouName, 1);
+        }
+        */
+
         SortItemInventory();
     }
 
@@ -141,6 +165,16 @@ public class InventoryManager : MonoBehaviour
                     break;
                 }
             }
+        }
+
+        if (name == "CouCou Capsule")
+        {
+            Debug.Log("Added " + amount + " capsules");
+            player.amountOfCapsules += amount;
+        }
+        else if (name == "Fishing Rod")
+        {
+            canPlayerFish.playerHasRod = true;
         }
 
         SortItemInventory();
@@ -240,12 +274,12 @@ public class InventoryManager : MonoBehaviour
         }
         Debug.Log("exp to add " + expToAdd);
         experienceIncrement = false;
-        StartCoroutine(IncrementallyIncreaseEXP(expToAdd, playerCouCou, enemyLevel, playerLevel));
+        experienceGained = Mathf.RoundToInt(expToAdd);
+        StartCoroutine(IncrementallyIncreaseEXP(expToAdd, playerCouCou.currentEXP, playerCouCou, enemyLevel, playerLevel));
     }
 
-    public IEnumerator IncrementallyIncreaseEXP(float desiredEXP, InventoryList.CouCouInventory coucou, int enemyLevel, int playerLevel)
+    public IEnumerator IncrementallyIncreaseEXP(float desiredEXP, float increase, InventoryList.CouCouInventory coucou, int enemyLevel, int playerLevel)
     {
-        float increase = coucou.currentEXP;
         float maxEXP = Mathf.Pow(10 * coucou.coucouLevel, 2) / 4;
 
         while (increase != desiredEXP && coucou.currentEXP < maxEXP)
@@ -269,13 +303,11 @@ public class InventoryManager : MonoBehaviour
 
             if (coucou.currentEXP < desiredEXP)
             {
-                StartCoroutine(IncrementallyIncreaseEXP(desiredEXP - increase, coucou, enemyLevel, playerLevel));
+                StartCoroutine(IncrementallyIncreaseEXP(desiredEXP - increase, increase, coucou, enemyLevel, playerLevel));
             }
         }
         else
         {
-            experienceGained = Mathf.RoundToInt((enemyLevel - playerLevel + 100) * playerLevel - increase);
-
             restOfPartyGains = experienceGained / 3;
 
             for (int i = 0; i < playerInventory.couCouInventory.Count; i++)
@@ -287,9 +319,10 @@ public class InventoryManager : MonoBehaviour
 
                     if (playerInventory.couCouInventory[i].currentEXP > maxEXPForI)
                     {
+                        float difference = playerInventory.couCouInventory[i].currentEXP - maxEXPForI;
                         playerInventory.couCouInventory[i].coucouLevel++;
+                        playerInventory.couCouInventory[i].currentEXP = difference;
                         partyLevelUps.Add(playerInventory.couCouInventory[i].coucouName);
-                        playerInventory.couCouInventory[i].currentEXP -= maxEXPForI;
                     }
                 }
             }
@@ -298,5 +331,20 @@ public class InventoryManager : MonoBehaviour
         }
         experienceIncrement = true;
         yield break;
+    }
+
+    public int GetCurrentAmount(string itemName)
+    {
+        int amount = 0;
+        foreach (InventoryList.ItemInventory item in playerInventory.itemInventory)
+        {
+            if (item.itemName == itemName)
+            {
+                amount = item.itemAmount;
+                break;
+            }
+        }
+
+        return amount;
     }
 }

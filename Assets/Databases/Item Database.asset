@@ -17,7 +17,7 @@ MonoBehaviour:
     positionIndex: 0
     itemDescription: The most basic and most used item in the game; the CouCou Capsule
       allows you to collect CouCou in the wild.
-    itemModel: {fileID: 0}
+    itemModel: {fileID: 4633655019181564208, guid: b98fe6c38ac341743b557251ccc91e72, type: 3}
     itemType: 0
     element: 0
     itemAttribute: 5
@@ -25,14 +25,14 @@ MonoBehaviour:
     positionIndex: 1
     itemDescription: Your new fishing rod came in the mail. Use it near water to
       catch some Aqua CouCou and possibly other useful things...
-    itemModel: {fileID: 0}
+    itemModel: {fileID: 882495105605834904, guid: a04ce60d43b6dcb42958495069fe9584, type: 3}
     itemType: 0
     element: 0
     itemAttribute: 6
   - itemName: Ripe Berry
     positionIndex: 2
     itemDescription: Ripe berries increase the current health of your CouCou.
-    itemModel: {fileID: 0}
+    itemModel: {fileID: 3552323375737757141, guid: ad4354dd9ee89de4b8b8641a62dbce9e, type: 3}
     itemType: 1
     element: 0
     itemAttribute: 0
@@ -40,7 +40,7 @@ MonoBehaviour:
     positionIndex: 3
     itemDescription: Strong berries increase the attack of your CouCou in battle.
       These effects wear off after the battle ends.
-    itemModel: {fileID: 0}
+    itemModel: {fileID: 2699470510401941910, guid: 370421d0416004a459ea9d8b6d0f7c5f, type: 3}
     itemType: 1
     element: 0
     itemAttribute: 1
@@ -48,7 +48,7 @@ MonoBehaviour:
     positionIndex: 4
     itemDescription: Bulwark berries increase the resistance of your CouCou in battle.
       These effects wear off after the battle ends.
-    itemModel: {fileID: 0}
+    itemModel: {fileID: 2901121181443357346, guid: 98a4bfb6c8eef294bae2dc239a533499, type: 3}
     itemType: 1
     element: 0
     itemAttribute: 2
@@ -56,7 +56,7 @@ MonoBehaviour:
     positionIndex: 5
     itemDescription: Burnt berries increase the mindset of Flame CouCou in battle.
       These effects wear off after the battle ends.
-    itemModel: {fileID: 0}
+    itemModel: {fileID: 8060504549705327404, guid: 601d7f1d9d6382f4b95e72ff36c248f1, type: 3}
     itemType: 1
     element: 1
     itemAttribute: 3
@@ -64,7 +64,7 @@ MonoBehaviour:
     positionIndex: 6
     itemDescription: Frozen berries increase the mindset of Aqua CouCou in battle.
       These effects wear off after the battle ends.
-    itemModel: {fileID: 0}
+    itemModel: {fileID: 6168959498188145347, guid: 0bafa72d04d48bf428c6e927c29c05f2, type: 3}
     itemType: 1
     element: 3
     itemAttribute: 3
@@ -72,7 +72,7 @@ MonoBehaviour:
     positionIndex: 7
     itemDescription: Fruitful berries increase the mindset of Nature CouCou in battle.
       These effects wear off after the battle ends.
-    itemModel: {fileID: 0}
+    itemModel: {fileID: 6895496506259398081, guid: f9d4564c22354424aaf70d2dcbbe3cfb, type: 3}
     itemType: 1
     element: 2
     itemAttribute: 3
@@ -80,7 +80,7 @@ MonoBehaviour:
     positionIndex: 8
     itemDescription: Dark berries increase the mindset of Umbral CouCou in battle.
       These effects wear off after the battle ends.
-    itemModel: {fileID: 0}
+    itemModel: {fileID: 1587429191922110215, guid: b18cfa8015f0a5647bc7cfb52b72b11b, type: 3}
     itemType: 1
     element: 5
     itemAttribute: 3
@@ -88,14 +88,14 @@ MonoBehaviour:
     positionIndex: 9
     itemDescription: Bright berries increase the mindset of Lux CouCou in battle.
       These effects wear off after the battle ends.
-    itemModel: {fileID: 0}
+    itemModel: {fileID: 1695696050181300492, guid: 77f6039aa0685d34eb010867b043673c, type: 3}
     itemType: 1
     element: 4
     itemAttribute: 3
   - itemName: Mystic Berry
     positionIndex: 10
     itemDescription: Mystic berries gives a CouCou a large amount of experience.
-    itemModel: {fileID: 0}
+    itemModel: {fileID: 467643123461716447, guid: 81fd8f440adf7b7488d074bfe7c6b6b5, type: 3}
     itemType: 1
     element: 6
     itemAttribute: 4

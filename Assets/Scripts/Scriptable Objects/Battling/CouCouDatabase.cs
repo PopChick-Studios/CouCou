@@ -24,6 +24,7 @@ public class CouCouDatabase : ScriptableObject
         public string coucouDescription;
         public bool isStarter;
         public GameObject coucouModel;
+        public GameObject coucouBattleModel;
         public Element coucouElement;
 
         public int coucouVariant;

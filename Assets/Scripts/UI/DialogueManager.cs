@@ -5,6 +5,8 @@ using TMPro;
 
 public class DialogueManager : MonoBehaviour
 {
+    private PlayerMovement playerMovement;
+
     public TextMeshProUGUI nameText;
     public TextMeshProUGUI dialogueText;
 
@@ -16,9 +18,14 @@ public class DialogueManager : MonoBehaviour
 
     public bool dialogueOccuring = false;
     public bool dialogueFinished = true;
+    public bool speechFinished = true;
+
+    private Coroutine lastCoroutine;
 
     private void Awake()
     {
+        playerMovement = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>();
+
         playerInputActions = new PlayerInputActions();
         playerInputActions.UI.Click.started += x => OnDialogueSkip();
         playerInputActions.UI.Submit.started += x => OnDialogueSkip();
@@ -43,29 +50,38 @@ public class DialogueManager : MonoBehaviour
         }
     }
 
-    public void StartDialogue(Dialogue dialogue)
+    public IEnumerator StartDialogue(List<Dialogue> dialogue)
     {
-        if (!dialogueFinished)
+        if (dialogueFinished)
         {
-            return;
-        }
-        animatior.SetBool("DialogueIsOpen", true);
-        dialogueFinished = false;
-        nameText.text = dialogue.name;
-        sentences.Clear();
+            animatior.SetBool("DialogueIsOpen", true);
+            dialogueFinished = false;
+            playerMovement.canMove = false;
+            sentences.Clear();
+            for (int i = 0; i < dialogue.Count; i++)
+            {
+                nameText.text = dialogue[i].name;
+                sentences.Clear();
+                foreach (string sentence in dialogue[i].sentences)
+                {
+                    sentences.Enqueue(sentence);
+                }
+                speechFinished = false;
+                DisplayNextSentence();
+                yield return new WaitUntil(() => speechFinished);
+            }
 
-        foreach (string sentence in dialogue.sentences)
-        {
-            sentences.Enqueue(sentence);
+            EndDialogue();
         }
-
-        DisplayNextSentence();
     }
 
     public void CompleteSentence()
     {
         dialogueOccuring = false;
-        StopAllCoroutines();
+        if (lastCoroutine != null)
+        {
+            StopCoroutine(lastCoroutine);
+        }
         dialogueText.text = currentSentence;
     }
 
@@ -73,17 +89,17 @@ public class DialogueManager : MonoBehaviour
     {
         if (sentences.Count == 0)
         {
-            EndDialogue();
+            speechFinished = true;
             return;
         }
+        dialogueOccuring = true;
         currentSentence = sentences.Dequeue();
-        StartCoroutine(TypeSentence(currentSentence));
+        lastCoroutine = StartCoroutine(TypeSentence(currentSentence));
     }
 
     public IEnumerator TypeSentence(string sentence)
     {
         dialogueText.text = "";
-        dialogueOccuring = true;
 
         foreach (char letter in sentence.ToCharArray())
         {
@@ -98,6 +114,7 @@ public class DialogueManager : MonoBehaviour
     {
         animatior.SetBool("DialogueIsOpen", false);
         dialogueFinished = true;
+        playerMovement.canMove = true;
     }
 
     #region - Enable/Disable -

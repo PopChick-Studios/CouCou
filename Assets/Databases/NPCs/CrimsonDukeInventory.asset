@@ -18,7 +18,7 @@ MonoBehaviour:
   starterCouCou:
     coucouName: Brawlster
     coucouLevel: 30
-    coucouEXP: 0
+    currentEXP: 0
     coucouVariant: 6
     element: 3
     lineupOrder: 0
@@ -33,7 +33,7 @@ MonoBehaviour:
   couCouInventory:
   - coucouName: Brawlster
     coucouLevel: 30
-    coucouEXP: 0
+    currentEXP: 0
     coucouVariant: 6
     element: 3
     lineupOrder: 1
@@ -47,7 +47,7 @@ MonoBehaviour:
     hasCollapsed: 0
   - coucouName: Candleflambe
     coucouLevel: 30
-    coucouEXP: 0
+    currentEXP: 0
     coucouVariant: 3
     element: 1
     lineupOrder: 1
@@ -61,7 +61,7 @@ MonoBehaviour:
     hasCollapsed: 0
   - coucouName: Chappa
     coucouLevel: 30
-    coucouEXP: 0
+    currentEXP: 0
     coucouVariant: 2
     element: 2
     lineupOrder: 3
@@ -75,7 +75,7 @@ MonoBehaviour:
     hasCollapsed: 0
   - coucouName: Shand
     coucouLevel: 30
-    coucouEXP: 0
+    currentEXP: 0
     coucouVariant: 1
     element: 5
     lineupOrder: 4
@@ -89,7 +89,7 @@ MonoBehaviour:
     hasCollapsed: 0
   - coucouName: Hurculight
     coucouLevel: 30
-    coucouEXP: 0
+    currentEXP: 0
     coucouVariant: 1
     element: 4
     lineupOrder: 5
@@ -106,23 +106,23 @@ MonoBehaviour:
     itemAmount: 3
     itemAttribute: 0
     element: 0
-  - itemName: Ripe Berry
-    itemAmount: 8
-    itemAttribute: 0
-    element: 0
   - itemName: Burnt Berry
     itemAmount: 3
-    itemAttribute: 0
-    element: 0
+    itemAttribute: 3
+    element: 1
+  - itemName: Frozen Berry
+    itemAmount: 3
+    itemAttribute: 3
+    element: 3
   - itemName: Fruitful Berry
     itemAmount: 3
-    itemAttribute: 0
-    element: 0
+    itemAttribute: 3
+    element: 2
   - itemName: Dark Berry
     itemAmount: 3
-    itemAttribute: 0
-    element: 0
+    itemAttribute: 3
+    element: 5
   - itemName: Bright Berry
     itemAmount: 3
-    itemAttribute: 0
-    element: 0
+    itemAttribute: 3
+    element: 4

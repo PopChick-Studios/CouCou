@@ -7,8 +7,13 @@ using UnityEngine.InputSystem;
 public class PlayerMovement : MonoBehaviour
 {
     private GameManager gameManager;
+    private Player player;
+    public QuestScriptable questScriptable;
+    //private TerrainDetector terrainDetector;
 
     private CharacterController controller;
+    public Animator playerAnimator;
+    public Animator crossfadeAnimator;
     public Transform cam;
 
     private float turnSmoothVelocity;
@@ -24,6 +29,7 @@ public class PlayerMovement : MonoBehaviour
     private float gravityValue = -9.81f;
     private bool isGrounded;
     private bool isCrouching;
+    public bool canMove;
 
     // Inputs
     PlayerInputActions playerInputActions;
@@ -31,6 +37,9 @@ public class PlayerMovement : MonoBehaviour
 
     private void Awake()
     {
+        player = GetComponent<Player>();
+
+        //terrainDetector = new TerrainDetector();
         controller = gameObject.GetComponent<CharacterController>();
         gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
 
@@ -41,6 +50,23 @@ public class PlayerMovement : MonoBehaviour
 
         playerInputActions.Wandering.CrouchStart.performed += x => CrouchPressed();
         playerInputActions.Wandering.CrouchFinish.performed += x => CrouchReleased();
+    }
+
+    private void Start()
+    {
+        PlayerData data = SaveSystem.LoadPlayer();
+        if (data == null)
+        {
+            return;
+        }
+        player.questProgress = data.questProgress;
+        player.amountOfCapsules = data.amountOfCapsules;
+        controller.enabled = false;
+        transform.position = new Vector3(data.position[0], data.position[1], data.position[2]);
+        cam.position = transform.position;
+        questScriptable.questProgress = data.questProgress;
+        questScriptable.subquestProgress = data.subquestProgress;
+        controller.enabled = true;
     }
 
     #region - Crouch -
@@ -60,7 +86,7 @@ public class PlayerMovement : MonoBehaviour
     private void Update()
     {
         // Only move during wandering phase
-        if (gameManager.State == GameManager.GameState.Wandering)
+        if (gameManager.State == GameManager.GameState.Wandering && canMove)
         {
             // Check whether or not to use gravity
             isGrounded = controller.isGrounded;
@@ -71,23 +97,36 @@ public class PlayerMovement : MonoBehaviour
 
             if (inputMovement.magnitude >= 0.1f)
             {
+                playerAnimator.SetBool("isWalking", true);
                 // Choose the right movement speed
                 if (isCrouching)
                 {
+                    playerAnimator.speed = 1;
+                    playerAnimator.SetBool("isCrouching", true);
                     moveSpeed = walkSpeed;
                 }
-                else if (inputMovement.magnitude != 1)
+                else if (inputMovement.magnitude < 0.9)
                 {
-                    moveSpeed = runSpeed * inputMovement.magnitude;
+                    Debug.Log(inputMovement.magnitude);
+                    playerAnimator.SetBool("isCrouching", false);
+                    playerAnimator.SetBool("isRunning", false);
                     runTimer = 2;
+                    moveSpeed = runSpeed * inputMovement.magnitude;
                 }
                 else if (runTimer < 0)
                 {
-                    moveSpeed = sprintSpeed;
+                    playerAnimator.SetBool("isRunning", true);
+                    moveSpeed = sprintSpeed * Mathf.Clamp(Mathf.Abs(runTimer) / 2 + 1, 1, 2.5f);
+                    playerAnimator.speed = Mathf.Clamp(Mathf.Abs(runTimer) / 5 + 1, 1, 1.25f);
+                    runTimer -= Time.deltaTime;
                 }
                 else
                 {
-                    moveSpeed = runSpeed;
+                    playerAnimator.speed = 1;
+                    playerAnimator.SetBool("isCrouching", false);
+                    playerAnimator.SetBool("isRunning", false);
+                    moveSpeed = runSpeed * Mathf.Clamp(Mathf.Abs(2 - runTimer) + 1, 1, 2.5f);
+                    playerAnimator.speed = Mathf.Clamp(Mathf.Abs(runTimer) / 2, 1, 1.25f);
                     runTimer -= Time.deltaTime;
                 }
 
@@ -100,10 +139,15 @@ public class PlayerMovement : MonoBehaviour
 
                 // Move the player
                 Vector3 moveDirection = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
-                controller.Move(moveDirection.normalized * moveSpeed * Time.deltaTime);
+                controller.Move(moveSpeed * Time.deltaTime * moveDirection.normalized);
+
+                //Debug.Log(terrainDetector.GetActiveTerrainTextureIdx(transform.position));
             }
             else
             {
+                playerAnimator.SetBool("isCrouching", false);
+                playerAnimator.SetBool("isRunning", false);
+                playerAnimator.SetBool("isWalking", false);
                 runTimer = 2;
             }
 
@@ -111,6 +155,24 @@ public class PlayerMovement : MonoBehaviour
             playerVelocity.y += gravityValue * Time.deltaTime;
             controller.Move(playerVelocity * Time.deltaTime);
         }
+        else if (!canMove)
+        {
+            playerAnimator.SetBool("isCrouching", false);
+            playerAnimator.SetBool("isRunning", false);
+            playerAnimator.SetBool("isWalking", false);
+            runTimer = 2;
+        }
+    }
+
+    public IEnumerator WarpPlayer(Vector3 position)
+    {
+        crossfadeAnimator.SetTrigger("Start");
+        yield return new WaitForSeconds(1.5f);
+        controller.enabled = false;
+        transform.position = position;
+        cam.position = position;
+        controller.enabled = true;
+        crossfadeAnimator.SetTrigger("Reset");
     }
 
     #region - Enable/Disable -

@@ -6,7 +6,7 @@ using TMPro;
 
 public class InteractableUI : MonoBehaviour
 {
-    private DisplayManager displayManager;
+    private QuestMarker questMarker;
     public InventoryList playerInventory;
 
     [Header("Interaction Type")]
@@ -15,6 +15,8 @@ public class InteractableUI : MonoBehaviour
     public TextMeshProUGUI nameText;
     public string itemName;
     public int itemAmount;
+    public float range;
+    public float height;
 
     [Header("Arrow")]
     [SerializeField] private Sprite arrowSprite;
@@ -28,33 +30,34 @@ public class InteractableUI : MonoBehaviour
 
     private GameObject player;
 
-    private bool isInRange = false;
+    public bool doorOpen = false;
+    public bool isInRange = false;
     public bool canInteract = false;
+
+    private void Awake()
+    {
+        questMarker = GetComponent<QuestMarker>();
+    }
 
     // Start is called before the first frame update
     void Start()
     {
-        if (interactionType == DisplayManager.InteractionTypes.CouCou)
+        if (interactionType == DisplayManager.InteractionTypes.StarterCouCou)
         {
             itemName = gameObject.name;
             nameText.text = itemName;
-
-            foreach (InventoryList.CouCouInventory coucou in playerInventory.couCouInventory)
+            if (!string.IsNullOrEmpty(playerInventory.starterCouCou.coucouName))
             {
-                if (coucou.coucouName == itemName)
-                {
-                    gameObject.SetActive(false);
-                }
+                gameObject.SetActive(false);
             }
         }
         else
         {
             nameText.text = "";
         }
-        displayManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<DisplayManager>();
 
         arrowPlaceholder.sprite = arrowSprite;
-        arrowPlaceholder.rectTransform.position = new Vector3(originTransform.position.x, originTransform.position.y + 2.5f, originTransform.position.z);
+        arrowPlaceholder.rectTransform.position = new Vector3(originTransform.position.x, height + originTransform.position.y + 2.5f, originTransform.position.z);
         arrowPlaceholder.gameObject.SetActive(false);
     }
 
@@ -64,12 +67,16 @@ public class InteractableUI : MonoBehaviour
         nameText.rectTransform.transform.rotation = Quaternion.LookRotation(nameText.rectTransform.transform.position - cameraTransform.position);
         if (isInRange && player != null)
         {
+            if (!arrowPlaceholder.gameObject.activeInHierarchy)
+            {
+                arrowPlaceholder.gameObject.SetActive(true);
+            }
             float y = Mathf.PingPong(Time.time * bounceTime, 1);
-            arrowPlaceholder.rectTransform.position = new Vector3(originTransform.position.x, originTransform.position.y + 1.5f + y, originTransform.position.z);
+            arrowPlaceholder.rectTransform.position = new Vector3(originTransform.position.x, height + originTransform.position.y + 1.5f + y, originTransform.position.z);
             arrowPlaceholder.rectTransform.transform.rotation = Quaternion.LookRotation(arrowPlaceholder.rectTransform.transform.position - cameraTransform.position);
 
             // Check the distance from the player
-            if (Vector3.Distance(player.transform.position, gameObject.transform.position) < 2.5)
+            if (Vector3.Distance(player.transform.position, originTransform.position) < range)
             {
                 arrowPlaceholder.color = new Color32(255, 212, 73, 255);
                 canInteract = true;
@@ -82,14 +89,21 @@ public class InteractableUI : MonoBehaviour
         }
     }
 
+    public void GiveProgress()
+    {
+        if (questMarker)
+        {
+            questMarker.questScriptable.subquestProgress++;
+        }
+    }
+
     #region - Triggers -
 
     private void OnTriggerEnter(Collider other)
     {
-        player = other.gameObject;
-
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") && enabled)
         {
+            player = other.gameObject;
             isInRange = true;
             arrowPlaceholder.gameObject.SetActive(true);
         }
@@ -97,10 +111,9 @@ public class InteractableUI : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        player = null;
-
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") && enabled)
         {
+            player = null;
             arrowPlaceholder.gameObject.SetActive(false);
             isInRange = false;
         }
@@ -110,6 +123,10 @@ public class InteractableUI : MonoBehaviour
 
     private void OnDisable()
     {
+        if (arrowPlaceholder != null)
+        {
+            arrowPlaceholder.gameObject.SetActive(false);
+        }
         canInteract = false;
     }
 }

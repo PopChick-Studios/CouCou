@@ -1,0 +1,66 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 702f33a5e8631ca4996ad7764405fcba, type: 3}
+  m_Name: PlayerInventory
+  m_EditorClassIdentifier: 
+  preGameDialogue:
+    name: Player
+    sentences: []
+  starterCouCou:
+    coucouName: Lantiee
+    coucouLevel: 3
+    currentEXP: 3.3985977
+    coucouVariant: 2
+    element: 4
+    lineupOrder: 1
+    maxHealth: 84
+    currentAttack: 40
+    currentResistance: 1.24
+    currentHealth: 66
+    currentMindset: 15
+    currentDetermination: 50
+    isStunned: 0
+    hasCollapsed: 0
+  couCouInventory:
+  - coucouName: Lantiee
+    coucouLevel: 2
+    currentEXP: 72.5357
+    coucouVariant: 1
+    element: 5
+    lineupOrder: 1
+    maxHealth: 62
+    currentAttack: 27
+    currentResistance: 1.0999999
+    currentHealth: 62
+    currentMindset: 30
+    currentDetermination: 50
+    isStunned: 0
+    hasCollapsed: 0
+  - coucouName: Foxtning
+    coucouLevel: 3
+    currentEXP: 36.398598
+    coucouVariant: 2
+    element: 4
+    lineupOrder: 2
+    maxHealth: 84
+    currentAttack: 40
+    currentResistance: 1.24
+    currentHealth: 0
+    currentMindset: 15
+    currentDetermination: 50
+    isStunned: 0
+    hasCollapsed: 1
+  itemInventory:
+  - itemName: Fishing Rod
+    itemAmount: 1
+    itemAttribute: 6
+    element: 0
