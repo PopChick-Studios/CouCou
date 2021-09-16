@@ -179,6 +179,8 @@ public class GameManager : MonoBehaviour
 
     public IEnumerator GoodEnding(string text)
     {
+        playerMovement.canMove = false;
+        crossfadeAnimator.SetTrigger("Start");
         yield return new WaitForSeconds(1.5f);
         typingEnding = true;
         StartCoroutine(EndingTypeSentence(text));

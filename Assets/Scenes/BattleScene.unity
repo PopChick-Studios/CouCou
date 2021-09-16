@@ -3435,7 +3435,10 @@ MonoBehaviour:
   endingText: {fileID: 839258855}
   badEndingText: The punks brainwash you and force you to work with the CouCorp.
     Now with no one standing in their way, they take control of all of Norwich
-  goodEndingText: 
+  goodEndingText: "And with that, you and Umbri go on and rescue all the CouCou from
+    the evils of the CouCorp.\n\nThank you for playing!!\n\nCreated by PopChick Studios
+    \n\nDirector and Developer: Owen Cooke\nArt and Animation: Peter Mallia\nDialogue:
+    Travis Keeley\nWorld and Map Building: Joshua Tarulli"
   playerInventory: {fileID: 11400000, guid: 44ee79a05ad81ff4d8652799fc7d7f56, type: 2}
   typingEnding: 0
   questRewardFinish: 0

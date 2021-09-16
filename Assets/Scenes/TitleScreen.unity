@@ -6088,7 +6088,7 @@ GameObject:
   - component: {fileID: 1556605460}
   - component: {fileID: 1556605459}
   m_Layer: 5
-  m_Name: GroovePad
+  m_Name: Us
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6110,8 +6110,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 250, y: 30}
-  m_SizeDelta: {x: 400, y: 50}
+  m_AnchoredPosition: {x: 550, y: 30}
+  m_SizeDelta: {x: 1000, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1556605459
 MonoBehaviour:
@@ -6133,7 +6133,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Audio done in GroovePad
+  m_text: Owen Cooke, Peter Mallia, Joshua Tarulli and Travis Keeley
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 15bf731e84de70b448b7f850026333ee, type: 2}
   m_sharedMaterial: {fileID: -7614700921714188360, guid: 15bf731e84de70b448b7f850026333ee, type: 2}
