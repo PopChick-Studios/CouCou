@@ -722,6 +722,7 @@ public class BattleSystem : MonoBehaviour
 
     public IEnumerator GrantExperience(bool caught)
     {
+        yield return new WaitForSeconds(2f);
         grantingExperience = true;
         inventoryManager.AddExperience(player, player.coucouLevel, enemy.coucouLevel, caught);
 
@@ -750,7 +751,6 @@ public class BattleSystem : MonoBehaviour
             {
                 dialogueText.text = "You defeated " + enemyManager.enemyInventory.preGameDialogue.name;
                 yield return new WaitForSeconds(2f);
-                questScriptable.subquestProgress++;
             }
 
             gameManager.SetState(GameManager.GameState.Wandering);

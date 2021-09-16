@@ -9,6 +9,7 @@ public class TitleScreen : MonoBehaviour
     private SceneLoader sceneLoader;
 
     public Button continueButton;
+    public Button newGameCancelButton;
     public GameObject optionsMenu;
     public GameObject controlMenu;
     public GameObject newGameWarning;
@@ -74,6 +75,7 @@ public class TitleScreen : MonoBehaviour
         if (hasData)
         {
             newGameWarning.SetActive(true);
+            newGameCancelButton.Select();
         }
         else
         {

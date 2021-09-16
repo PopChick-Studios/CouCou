@@ -9,6 +9,7 @@ public class FindWildCouCou : MonoBehaviour
     private CouCouFinder coucouFinder;
     private InventoryManager inventoryManager;
 
+    public QuestScriptable questScriptable;
     public InventoryList playerInventory;
     public InventoryList enemyInventory;
     public CouCouDatabase coucouDatabase;
@@ -56,8 +57,6 @@ public class FindWildCouCou : MonoBehaviour
         int randomElement = Random.Range(0, elementList.Count);
         List<CouCouDatabase.CouCouData> possibleEnemies = coucouFinder.GetElementalCouCou(elementList[randomElement]);
 
-
-
         int randomCouCou = Random.Range(0, possibleEnemies.Count);
         enemyInventory.preGameDialogue = new Dialogue();
         enemyInventory.couCouInventory.Clear();
@@ -74,7 +73,7 @@ public class FindWildCouCou : MonoBehaviour
         enemyInventory.preGameDialogue.sentences = new string[1];
         enemyInventory.preGameDialogue.sentences[0] = "Lets see how good you are";
         enemyInventory.couCouInventory.Add(newEnemyCouCou);
-
+        questScriptable.subquestProgress++;
         WildCouCouFound();
     }
 

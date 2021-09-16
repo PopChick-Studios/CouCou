@@ -4,13 +4,10 @@ using UnityEngine;
 
 public class ChangeCamera : MonoBehaviour
 {
+    public Animator playerAnimator;
     public GameObject mainCamera;
     public GameObject tortureRoomDoorCamera;
-    public GameObject punksNoteCamera;
     public GameObject docksCamera;
-    public GameObject cherroomTownCamera;
-    public GameObject punks1Camera;
-    public GameObject punks2Camera;
     public Animator crossfadeAnimator;
 
     private GameManager gameManager;
@@ -27,6 +24,9 @@ public class ChangeCamera : MonoBehaviour
 
     public IEnumerator SwitchToCamera(GameObject camera)
     {
+        playerAnimator.SetBool("isCrouching", false);
+        playerAnimator.SetBool("isRunning", false);
+        playerAnimator.SetBool("isWalking", false);
         gameManager.SetState(GameManager.GameState.Dialogue);
         crossfadeAnimator.SetTrigger("Start");
         yield return new WaitForSeconds(1.5f);

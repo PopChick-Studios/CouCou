@@ -3410,6 +3410,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyInventory: {fileID: 11400000, guid: e4a668288a3079545aa3cb899de54343, type: 2}
+  questScriptable: {fileID: 0}
   dialogueText: {fileID: 1372405038}
   catchSuccessful: 0
 --- !u!114 &368891506
@@ -3425,8 +3426,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   questScriptable: {fileID: 11400000, guid: 7e68a8077602474489a7f958ead3536e, type: 2}
+  playerInteraction: {fileID: 0}
+  playerMovement: {fileID: 0}
   crossfadeAnimator: {fileID: 839258854}
-  endingText: {fileID: 839258853}
+  fadeOutText: {fileID: 839258853}
+  endingText: {fileID: 839258855}
   badEndingText: The punks brainwash you and force you to work with the CouCorp.
     Now with no one standing in their way, they take control of all of Norwich
   goodEndingText: 
@@ -7077,6 +7081,17 @@ Animator:
   m_CorrespondingSourceObject: {fileID: 3266448115033020358, guid: 727499644bd6ba74193d0bfb0123971e, type: 3}
   m_PrefabInstance: {fileID: 839258852}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &839258855 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7289102731659203923, guid: 727499644bd6ba74193d0bfb0123971e, type: 3}
+  m_PrefabInstance: {fileID: 839258852}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &871058377
 GameObject:
   m_ObjectHideFlags: 0

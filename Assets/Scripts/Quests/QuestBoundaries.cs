@@ -15,14 +15,19 @@ public class BoundairesList
 public class QuestBoundaries : MonoBehaviour
 {
     public QuestScriptable questScriptable;
-
+    public bool stall;
     public List<BoundairesList> boundairesList;
     private int previousSubquestProgress = -1;
     private int index;
 
+    private void Awake()
+    {
+        stall = false;
+    }
+
     void Update()
     {
-        if (questScriptable.subquestProgress != previousSubquestProgress)
+        if (questScriptable.subquestProgress != previousSubquestProgress && !stall)
         {
             Debug.Log("Subquest changed value. Changing all boundaries");
             for (int i = 0; i < boundairesList.Count; i++)

@@ -155,8 +155,9 @@ public class GameManager : MonoBehaviour
     {
         crossfadeAnimator.SetTrigger("Start");
         yield return new WaitForSeconds(1.5f);
+        SaveSystem.DeleteAllSaveFiles();
         typingEnding = true;
-        StartCoroutine(TypeSentence(fadeOutText, badEndingText, 1));
+        StartCoroutine(FadeOutTypeSentence(badEndingText));
         yield return new WaitWhile(() => typingEnding);
         StartCoroutine(sceneLoader.TitleScreen());
     }
@@ -169,7 +170,7 @@ public class GameManager : MonoBehaviour
         if (!string.IsNullOrEmpty(text))
         {
             typingEnding = true;
-            StartCoroutine(TypeSentence(fadeOutText, text, 1));
+            StartCoroutine(FadeOutTypeSentence(text));
             yield return new WaitWhile(() => typingEnding);
         }
         crossfadeAnimator.SetTrigger("Reset");
@@ -180,19 +181,32 @@ public class GameManager : MonoBehaviour
     {
         yield return new WaitForSeconds(1.5f);
         typingEnding = true;
-        StartCoroutine(TypeSentence(endingText, text, 2));
+        StartCoroutine(EndingTypeSentence(text));
         yield return new WaitWhile(() => typingEnding);
         StartCoroutine(sceneLoader.TitleScreen());
     }
 
-    public IEnumerator TypeSentence(TextMeshProUGUI textarea, string sentence, int speed)
+    public IEnumerator FadeOutTypeSentence(string sentence)
     {
-        textarea.text = "";
+        fadeOutText.text = "";
 
         foreach (char letter in sentence.ToCharArray())
         {
-            textarea.text += letter;
-            yield return new WaitForSeconds(0.04f * speed);
+            fadeOutText.text += letter;
+            yield return new WaitForSeconds(0.04f);
+        }
+
+        typingEnding = false;
+    }
+
+    public IEnumerator EndingTypeSentence(string sentence)
+    {
+        endingText.text = "";
+
+        foreach (char letter in sentence.ToCharArray())
+        {
+            endingText.text += letter;
+            yield return new WaitForSeconds(0.08f);
         }
 
         typingEnding = false;

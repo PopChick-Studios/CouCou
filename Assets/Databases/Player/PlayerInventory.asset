@@ -16,19 +16,33 @@ MonoBehaviour:
     name: Player
     sentences: []
   starterCouCou:
-    coucouName: 
-    coucouLevel: 3
-    currentEXP: 3.3985977
-    coucouVariant: 2
-    element: 4
+    coucouName: Bonzie
+    coucouLevel: 1
+    currentEXP: 0
+    coucouVariant: 1
+    element: 2
     lineupOrder: 1
-    maxHealth: 84
-    currentAttack: 40
-    currentResistance: 1.24
-    currentHealth: 66
-    currentMindset: 15
+    maxHealth: 50
+    currentAttack: 15
+    currentResistance: 1.05
+    currentHealth: 50
+    currentMindset: 30
     currentDetermination: 50
     isStunned: 0
     hasCollapsed: 0
-  couCouInventory: []
+  couCouInventory:
+  - coucouName: Bonzie
+    coucouLevel: 1
+    currentEXP: 0
+    coucouVariant: 1
+    element: 2
+    lineupOrder: 1
+    maxHealth: 50
+    currentAttack: 15
+    currentResistance: 1.05
+    currentHealth: 0
+    currentMindset: 30
+    currentDetermination: 50
+    isStunned: 0
+    hasCollapsed: 1
   itemInventory: []

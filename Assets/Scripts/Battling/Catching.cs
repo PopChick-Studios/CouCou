@@ -79,7 +79,6 @@ public class Catching : MonoBehaviour
             battleSystem.state = BattleState.WON;
             StartCoroutine(battleSystem.GrantExperience(true));
             yield return new WaitWhile(() => battleSystem.grantingExperience);
-            questScriptable.subquestProgress++;
             StartCoroutine(battleSystem.EndBattle());
         }
     }

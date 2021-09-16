@@ -168,11 +168,14 @@ public class PlayerMovement : MonoBehaviour
     {
         crossfadeAnimator.SetTrigger("Start");
         yield return new WaitForSeconds(1.5f);
+        canMove = false;
         controller.enabled = false;
         transform.position = position;
         cam.position = position;
         controller.enabled = true;
         crossfadeAnimator.SetTrigger("Reset");
+        yield return new WaitForSeconds(1f);
+        canMove = true;
     }
 
     #region - Enable/Disable -

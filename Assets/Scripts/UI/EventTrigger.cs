@@ -7,6 +7,7 @@ public class EventTrigger : MonoBehaviour
     private DisplayManager displayManager;
     private DialogueManager dialogueManager;
     private PlayerMovement playerMovement;
+    private QuestBoundaries questBoundaries;
 
     public QuestScriptable questScriptable;
     public Transform warpPosition;
@@ -20,11 +21,11 @@ public class EventTrigger : MonoBehaviour
         EnterTriggerDialogue,
         EnterTriggerDialogueQuest,
         Interaction,
-        InteractionFight,
+        InteractionFight, // Gives Quest Point
         InteractionQuest,
         Warp,
         InteractionWildCouCou,
-        EnterTriggerDialogueFight
+        EnterTriggerDialogueFight // Gives Quest Point
     }
 
     public EventTriggerType eventTriggerType;
@@ -34,6 +35,7 @@ public class EventTrigger : MonoBehaviour
     {
         displayManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<DisplayManager>();
         dialogueManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<DialogueManager>();
+        questBoundaries = GameObject.FindGameObjectWithTag("GameManager").GetComponent<QuestBoundaries>();
         playerMovement = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>();
     }
 
@@ -61,6 +63,8 @@ public class EventTrigger : MonoBehaviour
                 {
                     StartCoroutine(dialogueManager.StartDialogue(dialogue));
                     StartCoroutine(StartFight());
+                    questBoundaries.stall = true;
+                    questScriptable.subquestProgress++;
                 }
                 break;
             case EventTriggerType.InteractionQuest:
@@ -123,6 +127,12 @@ public class EventTrigger : MonoBehaviour
                 case EventTriggerType.EnterTriggerDialogueFight:
                     TriggerDialogue();
                     StartCoroutine(StartFight());
+                    questBoundaries.stall = true;
+                    questScriptable.subquestProgress++;
+                    break;
+
+                case EventTriggerType.Warp:
+                    StartCoroutine(playerMovement.WarpPlayer(warpPosition.position));
                     break;
             }
         }
