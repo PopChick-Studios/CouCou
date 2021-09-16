@@ -13,6 +13,9 @@ public class Fishing : MonoBehaviour
     private Transform cameraPosition;
     private Player player;
 
+    private Coroutine previousStartFishingCoroutine;
+    private Coroutine previousTimerCoroutine;
+
     public GameObject playerGO;
     public Animator playerAnimator;
     public GameObject fishingRod1;
@@ -57,7 +60,7 @@ public class Fishing : MonoBehaviour
         {
             playerInputActions.Wandering.Disable();
             playerInputActions.Fishing.Enable();
-            StartCoroutine(StartFishing());
+            previousStartFishingCoroutine = StartCoroutine(StartFishing());
         }
         else if (canPlayerFish.playerCanFish && isFishing && gameManager.State == GameManager.GameState.Fishing)
         {
@@ -107,16 +110,16 @@ public class Fishing : MonoBehaviour
 
         while (!caughtSomething)
         {
-            float rnd = Random.Range(3, 26);
-            Debug.Log("waiting: " + rnd);
-            yield return new WaitForSeconds(rnd);
-
-            playerAnimator.SetTrigger("caughtFish");
-
             pullUp = false;
             countdownFinished = false;
             timer = 1.8f;
-            StartCoroutine(CountdownTimer());
+            float rnd = Random.Range(3, 26);
+            Debug.Log("waiting: " + rnd);
+
+            yield return new WaitForSeconds(rnd);
+
+            playerAnimator.SetTrigger("caughtFish");
+            previousTimerCoroutine = StartCoroutine(CountdownTimer());
             yield return new WaitUntil(() => countdownFinished);
             if (timer > 0)
             {
@@ -144,6 +147,8 @@ public class Fishing : MonoBehaviour
         playerInputActions.Wandering.Enable();
         yield return new WaitForSeconds(0.7f);
         isFishing = false;
+        pullUp = false;
+        countdownFinished = true;
         fishingRod1.SetActive(false);
         fishingRod2.SetActive(false);
     }
@@ -165,7 +170,7 @@ public class Fishing : MonoBehaviour
 
     public IEnumerator CancelFish()
     {
-        if (timer != 0)
+        if (timer > 0 && timer < 1.8f)
         {
             pullUp = true;
         }
@@ -173,7 +178,14 @@ public class Fishing : MonoBehaviour
         {
             playerAnimator.SetTrigger("finishFishing");
             yield return new WaitForSeconds(0.7f);
-            StopAllCoroutines();
+            if (previousTimerCoroutine != null)
+            {
+                StopCoroutine(previousTimerCoroutine);
+            }
+            if (previousStartFishingCoroutine != null)
+            {
+                StopCoroutine(previousStartFishingCoroutine);
+            }
             isFishing = false;
             gameManager.SetState(GameManager.GameState.Wandering);
             InstantiateUI();
@@ -195,7 +207,7 @@ public class Fishing : MonoBehaviour
         int randomItem = Random.Range(0, 4);
         string item = "";
         int amount = 0;
-        if (randomItem < 3 || player.HasMaxCapsules())
+        if (randomItem <= 3 || player.HasMaxCapsules())
         {
             item = "Frozen Berry";
             amount = 1;

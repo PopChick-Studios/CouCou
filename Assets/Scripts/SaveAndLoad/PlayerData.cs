@@ -5,15 +5,11 @@ using UnityEngine;
 [System.Serializable]
 public class PlayerData
 {
-    public int questProgress;
-    public int subquestProgress;
     public int amountOfCapsules;
     public float[] position;
     
-    public PlayerData (Player player, QuestScriptable questScriptable)
+    public PlayerData (Player player)
     {
-        questProgress = questScriptable.questProgress;
-        subquestProgress = questScriptable.subquestProgress;
         amountOfCapsules = player.amountOfCapsules;
 
         position = new float[3];

@@ -74,6 +74,17 @@ public class Catching : MonoBehaviour
 
             dialogueText.text = "You caught " + battleSystem.enemy.coucouName + "!";
 
+            Destroy(battleSystem.enemyInScene);
+
+            Debug.Log(questScriptable.subquestProgress + " " + questScriptable.questProgress);
+
+            if (questScriptable.subquestProgress == 3 && questScriptable.questProgress == 2)
+            {
+                questScriptable.subquestProgress = 4;
+                Debug.Log(questScriptable.subquestProgress + " " + questScriptable.questProgress);
+
+            }
+
             inventoryManager.AddCouCou(battleSystem.enemy.coucouName, battleSystem.enemy.coucouLevel);
             enemyInventory.couCouInventory.Remove(battleSystem.enemy);
             battleSystem.state = BattleState.WON;

@@ -55,17 +55,18 @@ public class PlayerMovement : MonoBehaviour
     private void Start()
     {
         PlayerData data = SaveSystem.LoadPlayer();
+        QuestData questData = SaveSystem.LoadQuests();
         if (data == null)
         {
             return;
         }
-        player.questProgress = data.questProgress;
+        player.questProgress = questData.questProgress;
         player.amountOfCapsules = data.amountOfCapsules;
         controller.enabled = false;
         transform.position = new Vector3(data.position[0], data.position[1], data.position[2]);
         cam.position = transform.position;
-        questScriptable.questProgress = data.questProgress;
-        questScriptable.subquestProgress = data.subquestProgress;
+        questScriptable.questProgress = questData.questProgress;
+        questScriptable.subquestProgress = questData.subquestProgress;
         controller.enabled = true;
     }
 

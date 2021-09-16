@@ -52,13 +52,15 @@ public class SceneLoader : MonoBehaviour
         if (inventoryManager.HasPlayableCouCou())
         {
             inventoryManager.SaveInventory();
-            SaveSystem.SavePlayer(player, questScriptable);
+            SaveSystem.SavePlayer(player);
+            SaveSystem.SaveQuests(questScriptable);
             StartCoroutine(LoadScene("BattleScene"));
         }
     }
 
     public void LoadAdventureScene()
     {
+        SaveSystem.SaveQuests(questScriptable);
         inventoryManager.SaveInventory();
         StartCoroutine(LoadScene("CouCou"));
     }

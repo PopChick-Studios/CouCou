@@ -11,6 +11,10 @@ public class IncreaseCouCouHealth : MonoBehaviour
     private void Awake()
     {
         gameManager = gameObject.GetComponent<GameManager>();
+    }
+
+    private void Start()
+    {
         StartCoroutine(IncreaseHealth());
     }
 
@@ -20,9 +24,13 @@ public class IncreaseCouCouHealth : MonoBehaviour
         {
             foreach (InventoryList.CouCouInventory coucou in playerInventory.couCouInventory)
             {
-                if (!coucou.hasCollapsed && coucou.currentHealth != coucou.maxHealth)
+                if (coucou.currentHealth != coucou.maxHealth)
                 {
                     coucou.currentHealth = Mathf.Min(coucou.currentHealth + (3 * coucou.maxHealth / 100), coucou.maxHealth);
+                    if (coucou.hasCollapsed)
+                    {
+                        coucou.hasCollapsed = false;
+                    }
                 }
             }
             yield return new WaitForSeconds(20f);

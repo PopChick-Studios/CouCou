@@ -196,7 +196,8 @@ public class PlayerInteraction : MonoBehaviour
 
     public void OnSaveGame()
     {
-        SaveSystem.SavePlayer(GetComponent<Player>(), questScriptable);
+        SaveSystem.SavePlayer(GetComponent<Player>());
+        SaveSystem.SaveQuests(questScriptable);
         SaveSystem.SaveInventory(playerInventory);
 
         displayManager.HeadsUpDisplay();

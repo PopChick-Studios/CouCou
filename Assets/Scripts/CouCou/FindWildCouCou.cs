@@ -111,7 +111,7 @@ public class FindWildCouCou : MonoBehaviour
         InventoryList.CouCouInventory newEnemyCouCou = new InventoryList.CouCouInventory()
         {
             coucouName = possibleEnemies[randomCouCou].coucouName,
-            coucouLevel = FindAverageLevel() + randomLevelIncrease,
+            coucouLevel = Mathf.Max(FindAverageLevel() + randomLevelIncrease, 1),
             lineupOrder = 0,
             coucouVariant = possibleEnemies[randomCouCou].coucouVariant,
             element = element

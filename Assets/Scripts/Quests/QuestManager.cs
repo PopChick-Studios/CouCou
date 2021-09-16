@@ -28,13 +28,11 @@ public class QuestManager : MonoBehaviour
 
     private void Awake()
     {
-        
         changeCamera = GameObject.FindGameObjectWithTag("CameraRig").GetComponent<ChangeCamera>();
         gameManager = GetComponent<GameManager>();
         inventoryManager = GetComponent<InventoryManager>();
         dialogueManager = GetComponent<DialogueManager>();
         increaseCouCouHealth = GetComponent<IncreaseCouCouHealth>();
-        
     }
 
     public void Update()

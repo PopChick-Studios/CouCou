@@ -3146,6 +3146,8 @@ GameObject:
   - component: {fileID: 368891504}
   - component: {fileID: 368891503}
   - component: {fileID: 368891505}
+  - component: {fileID: 368891508}
+  - component: {fileID: 368891507}
   m_Layer: 0
   m_Name: --Game Management--
   m_TagString: GameManager
@@ -3410,7 +3412,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyInventory: {fileID: 11400000, guid: e4a668288a3079545aa3cb899de54343, type: 2}
-  questScriptable: {fileID: 0}
+  questScriptable: {fileID: 11400000, guid: 7e68a8077602474489a7f958ead3536e, type: 2}
   dialogueText: {fileID: 1372405038}
   catchSuccessful: 0
 --- !u!114 &368891506
@@ -3438,6 +3440,119 @@ MonoBehaviour:
   typingEnding: 0
   questRewardFinish: 0
   gameState: 0
+--- !u!82 &368891507
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 368891496}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 24300002, guid: 6c382a7b606a1ae4d873fc76c8724e85, type: 2}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!114 &368891508
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 368891496}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a913d93efc5d2aa49b815f2362bd1eb5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  openWorldMusic: {fileID: 0}
+  battleMusicIntro: {fileID: 8300000, guid: 9245a9c89c66b9f4892812503b0705d7, type: 3}
+  battleMusicLoop: {fileID: 8300000, guid: 47ec19696c99a3747ba59474d22d2063, type: 3}
+  specialEffectAudio: {fileID: 0}
+  levelUpEffect: {fileID: 0}
 --- !u!1 &404940652
 GameObject:
   m_ObjectHideFlags: 0

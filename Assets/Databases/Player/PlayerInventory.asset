@@ -31,18 +31,48 @@ MonoBehaviour:
     isStunned: 0
     hasCollapsed: 0
   couCouInventory:
-  - coucouName: Bonzie
-    coucouLevel: 1
-    currentEXP: 0
-    coucouVariant: 1
-    element: 2
+  - coucouName: Foxtning
+    coucouLevel: 10
+    currentEXP: 4.3435
+    coucouVariant: 2
+    element: 4
     lineupOrder: 1
-    maxHealth: 50
-    currentAttack: 15
-    currentResistance: 1.05
-    currentHealth: 0
-    currentMindset: 30
+    maxHealth: 208
+    currentAttack: 120
+    currentResistance: 1.7900001
+    currentHealth: 208
+    currentMindset: 15
     currentDetermination: 50
     isStunned: 0
-    hasCollapsed: 1
-  itemInventory: []
+    hasCollapsed: 0
+  - coucouName: Squelsh
+    coucouLevel: 1
+    currentEXP: 0
+    coucouVariant: 2
+    element: 3
+    lineupOrder: 2
+    maxHealth: 208
+    currentAttack: 120
+    currentResistance: 1.7900001
+    currentHealth: 208
+    currentMindset: 15
+    currentDetermination: 50
+    isStunned: 0
+    hasCollapsed: 0
+  itemInventory:
+  - itemName: CouCou Capsule
+    itemAmount: 14
+    itemAttribute: 5
+    element: 0
+  - itemName: Fishing Rod
+    itemAmount: 2
+    itemAttribute: 6
+    element: 0
+  - itemName: Ripe Berry
+    itemAmount: 4
+    itemAttribute: 0
+    element: 0
+  - itemName: Frozen Berry
+    itemAmount: 7
+    itemAttribute: 3
+    element: 3
